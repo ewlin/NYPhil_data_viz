@@ -2,7 +2,7 @@
 
 Things to do:
 
-A) Create Github repo
++ A) Create Github repo
 B) Add Build tools and other stuff to project
 C) Think about how to split up code and start experimenting with chunks of the data
 D) Sketch viz ideas
@@ -10,7 +10,7 @@ E) Break utility code into a seperate folder, possibly to be reused in future da
 
 Possible questions to ask:
 
-1) Histogram of frequency of pieces in seasons
+X 1) Histogram of frequency of pieces in seasons
 2) Tour map through time
 3) Changes in trends and styles--arrangements more common back in the day?
 4) Composer hit vs miss charts (one-hit wonders? )
@@ -25,7 +25,7 @@ Possible questions to ask:
 11) used to be popular pieces that and no longer as popular
 12) pieces that became more popular as time went on...
 13) Music Directors leadership (changes in diversity of music? age of music? any real impact?)
-14) Genres (Concertos, symphonies, tone poems etc.) x
+14) Genres (Concertos, symphonies, tone poems etc.) 
 15) Orchestral map showing most common concerto instruments (in pieces, in overall frequency)
 16) Mean performances since founding of orchestra (for pieces composed before founding), and since composition, per piece. (Top 25? 50? Top 100?)
 17) Season heat map (percentage of recent compositions; composed in the last 15? 30? years?) Is there a peak? I.E. Highest percentage of pieces composed in the past x years? Do differential: average age of pieces performed in any one year.
@@ -59,7 +59,7 @@ d3.json('complete.json', d => {
 
 
 	let subscriptionConcerts = PROGRAMS.filter( p => {
-		return p.orchestra === "New York Philharmonic";
+		return p.orchestra === "New York Philharmonic" || p.orchestra === "New York Symphony";
 	}).filter( p => {
 		return p.concerts[0]["eventType"] === "Subscription Season";
 	});
@@ -188,12 +188,18 @@ d3.json('complete.json', d => {
 	composersByTopSeasons.forEach(composer => {
 		let node = d3.hierarchy(composer, d => d.works).sum( d => d.seasonCount );
 		let pack = d3.pack().size([packScale(node.value), packScale(node.value)]);
+		let formattedComposerName = `${composer.composer.split(",")[0]}`; 
 		let composerBubbles = d3.select("body")
 			.append("svg")
 			.attr("class", "composer")
 			.attr("width", packScale(node.value))
-			.attr("height", packScale(node.value) + 30)
-			
+			.attr("height", packScale(node.value) + 30); 
+		
+		console.log(formattedComposerName); 
+		
+		composerBubbles
+			.append("g")
+			//.attr("transform", "translate(0,20)")
 			.selectAll(".work")
 			.data((pack(node)).descendants())
 			.enter()
@@ -201,6 +207,13 @@ d3.json('complete.json', d => {
 			.attr("class", function(d) { return d.children ? "node parent" : "leaf node"; })
 			.attr("r", function(d) { return d.r; })
 			.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+		
+		composerBubbles.append("text")
+										.attr("fill", "Black")
+										.attr("font-size", "15px")
+										.attr("transform", "translate(20,30)")
+										.attr("font-family", "Arial")
+										.text(formattedComposerName.toUpperCase());
 	}); 
 	
 	//selectComposers.forEach(composer => {
@@ -307,7 +320,9 @@ function composersByUniqueWorks () {
 function processComposers (composers) {
     let arrOfComposers = [];
     for (let composer in composers) {
-			arrOfComposers.push(Object.assign(composers[composer],{composer: composer}));
+			if (composer !== "Traditional,") {
+					arrOfComposers.push(Object.assign(composers[composer],{composer: composer}));
+			}
     }
     return arrOfComposers;
 }
