@@ -3,8 +3,28 @@
 <html> 
 	<head>
 		<style>
+			
 			body {
 				background-color: darkslategrey;
+			}
+			
+			
+			circle {
+  			fill: rgb(31, 119, 180);
+  			stroke: rgb(31, 119, 180);
+  			stroke-width: 0px;
+			}
+
+			.parent {
+	 			fill-opacity: 0;
+			}
+		
+			
+			
+			.leaf {
+  			stroke: rgb(31, 119, 180);
+  			stroke-width: 0px;
+				fill-opacity: .4;
 			}
 			
 			/**
@@ -14,43 +34,37 @@
   			stroke: rgb(31, 119, 180);
   			stroke-width: 0px;
 			}
-							fill: rgb(31, 119, 180);
-
-			
-			
-			
-
-			
 			**/
+			
+				
+			
+			/** Beethoven Graph  
+		
+		
 			
 			.graphLegend g {
 				cursor: pointer;
 			}
 			
-			.parent {
-	 			fill-opacity: 0;
-			}
 		
-			
-			
 			.leaf {
-  			/*fill-opacity: .95;*/
   			stroke: rgb(31, 119, 180);
   			stroke-width: 0px;
 			}
+			
+			**/
 			
 		</style>
 	</head>
 	
 	<body> 
-		<svg width="1200" height="600"></svg>
+		<!--<svg width="1200" height="600"></svg>-->
 		
 		
 		<script src="d3-v4.js"></script>
 		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-		<script src="beethoven-circle-pack.js"></script>
+		<script src="main.js"></script>
 
-		<!--<script src="main.js"></script>-->
 	</body>
 
 </html>

@@ -31,9 +31,27 @@ d3.json('beethoven.json', d => {
 		.attr("r", function(d) { return d.r; })
 		.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 		.attr("fill", function(d) { return colorIndex(d.data.category); })
-		.attr("opacity", 0.85); 
+		.attr("opacity", 0.85)
+		.on("mouseover", (d, i, nodes) => {
+			//g.select("g")
+			//	.append("rect")
+			//	.attr("width", "50")
+			//	.attr("height", "50")
+			//	.attr("fill", "White")
+			//	.attr("y", d.y + 30)
+			//	.attr("x", d.x + 30); 
+			g.select("g")
+				.append("text")
+				.attr("y", 0)
+				.attr("x", 0)
+				.attr("fill", "White")
+				.text(d.data.title); 
+		}).on("mouseout", () => {
+			//g.select("g").select("rect").remove(); 
+			g.select("g").select("text").remove(); 
+		}); 
 	
-	
+	console.log(g.selectAll("circle")); 
 	
 	let legend = svg.append("g")
 		.attr("transform", "translate(" + (svgHeight + margin.left) + ",100)")
