@@ -59,7 +59,7 @@ d3.json('complete.json', d => {
 
 
 	let subscriptionConcerts = PROGRAMS.filter( p => {
-		return p.orchestra === "New York Philharmonic" || p.orchestra === "New York Symphony";
+		return p.orchestra === "New York Philharmonic" //|| p.orchestra === "New York Symphony";
 	}).filter( p => {
 		return p.concerts[0]["eventType"] === "Subscription Season";
 	});
@@ -179,9 +179,8 @@ d3.json('complete.json', d => {
 										.range([0, svgHeight])
 										.domain([0, 1281]);
 
-	//let selectComposers = ["Beethoven,  Ludwig  van", "Mozart,  Wolfgang  Amadeus", "Brahms,  Johannes", "Berlioz,  Hector", "Strauss,  Richard", "Ravel,  Maurice", "Stravinsky,  Igor", "Bruch,  Max", "Haydn,  Franz  Joseph", "Berg,  Alban", "Debussy,  Claude", "Lindberg,  Magnus", "Rouse,  Christopher", "Bernstein,  Leonard", "Copland,  Aaron", "Bartok [Bartók],  Béla"];
 
-  let composersByTopSeasons = processComposers(composers).sort((a,b) =>  b.works.reduce((sum,work)=>sum + (+work.seasonCount),0) - a.works.reduce((sum,work)=>sum + (+work.seasonCount),0)).slice(0,50); 
+  let composersByTopSeasons = processComposers(composers).sort((a,b) =>  b.works.reduce((sum,work)=>sum + (+work.seasonCount),0) - a.works.reduce((sum,work)=>sum + (+work.seasonCount),0)).slice(0,60); 
 	
 	console.log(composersByTopSeasons);
 	

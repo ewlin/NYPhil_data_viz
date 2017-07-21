@@ -26,6 +26,8 @@ d3.json('beethoven.json', d => {
 	//console.log((pack(node)).descendants()); 
 	g.append("g").selectAll(".work").data((pack(node)).descendants().slice(1))
 		.enter()
+		.append("g")
+		.attr("class", "circle")
 		.append("circle")
 		.attr("class", function(d) { return d.children ? "parent node" : "leaf node"; })
 		.attr("r", function(d) { return d.r; })

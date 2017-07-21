@@ -178,7 +178,7 @@ const ALL_SEASONS = [
 
 let composersByTotal = []; 
 
-d3.json('top50.json', composers => {
+d3.json('top60_alt.json', composers => {
 	composers.forEach( composer => {
 		let works = composer.works; 
 		let worksByYears = {composer: composer.composer, seasons: {}}; 
@@ -202,9 +202,32 @@ d3.json('top50.json', composers => {
 										.range([0, SVG_WIDTH])
 										.padding(.1); 
 	
-	//TODO: create color or opacity scale for concentration (aka number of pieces by composer in one season); 
-	//Use findMax() to get max value in range 
 	let densityScale = d3.scalePow().exponent(.7).domain([0,30]).range([0,1]); 
+	
+	//TODO: Create axis on top of graph for seasons (Every 25 seasons?) 
+	
+	//let axisYears = d3.axisTop(x)
+	//									.tickValues(x.domain().filter((season, i) => {
+	//										const s = ["1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01"];
+	//										return s.includes(season); 
+	//									}))
+	//
+	//let axis = d3.select("body").select(".container")
+	//		.append("svg")
+	//		.attr("width", SVG_WIDTH)
+	//		.attr("height", 60)
+	//		.attr("x", 0)
+	//		.attr("y", 0)
+	//		.append("g")
+	//    .attr("transform", `translate(-${x.bandwidth()/2},20)`)
+	//		.call(axisYears)
+	//		.attr("font-size", "13px");
+	//
+	//d3.select("body").selectAll(".tick").select("line")
+	//						.attr("stroke", "White")
+	//						.attr("stroke-dasharray", "2,2")
+
+	
 	
 	composersByTotal.forEach( composer => {
 		let composerSeasonsArr = []; 
@@ -213,10 +236,10 @@ d3.json('top50.json', composers => {
 			composerSeasonsArr.push({season: s, count: composerSeasons[s]}); 
 		}
 		//console.log(beethovenSeasonsArr);
-		let svg = d3.select("body")
+		let svg = d3.select("body").select(".container")
 			.append("svg")
 			.attr("width", SVG_WIDTH)
-			.attr("height", 80)
+			.attr("height", 60)
 			.attr("x", 0)
 			.attr("y", 0); 
 		
@@ -226,14 +249,16 @@ d3.json('top50.json', composers => {
 			.append("rect")
 			.attr("y", 0)
 			.attr("x", d => x(d.season))
-			.attr("height", 80)
+			.attr("height", 60)
 			.attr("width", x.bandwidth)
 			.attr("fill", "Tomato")
 			.attr("fill-opacity", d => densityScale(d.count))
 			
 			//Borders around works that have 5+ performances
-			//.attr("stroke", "Black")
-			//.attr("stroke-width", d => d.count >= 5 ? 2 : 0)
+			.attr("stroke", "#369c9c")
+			//.attr("stroke-width", d => d.count >= 10 ? 2 : 0)
+			.attr("stroke-width", d => d.season >= "2007-08" && d.count > 0 ? 2 : 0)
+			.attr("stroke-opacity", 0.7)
 	});		
 	
 }); 
