@@ -35,6 +35,7 @@ d3.json('beethoven.json', d => {
 		.attr("fill", function(d) { return colorIndex(d.data.category); })
 		.attr("opacity", 0.85)
 		.on("mouseover", (d, i, nodes) => {
+			console.log(d); 
 			//g.select("g")
 			//	.append("rect")
 			//	.attr("width", "50")
