@@ -203,9 +203,19 @@ d3.json('top60_alt.json', composers => {
 		composersByTotal.push(worksByYears); 
 	}); 
 	
+	let composersArray = composersByTotal.map( composer => {
+		let composerSeasonsArr = []; 
+		let composerSeasons = composer.seasons; 
+		
+		for (let s in composerSeasons) {
+			composerSeasonsArr.push({season: s, count: composerSeasons[s]}); 
+		}
+		
+		return {composer: composer.composer, seasons: composerSeasonsArr}; 
+	}); 
 	
 	console.log("MAX=" + findMax(composersByTotal));
-	console.log(composersByTotal); 
+	console.log(composersArray); 
 	composersByTotal.forEach(composer => console.log(composer.composer)); 
 
 	//scale to determine where bar goes for each season 
