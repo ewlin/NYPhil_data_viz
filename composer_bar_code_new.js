@@ -249,39 +249,43 @@ d3.json('top60_alt.json', composers => {
 	//						.attr("stroke-dasharray", "2,2")
 
 	
-	composersByTotal.forEach( (composer, i) => {
-		
-		let composerSeasonsArr = []; 
-		let composerSeasons = composer.seasons; 
-		
-		for (let s in composerSeasons) {
-			composerSeasonsArr.push({season: s, count: composerSeasons[s]}); 
-		}
-		let bars = SVG.append("g")
-			.attr("width", SVG_WIDTH)
-			.attr("height", 60)
-			.attr("x", 0)
-			.attr("y", 0)
-			.attr("transform", "translate(0," + i*BAR_HEIGHT + ")"); 
-			 
-		
-		bars.selectAll(".season")
-			.data(composerSeasonsArr)
-			.enter()
-			.append("rect")
-			.attr("y", 0)
-			.attr("x", d => x(d.season))
-			.attr("height", BAR_HEIGHT)
-			.attr("width", x.bandwidth)
-			.attr("fill", "Tomato")
-			.attr("fill-opacity", d => densityScale(d.count))
-			
-			//Borders around works that have 5+ performances
-			.attr("stroke", "#369c9c")
-			//.attr("stroke-width", d => d.count >= 10 ? 2 : 0)
-			.attr("stroke-width", d => d.season >= "2007-08" && d.count > 0 ? 2 : 0)
-			.attr("stroke-opacity", 0.7)
-	});		
+	//!!! TODO: Use composerArray to create chart and bind all data all at once
+	
+	
+	
+	//composersByTotal.forEach( (composer, i) => {
+	//	
+	//	let composerSeasonsArr = []; 
+	//	let composerSeasons = composer.seasons; 
+	//	
+	//	for (let s in composerSeasons) {
+	//		composerSeasonsArr.push({season: s, count: composerSeasons[s]}); 
+	//	}
+	//	let bars = SVG.append("g")
+	//		.attr("width", SVG_WIDTH)
+	//		.attr("height", 60)
+	//		.attr("x", 0)
+	//		.attr("y", 0)
+	//		.attr("transform", "translate(0," + i*BAR_HEIGHT + ")"); 
+	//		 
+	//	
+	//	bars.selectAll(".season")
+	//		.data(composerSeasonsArr)
+	//		.enter()
+	//		.append("rect")
+	//		.attr("y", 0)
+	//		.attr("x", d => x(d.season))
+	//		.attr("height", BAR_HEIGHT)
+	//		.attr("width", x.bandwidth)
+	//		.attr("fill", "Tomato")
+	//		.attr("fill-opacity", d => densityScale(d.count))
+	//		
+	//		//Borders around works that have 5+ performances
+	//		.attr("stroke", "#369c9c")
+	//		//.attr("stroke-width", d => d.count >= 10 ? 2 : 0)
+	//		.attr("stroke-width", d => d.season >= "2007-08" && d.count > 0 ? 2 : 0)
+	//		.attr("stroke-opacity", 0.7)
+	//});		
 	
 }); 
 
