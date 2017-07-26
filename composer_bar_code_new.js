@@ -249,9 +249,28 @@ d3.json('top60_alt.json', composers => {
 	//						.attr("stroke-dasharray", "2,2")
 
 	
-	//!!! TODO: Use composerArray to create chart and bind all data all at once
+	//!!! TODO: Use composersArray to create chart and bind all data all at once (DONE!!!)
 	
+	let bars = SVG.selectAll(".composer")
+			.data(composersArray)
+			.enter()
+			.append("g")
+			.attr("width", SVG_WIDTH)
+			.attr("height", 60)
+			.attr("x", 0)
+			.attr("y", 0)
+			.attr("transform", (d, i) => "translate(0," + i*BAR_HEIGHT + ")"); 
 	
+	bars.selectAll(".season")
+			.data( d => d.seasons)
+			.enter()
+			.append("rect")
+			.attr("y", 0)
+			.attr("x", d => x(d.season))
+			.attr("height", BAR_HEIGHT)
+			.attr("width", x.bandwidth)
+			.attr("fill", "Tomato")
+			.attr("fill-opacity", d => densityScale(d.count)); 
 	
 	//composersByTotal.forEach( (composer, i) => {
 	//	
