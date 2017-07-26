@@ -193,12 +193,15 @@ d3.json('top60_alt.json', composers => {
 	
 	composers.forEach( composer => {
 		let works = composer.works; 
-		let worksByYears = {composer: composer.composer, seasons: {}}; 
+		let worksByYears = {composer: composer.composer, seasons: {}, firstSeason: null}; 
 		ALL_SEASONS.forEach( season => {
 			let worksPerSeason = works.reduce( (total,work) => {
 				 return work.seasons.includes(season) ? total + 1 : total; 
 			}, 0); 
 			worksByYears.seasons[season] = worksPerSeason; 
+			if (!worksByYears.firstSeason) {
+				if (worksPerSeason) worksByYears.firstSeason = season; 
+			}
 		}); 
 		composersByTotal.push(worksByYears); 
 	}); 
