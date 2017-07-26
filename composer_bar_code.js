@@ -206,26 +206,26 @@ d3.json('top60_alt.json', composers => {
 	
 	//TODO: Create axis on top of graph for seasons (Every 25 seasons?) 
 	
-	//let axisYears = d3.axisTop(x)
-	//									.tickValues(x.domain().filter((season, i) => {
-	//										const s = ["1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01"];
-	//										return s.includes(season); 
-	//									}))
-	//
-	//let axis = d3.select("body").select(".container")
-	//		.append("svg")
-	//		.attr("width", SVG_WIDTH)
-	//		.attr("height", 60)
-	//		.attr("x", 0)
-	//		.attr("y", 0)
-	//		.append("g")
-	//    .attr("transform", `translate(-${x.bandwidth()/2},20)`)
-	//		.call(axisYears)
-	//		.attr("font-size", "13px");
-	//
-	//d3.select("body").selectAll(".tick").select("line")
-	//						.attr("stroke", "White")
-	//						.attr("stroke-dasharray", "2,2")
+	let axisYears = d3.axisTop(x)
+										.tickValues(x.domain().filter((season, i) => {
+											const s = ["1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01"];
+											return s.includes(season); 
+										}))
+	
+	let axis = d3.select("body").select(".container")
+			.append("svg")
+			.attr("width", SVG_WIDTH)
+			.attr("height", 60)
+			.attr("x", 0)
+			.attr("y", 0)
+			.append("g")
+	    .attr("transform", `translate(-${x.bandwidth()/2},20)`)
+			.call(axisYears)
+			.attr("font-size", "13px");
+	
+	d3.select("body").selectAll(".tick").select("line")
+							.attr("stroke", "White")
+							.attr("stroke-dasharray", "2,2")
 
 	
 	
