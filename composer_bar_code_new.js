@@ -179,6 +179,11 @@ const BAR_HEIGHT = 40;
 
 let composersByTotal = []; 
 
+let composerArray; 
+let composersByFirstSeason; 
+
+let transition; 
+
 
 d3.json('top60_alt.json', composers => {
 	
@@ -206,7 +211,7 @@ d3.json('top60_alt.json', composers => {
 		composersByTotal.push(worksByYears); 
 	}); 
 	
-	let composersArray = composersByTotal.map( composer => {
+	composersArray = composersByTotal.map( composer => {
 		let composerSeasonsArr = []; 
 		let composerSeasons = composer.seasons; 
 		
@@ -214,11 +219,14 @@ d3.json('top60_alt.json', composers => {
 			composerSeasonsArr.push({season: s, count: composerSeasons[s]}); 
 		}
 		
-		return {composer: composer.composer, seasons: composerSeasonsArr}; 
+		return {composer: composer.composer, seasons: composerSeasonsArr, firstSeason: composer.firstSeason}; 
 	}); 
 	
 	console.log("MAX=" + findMax(composersByTotal));
 	console.log(composersArray); 
+	composersByFirstSeason = composersArray.slice()
+																				.sort( (a,b) => parseInt(a.firstSeason) - parseInt(b.firstSeason) );
+	console.log(composersByFirstSeason); 
 	composersByTotal.forEach(composer => console.log(composer.composer)); 
 
 	//scale to determine where bar goes for each season 
@@ -259,11 +267,12 @@ d3.json('top60_alt.json', composers => {
 			.enter()
 			.append("g")
 			.attr("width", SVG_WIDTH)
-			.attr("height", 60)
+			.attr("height", BAR_HEIGHT)
 			.attr("x", 0)
 			.attr("y", 0)
 			.attr("transform", (d, i) => "translate(0," + i*BAR_HEIGHT + ")"); 
 	
+	console.log(bars.data());
 	bars.selectAll(".season")
 			.data( d => d.seasons)
 			.enter()
@@ -273,7 +282,13 @@ d3.json('top60_alt.json', composers => {
 			.attr("height", BAR_HEIGHT)
 			.attr("width", x.bandwidth)
 			.attr("fill", "Tomato")
-			.attr("fill-opacity", d => densityScale(d.count)); 
+			.attr("fill-opacity", d => densityScale(d.count))
+	
+	//Borders around works that have 5+ performances
+.attr("stroke", "#369c9c")
+//.attr("stroke-width", d => d.count >= 10 ? 2 : 0)
+.attr("stroke-width", d => d.season >= "2007-08" && d.count > 0 ? 2 : 0)
+.attr("stroke-opacity", 0.7)
 	
 	//composersByTotal.forEach( (composer, i) => {
 	//	
@@ -308,6 +323,44 @@ d3.json('top60_alt.json', composers => {
 	//		.attr("stroke-width", d => d.season >= "2007-08" && d.count > 0 ? 2 : 0)
 	//		.attr("stroke-opacity", 0.7)
 	//});		
+	transition = function() {
+		bars.data(composersByFirstSeason)
+			.transition()
+			.duration(0); 
+			//.attr("transform", (d, i) => {
+			//			console.log(d); 
+			//			return "translate(0," + i*30 + ")"; 
+			//		}); 
+		//console.log(bars.data())
+		//console.log(bars); 
+		
+		
+		bars.selectAll("rect").data(d => d.seasons)
+								.transition()
+								.duration(1000)
+								.attr("fill", "Steelblue")
+								.attr("fill-opacity", d => densityScale(d.count))
+							.attr("stroke", "#369c9c")
+					//.attr("stroke-width", d => d.count >= 10 ? 2 : 0)
+						.attr("stroke-width", d => d.season >= "2007-08" && d.count > 0 ? 2 : 0)
+					.attr("stroke-opacity", 0.7)
+		
+		//.duration(900)
+		//.attr("x", d => x(d.season))
+		//.attr("height", BAR_HEIGHT)
+		//.attr("width", x.bandwidth)
+		//.attr("fill", "Tomato")
+		//.attr("fill-opacity", d => densityScale(d.count))		
+		//.data( d => d.seasons)
+		//	.transition()
+		//	.duration(1200)
+		//	.attr("x", d => x(d.season))
+		//	.attr("height", BAR_HEIGHT)
+		//	.attr("width", x.bandwidth)
+		//	.attr("fill", "Tomato")
+		//	.attr("fill-opacity", d => densityScale(d.count))
+		
+	}
 	
 }); 
 
@@ -321,3 +374,4 @@ function findMax(composersArr) {
 		return max > highest ? max : highest; 
 	}, 0); 
 }
+
