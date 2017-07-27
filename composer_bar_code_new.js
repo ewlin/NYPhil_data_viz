@@ -183,6 +183,7 @@ let composerArray;
 let composersByFirstSeason; 
 
 let transition; 
+let screen_height = window.outerHeight; 
 
 
 d3.json('top60_alt.json', composers => {
@@ -190,7 +191,7 @@ d3.json('top60_alt.json', composers => {
 	const SVG_WIDTH = 1200; 
 
 	
-	
+	console.log(composers); 
 	
 	composers.forEach( composer => {
 		let works = composer.works; 
@@ -240,18 +241,18 @@ d3.json('top60_alt.json', composers => {
 											const s = ["1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01"];
 											return s.includes(season); 
 										}))
-										.tickSize(650)
+										.tickSize(screen_height)
 									
 	
 	let axis = d3.select("body").select(".container")
 			.append("svg")
 			.attr("class", "axis")
 			.attr("width", SVG_WIDTH)
-			.attr("height", 60)
+			.attr("height", screen_height)
 			.attr("x", 0)
 			.attr("y", 0)
 			.append("g")
-	    .attr("transform", `translate(-${x.bandwidth()/2},670)`)
+	    .attr("transform", `translate(-${x.bandwidth()/2},${screen_height+20})`)
 			.call(axisYears)
 			
 	axis.selectAll("text").attr("fill", "white").attr("font-size", "15px");
