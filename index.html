@@ -7,16 +7,43 @@
 			body {
 				background-color: #0e2b2b;
 			}
+			
+			.buttons {
+				position: fixed;
+			}
+			
+			button:focus {
+				outline:0;
+				opacity: .5;
+			}
+			
+			button {
+				height: 28px;
+				font-size: 13px;
+				color: white;
+				border: none;
+				background: grey;
+			}
 			/** Stuff for Composer Bar Code chart **/
 			.container {
 				width: 1200px; 
 				margin: auto; 
 			}
-			.bars {
-				margin-bottom: 10px;
-			}
+			/*.bars {
+			/*	margin-bottom: 10px;
+			/*}*/
 			svg {
 				margin: 10px auto; 
+			}
+			
+			svg.axis {
+				margin-top: 40px;
+				position: fixed;
+				height: 600px;
+			}
+			
+			svg.main-svg {
+				margin-top: 80px;
 			}
 			
 			circle {
@@ -68,7 +95,11 @@
 	
 	<body> 
 		
-		<button onclick="transition()">Transition</button>
+		<div class="buttons">
+			<button id="by-first-season">Sort Composers By Earliest Performance by NYPhil</button>
+			<button id="by-most-performances">Sort Composers By Most Performances</button>
+		</div>
+		
 		<div class="container"></div>
 		
 		

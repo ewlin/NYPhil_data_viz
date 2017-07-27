@@ -175,7 +175,7 @@ const ALL_SEASONS = [
    "2015-16",
    "2016-17"
 ]; 
-const BAR_HEIGHT = 40; 
+const BAR_HEIGHT = 45; 
 
 let composersByTotal = []; 
 
@@ -189,12 +189,8 @@ d3.json('top60_alt.json', composers => {
 	
 	const SVG_WIDTH = 1200; 
 
-	const SVG = d3.select(".container").append("svg")
-								.attr("class", "main-svg")
-								.attr("x", 0)
-								.attr("y", 0)
-								.attr("width", SVG_WIDTH)
-								.attr("height", composers.length * BAR_HEIGHT); 
+	
+	
 	
 	composers.forEach( composer => {
 		let works = composer.works; 
@@ -231,34 +227,46 @@ d3.json('top60_alt.json', composers => {
 
 	//scale to determine where bar goes for each season 
 	let x = d3.scaleBand().domain(ALL_SEASONS)
-										.range([0, SVG_WIDTH])
+										.range([0, 1050])
 										.padding(.1); 
 	
 	let densityScale = d3.scalePow().exponent(.8).domain([0,30]).range([0,1]); 
 	
 	//TODO: Create axis on top of graph for seasons (Every 25 seasons?) 
 	
-	//let axisYears = d3.axisTop(x)
-	//									.tickValues(x.domain().filter((season, i) => {
-	//										const s = ["1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01"];
-	//										return s.includes(season); 
-	//									}))
-	//
-	//let axis = d3.select("body").select(".container")
-	//		.append("svg")
-	//		.attr("width", SVG_WIDTH)
-	//		.attr("height", 60)
-	//		.attr("x", 0)
-	//		.attr("y", 0)
-	//		.append("g")
-	//    .attr("transform", `translate(-${x.bandwidth()/2},20)`)
-	//		.call(axisYears)
-	//		.attr("font-size", "13px");
-	//
-	//d3.select("body").selectAll(".tick").select("line")
-	//						.attr("stroke", "White")
-	//						.attr("stroke-dasharray", "2,2")
-
+	
+  let axisYears = d3.axisTop(x)
+										.tickValues(x.domain().filter((season, i) => {
+											const s = ["1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01"];
+											return s.includes(season); 
+										}))
+										.tickSize(650)
+									
+	
+	let axis = d3.select("body").select(".container")
+			.append("svg")
+			.attr("class", "axis")
+			.attr("width", SVG_WIDTH)
+			.attr("height", 60)
+			.attr("x", 0)
+			.attr("y", 0)
+			.append("g")
+	    .attr("transform", `translate(-${x.bandwidth()/2},670)`)
+			.call(axisYears)
+			
+	axis.selectAll("text").attr("fill", "white").attr("font-size", "15px");
+	axis.select(".domain").remove(); 
+	
+	d3.select("body").selectAll(".tick").select("line")
+							.attr("stroke", "White")
+							.attr("stroke-dasharray", "2,2")
+	
+	const SVG = d3.select(".container").append("svg")
+								.attr("class", "main-svg")
+								.attr("x", 0)
+								.attr("y", 0)
+								.attr("width", SVG_WIDTH)
+								.attr("height", composers.length * BAR_HEIGHT); 
 	
 	//!!! TODO: Use composersArray to create chart and bind all data all at once (DONE!!!)
 	
@@ -272,7 +280,7 @@ d3.json('top60_alt.json', composers => {
 			.attr("y", 0)
 			.attr("transform", (d, i) => "translate(0," + i*BAR_HEIGHT + ")"); 
 	
-	console.log(bars.data());
+	
 	bars.selectAll(".season")
 			.data( d => d.seasons)
 			.enter()
@@ -283,13 +291,28 @@ d3.json('top60_alt.json', composers => {
 			.attr("width", x.bandwidth)
 			.attr("fill", "Tomato")
 			.attr("fill-opacity", d => densityScale(d.count))
+
+
+			//Borders around works that have 5+ performances
+			.attr("stroke", "#369c9c")
+			//.attr("stroke-width", d => d.count >= 10 ? 2 : 0)
+			.attr("stroke-width", d => d.season >= "2007-08" && d.count > 0 ? 2 : 0)
+			.attr("stroke-opacity", 0.7)
 	
-	//Borders around works that have 5+ performances
-.attr("stroke", "#369c9c")
-//.attr("stroke-width", d => d.count >= 10 ? 2 : 0)
-.attr("stroke-width", d => d.season >= "2007-08" && d.count > 0 ? 2 : 0)
-.attr("stroke-opacity", 0.7)
-	
+	bars.append("text")
+			.attr("class", "composer-name")
+			.text( (d) => { 
+				let c = d.composer.split("  "); 
+				let first = c[0].match(/\[.*\]/) ? c[0].match(/\[.*\]/)[0].slice(1,c[0].match(/\[.*\]/)[0].length-1) : c[0]; 
+				return `${first} ${c[1].trim().slice(0,1)}.`; 
+			}).attr("transform", `translate(1060, 27)`)
+			.attr("fill", "White")
+			.attr("font-family", "Arial")
+			.attr("font-size", "14px"); 
+
+			//.attr("transform", `translate(${SVG_WIDTH}, 0)`)
+			 
+
 	//composersByTotal.forEach( (composer, i) => {
 	//	
 	//	let composerSeasonsArr = []; 
@@ -323,10 +346,14 @@ d3.json('top60_alt.json', composers => {
 	//		.attr("stroke-width", d => d.season >= "2007-08" && d.count > 0 ? 2 : 0)
 	//		.attr("stroke-opacity", 0.7)
 	//});		
-	transition = function() {
-		bars.data(composersByFirstSeason)
+	transition = function (newData, color) {
+		bars.data(newData)
 			.transition()
-			.duration(0); 
+			.duration(0);
+			
+		//	.transition()
+		//	.duration(1500)
+		//	.text(d => d.composer)
 			//.attr("transform", (d, i) => {
 			//			console.log(d); 
 			//			return "translate(0," + i*30 + ")"; 
@@ -334,34 +361,47 @@ d3.json('top60_alt.json', composers => {
 		//console.log(bars.data())
 		//console.log(bars); 
 		
+		//bars.selectAll(".composer-name")
+		//	.transition()
+		//	.duration(1500)
+		//	.text(d => d.composer)
 		
 		bars.selectAll("rect").data(d => d.seasons)
 								.transition()
-								.duration(1000)
-								.attr("fill", "Steelblue")
+								.duration(1200)
+								.attr("fill", color)
 								.attr("fill-opacity", d => densityScale(d.count))
 							.attr("stroke", "#369c9c")
 					//.attr("stroke-width", d => d.count >= 10 ? 2 : 0)
 						.attr("stroke-width", d => d.season >= "2007-08" && d.count > 0 ? 2 : 0)
 					.attr("stroke-opacity", 0.7)
 		
-		//.duration(900)
-		//.attr("x", d => x(d.season))
-		//.attr("height", BAR_HEIGHT)
-		//.attr("width", x.bandwidth)
-		//.attr("fill", "Tomato")
-		//.attr("fill-opacity", d => densityScale(d.count))		
-		//.data( d => d.seasons)
-		//	.transition()
-		//	.duration(1200)
-		//	.attr("x", d => x(d.season))
-		//	.attr("height", BAR_HEIGHT)
-		//	.attr("width", x.bandwidth)
-		//	.attr("fill", "Tomato")
-		//	.attr("fill-opacity", d => densityScale(d.count))
+		bars.select(".composer-name")
+			.transition()
+			.duration(1200)
+			.text( (d) => { 
+				let c = d.composer.split(","); 
+				let first = c[0].match(/\[.*\]/) ? c[0].match(/\[.*\]/)[0].slice(1,c[0].match(/\[.*\]/)[0].length-1) : c[0]; 
+				return `${first}, ${c[1].trim().slice(0,1)}.`; 
+			});
+		
+		console.log(bars.selectAll("rect").data())
+		console.log(bars.selectAll("text").data())
+			//.text( d => { 
+			//	let c = d.composer.split(","); 
+			//	let first = c[0].match(/\[.*\]/) ? c[0].match(/\[.*\]/)[0].slice(1,c[0].match(/\[.*\]/)[0].length-1) : c[0]; 
+			//	return `${first}, ${c[1].trim().slice(0,1)}.`; 
+			//}).attr("transform", `translate(1060, 27)`)
+			//.attr("fill", "White")
+			//.attr("font-family", "Arial"); 
 		
 	}
 	
+	let button1 = document.getElementById("by-first-season"); 
+	button1.addEventListener("click", () => transition(composersByFirstSeason, "Steelblue"));
+	let button2  = document.getElementById("by-most-performances"); 
+	button2.addEventListener("click", () => transition(composersArray, "Tomato"));
+
 }); 
 
 function findMax(composersArr) {
