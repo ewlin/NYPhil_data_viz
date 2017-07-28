@@ -242,8 +242,9 @@ d3.json('top60_alt.json', composers => {
 	
 	//!!!TODO: Create a legend
 	
-	let legend = d3.select(".container").append("svg")
-												.attr("class", "legend")
+	//let legend = d3.select(".container").append("svg")
+		//										.attr("class", "legend");
+												
 	
 	
 	
