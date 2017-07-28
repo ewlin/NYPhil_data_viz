@@ -8,12 +8,16 @@
 				background-color: #0e2b2b;
 			}
 			
-			.buttons {
+			#buttons {
 				position: fixed;
 			}
 			
 			button:focus {
 				outline:0;
+				/*opacity: .5;*/
+			}
+			
+			button.active {
 				opacity: .5;
 			}
 			
@@ -23,6 +27,7 @@
 				color: white;
 				border: none;
 				background: grey;
+				cursor: pointer;
 			}
 			/** Stuff for Composer Bar Code chart **/
 			.container {
@@ -95,9 +100,9 @@
 	
 	<body> 
 		
-		<div class="buttons">
+		<div id="buttons">
 			<button id="by-first-season">Sort Composers By Earliest Performance by NYPhil</button>
-			<button id="by-most-performances">Sort Composers By Most Performances</button>
+			<button class="active" id="by-most-performances">Sort Composers By Most Performances</button>
 		</div>
 		
 		<div class="container"></div>
