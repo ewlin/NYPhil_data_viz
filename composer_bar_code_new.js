@@ -190,8 +190,7 @@ let screen_height = window.outerHeight;
 d3.json('top60_alt.json', composers => {
 	
 	const SVG_WIDTH = 1200; 
-
-	
+	console.log(composers);
 	
 	composers.forEach( composer => {
 		let works = composer.works; 
@@ -219,10 +218,11 @@ d3.json('top60_alt.json', composers => {
 		return {composer: composer.composer, seasons: composerSeasonsArr, firstSeason: composer.firstSeason}; 
 	}); 
 	
+	
 	composersByFirstSeason = composersArray.slice()
 																			.sort( (a,b) => parseInt(a.firstSeason) - parseInt(b.firstSeason) );
 
-
+	console.log(composersArray); 
 	//scale to determine where bar goes for each season 
 	let x = d3.scaleBand().domain(ALL_SEASONS)
 										.range([0, 1050])
@@ -239,13 +239,6 @@ d3.json('top60_alt.json', composers => {
 										}))
 										.tickSize(screen_height)
 									
-	
-	//!!!TODO: Create a legend
-	
-	//let legend = d3.select(".container").append("svg")
-		//										.attr("class", "legend");
-												
-	
 	
 	
 	let axis = d3.select("body").select(".container")
@@ -265,14 +258,16 @@ d3.json('top60_alt.json', composers => {
 	d3.select("body").selectAll(".tick").select("line")
 							.attr("stroke", "White")
 							.attr("stroke-dasharray", "2,2")
-	
+												
 	const SVG = d3.select(".container").append("svg")
 								.attr("class", "main-svg")
 								.attr("x", 0)
 								.attr("y", 0)
 								.attr("width", SVG_WIDTH)
-								.attr("height", composers.length * BAR_HEIGHT); 
+								.attr("height", composers.length * BAR_HEIGHT + 50); 
 		
+	
+	
 	let bars = SVG.selectAll(".composer")
 			.data(composersArray)
 			.enter()

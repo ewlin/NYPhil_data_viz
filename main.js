@@ -291,9 +291,36 @@ d3.json('complete.json', d => {
 		});
 	});
 
+	let compositionsAllSorted = compositionsBySeason(); 
+	
+	let firstPerfsOfSeasons = {}; 
+	let seasonsFirstTimeCompositions = []; 
+	let seasonsNewCompRatios = []; 
+	
+	const seasonsByTotalPerfs = compositionsPerSeason(); 
+
+	compositionsAllSorted.forEach(composition => {
+		const FIRST_SEASON = composition.seasons[0];
+		if (!firstPerfsOfSeasons[FIRST_SEASON]) {
+			firstPerfsOfSeasons[FIRST_SEASON] = [composition]; 
+		} else {
+			firstPerfsOfSeasons[FIRST_SEASON].push(composition); 
+		}
+	}); 
+	
+	for (let season in firstPerfsOfSeasons) {
+		seasonsFirstTimeCompositions.push({season: season, compositions: firstPerfsOfSeasons[season]});
+	}
+	
+	console.log(firstPerfsOfSeasons);
+	let ratios = seasonsByTotalPerfs.map(season => {
+		return {season: season.season, ratio: firstPerfsOfSeasons[season.season].length/season.count};
+	})
+	console.log(ratios);
+	
 	console.log(composers);
 	//console.log(compositionsByFrequency())
-	console.log(compositionsBySeason());
+	console.log(compositionsAllSorted);
 	var compositionsSorted = compositionsBySeason();
 	var totalCompositions = compositionsSorted.length;
 	var top100 = compositionsSorted.slice(0,100);
@@ -423,7 +450,6 @@ d3.json('complete.json', d => {
 	//	.attr("r", function(d) { return d.r; })
 	//	.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });;
 
-	console.log(compositionsPerSeason()); 
 
 });
 
