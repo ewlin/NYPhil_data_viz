@@ -218,7 +218,7 @@ let svgHeight = 500;
 let svgWidth = 1200;
 
 
-d3.json('complete.json', d => {
+d3.json('complete_latest_july_2017.json', d => {
 	const PROGRAMS = d.programs;
 
 	/*
@@ -239,9 +239,10 @@ d3.json('complete.json', d => {
 	let subscriptionConcerts = PROGRAMS.filter( p => {
 		return p.orchestra === "New York Philharmonic" //|| p.orchestra === "New York Symphony";
 	}).filter( p => {
-		return p.concerts[0]["eventType"] === "Subscription Season";
+		return p.concerts[0]["eventType"] == "Subscription Season";
 	});
 
+	console.log(subscriptionConcerts); 
 	subscriptionConcerts.forEach( program => {
 		let works = [],
 				numOfConcerts = program.concerts.length;
@@ -307,19 +308,45 @@ d3.json('complete.json', d => {
 			firstPerfsOfSeasons[FIRST_SEASON].push(composition); 
 		}
 	}); 
-	
+
 	for (let season in firstPerfsOfSeasons) {
 		seasonsFirstTimeCompositions.push({season: season, compositions: firstPerfsOfSeasons[season]});
 	}
 	
 	console.log(firstPerfsOfSeasons);
-	let ratios = seasonsByTotalPerfs.map(season => {
+	let ratiosOfFirstTime = seasonsByTotalPerfs.map(season => {
 		return {season: season.season, ratio: firstPerfsOfSeasons[season.season].length/season.count};
-	})
-	console.log(ratios);
+	}); 
+	//console.log(seasonsByTotalPerfs); 
+	//console.log(ratiosOfFirstTime);
 	
-	console.log(composers);
-	//console.log(compositionsByFrequency())
+
+	let stats = ALL_SEASONS.map( (season, idx) => {
+		
+		return {season: season, 
+						totalPieces: seasonsByTotalPerfs[idx].count, 
+						piecesFirst: firstPerfsOfSeasons[season].length, 
+						piecesRepeat: seasonsByTotalPerfs[idx].count - firstPerfsOfSeasons[season].length}; 
+	}); 
+	
+	let statsVers2 = ALL_SEASONS.map( (season, idx) => {
+		
+		let firstWithRepeatPerfs = firstPerfsOfSeasons[season].filter( piece => {
+			return piece.seasonCount > 1; 
+		}).length; 
+		
+		return {season: season, 
+						totalPieces: seasonsByTotalPerfs[idx].count, 
+						piecesFirst: firstPerfsOfSeasons[season].length, 
+						piecesFirstSingle: firstPerfsOfSeasons[season].length - firstWithRepeatPerfs, 
+						piecesFirstMultiple: firstWithRepeatPerfs, 
+						piecesRepeat: seasonsByTotalPerfs[idx].count - firstPerfsOfSeasons[season].length}; 
+	}); 
+	
+	
+	
+	console.log(stats);
+	console.log(statsVers2);
 	console.log(compositionsAllSorted);
 	var compositionsSorted = compositionsBySeason();
 	var totalCompositions = compositionsSorted.length;
