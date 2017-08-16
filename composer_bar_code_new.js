@@ -291,11 +291,11 @@ d3.json('top60_alt.json', composers => {
 			.attr("fill-opacity", d => densityScale(d.count))
 
 
-			//Borders around works that have 5+ performances
-			.attr("stroke", "#369c9c")
-			//.attr("stroke-width", d => d.count >= 10 ? 2 : 0)
-			.attr("stroke-width", d => d.season >= "2007-08" && d.count > 0 ? 2 : 0)
-			.attr("stroke-opacity", 0.7)
+			////Borders around works that have 5+ performances
+			//.attr("stroke", "#369c9c")
+			////.attr("stroke-width", d => d.count >= 10 ? 2 : 0)
+			//.attr("stroke-width", d => d.season >= "2007-08" && d.count > 0 ? 2 : 0)
+			//.attr("stroke-opacity", 0.7)
 	
 	bars.append("text")
 			.attr("class", "composer-name")
@@ -321,10 +321,10 @@ d3.json('top60_alt.json', composers => {
 								.duration(1200)
 								.attr("fill", color)
 								.attr("fill-opacity", d => densityScale(d.count))
-							.attr("stroke", "#369c9c")
-					//.attr("stroke-width", d => d.count >= 10 ? 2 : 0)
-						.attr("stroke-width", d => d.season >= "2007-08" && d.count > 0 ? 2 : 0)
-					.attr("stroke-opacity", 0.7)
+						//.attr("stroke", "#369c9c")
+						////.attr("stroke-width", d => d.count >= 10 ? 2 : 0)
+						//.attr("stroke-width", d => d.season >= "2007-08" && d.count > 0 ? 2 : 0)
+						//.attr("stroke-opacity", 0.7);
 		
 		bars.select(".composer-name")
 			.transition()
@@ -344,9 +344,9 @@ d3.json('top60_alt.json', composers => {
 		target.classList.add("active");
 		
 		if (target.id == "by-first-season") {
-			transition(composersByFirstSeason, "Steelblue")
+			transition(composersByFirstSeason, "Steelblue"); 
 		} else if (target.id == "by-most-performances") {
-			transition(composersArray, "Tomato")
+			transition(composersArray, "Tomato"); 
 		}
 	}); 
 	

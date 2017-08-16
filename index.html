@@ -8,9 +8,11 @@
 				background-color: #0e2b2b;
 			}
 			
-			#buttons {
+			/**#buttons {
 				position: fixed;
-			}
+			}**/
+			
+			
 			
 			button:focus {
 				outline:0;
@@ -101,6 +103,8 @@
 	<body> 
 		
 		<div id="buttons">
+			<button id="transition">Transition</button>
+			<button id="transition-back">Transition Back</button>
 			<button id="by-first-season">Sort Composers By Earliest Performance by NYPhil</button>
 			<button class="active" id="by-most-performances">Sort Composers By Most Performances</button>
 		</div>
@@ -110,7 +114,7 @@
 		
 		<script src="d3-v4.js"></script>
 		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-		<script src="main.js"></script>
+		<script src="composer_bar_code_new.js"></script>
 
 	</body>
 
