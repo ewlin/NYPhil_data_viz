@@ -272,10 +272,7 @@ d3.json('top60_alt.json', composers => {
 			.data(composersArray)
 			.enter()
 			.append("g")
-			.attr("width", SVG_WIDTH)
-			.attr("height", BAR_HEIGHT)
-			.attr("x", 0)
-			.attr("y", 0)
+			.attr("class", "composer-bar")
 			.attr("transform", (d, i) => "translate(0," + i*BAR_HEIGHT + ")"); 
 	
 	
@@ -308,7 +305,9 @@ d3.json('top60_alt.json', composers => {
 			.attr("font-family", "Arial")
 			.attr("font-size", "14px"); 
 
-			
+	
+	//console.log(SVG.selectAll(".composer-bar").sort(function(a, b) { return x0(a.letter) - x0(b.letter) })); 
+
 	
 	transition = function (newData, color) {
 		

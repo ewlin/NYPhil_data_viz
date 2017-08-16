@@ -257,7 +257,9 @@ d3.json('complete_latest_july_2017.json', d => {
 		});
 	});
 
-	let compositionsAllSorted = compositionsBySeason(); 
+	let compositionsAllSorted = compositionsBySeasonCount(); 
+	
+	console.log(compositionsAllSorted);
 	
 	let firstPerfsOfSeasons = {}; 
 	let seasonsFirstTimeCompositions = []; 
@@ -268,6 +270,9 @@ d3.json('complete_latest_july_2017.json', d => {
 	
 	//STREAMGRAPH DATA
 
+	//TAKE stringified JSON OBJECT AND ADD WORLD PREMIERE + US PREMIERE INFO and redo Streamgraphs
+	//console.log(JSON.stringify(compositionsAllSorted));
+	
 	compositionsAllSorted.forEach(composition => {
 		const FIRST_SEASON = composition.seasons[0];
 		if (!firstPerfsOfSeasons[FIRST_SEASON]) {
@@ -276,6 +281,8 @@ d3.json('complete_latest_july_2017.json', d => {
 			firstPerfsOfSeasons[FIRST_SEASON].push(composition); 
 		}
 	}); 
+	
+	console.log(JSON.stringify(firstPerfsOfSeasons)); 
 
 	for (let season in firstPerfsOfSeasons) {
 		seasonsFirstTimeCompositions.push({season: season, compositions: firstPerfsOfSeasons[season]});
@@ -445,7 +452,7 @@ function compositionsByFrequency () {
 	});
 }
 
-function compositionsBySeason () {
+function compositionsBySeasonCount () {
 	let compositions = [];
 	for (let composer in composers) {
 		composers[composer].works.forEach( work => {
