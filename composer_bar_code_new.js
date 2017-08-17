@@ -275,7 +275,6 @@ d3.json('top60_alt.json', composers => {
 			.attr("class", "composer-bar")
 			.attr("transform", (d, i) => "translate(0," + i*BAR_HEIGHT + ")"); 
 	
-	
 	bars.selectAll(".season")
 			.data( d => d.seasons)
 			.enter()

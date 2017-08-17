@@ -178,6 +178,7 @@ const ALL_SEASONS = [
 
 
 let composers = {};
+let composersArray = []; 
 const SVG_HEIGHT = 600;
 const SVG_WIDTH = 1200;
 
@@ -256,10 +257,17 @@ d3.json('complete_latest_july_2017.json', d => {
 			}
 		});
 	});
-
+	
+	//turn object into array 
+	for (let composer in composers) {
+		composersArray.push(Object.assign(composers[composer], {composer: composer})); 
+	}
+	
+	console.log(composersArray); 
+	console.log(JSON.stringify(composersArray)); 
+	
 	let compositionsAllSorted = compositionsBySeasonCount(); 
 	
-	console.log(compositionsAllSorted);
 	
 	let firstPerfsOfSeasons = {}; 
 	let seasonsFirstTimeCompositions = []; 
@@ -282,7 +290,6 @@ d3.json('complete_latest_july_2017.json', d => {
 		}
 	}); 
 	
-	console.log(JSON.stringify(firstPerfsOfSeasons)); 
 
 	for (let season in firstPerfsOfSeasons) {
 		seasonsFirstTimeCompositions.push({season: season, compositions: firstPerfsOfSeasons[season]});
@@ -393,7 +400,6 @@ d3.json('complete_latest_july_2017.json', d => {
 				if (d.key == "pctRepeat") return "#59273e";
 			});
 		
-		console.log(SVG.selectAll("path").data())
 	}
 	
 	transition = function() {
@@ -417,7 +423,6 @@ d3.json('complete_latest_july_2017.json', d => {
 		//		if (d.key == "pctFirstMult") return "Tomato";
 		//		if (d.key == "pctRepeat") return "Grey";
 		//}); 
-		console.log(SVG.selectAll("path").data())
 
 	}
 	
