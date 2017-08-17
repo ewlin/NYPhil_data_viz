@@ -1654,7 +1654,8 @@
         ]
       }
     ],
-    "composer": "Beethoven,  Ludwig  van"
+    "composer": "Beethoven,  Ludwig  van", 
+		"birthAndDeathDates": [1770, 1827]
   },
   {
     "works": [
@@ -2071,7 +2072,9 @@
         ]
       }
     ],
-    "composer": "Weber,  Carl  Maria Von"
+    "composer": "Weber,  Carl  Maria Von", 
+		"birthAndDeathDates": [1786, 1826]
+
   },
   {
     "works": [
@@ -2321,7 +2324,9 @@
         ]
       }
     ],
-    "composer": "Rossini,  Gioachino"
+    "composer": "Rossini,  Gioachino",
+		"birthAndDeathDates": [1792, 1868]
+
   },
   {
     "works": [
@@ -4207,7 +4212,9 @@
         ]
       }
     ],
-    "composer": "Mozart,  Wolfgang  Amadeus"
+    "composer": "Mozart,  Wolfgang  Amadeus", 
+		"birthAndDeathDates": [1756, 1791]
+
   },
   {
     "works": [
@@ -4247,7 +4254,9 @@
         ]
       }
     ],
-    "composer": "Kalliwoda,  Johann  W."
+    "composer": "Kalliwoda,  Johann  W.", 
+		"birthAndDeathDates": [1801, 1866]
+
   },
   {
     "works": [
@@ -4310,7 +4319,9 @@
         ]
       }
     ],
-    "composer": "Bellini,  Vincenzo"
+    "composer": "Bellini,  Vincenzo", 
+		"birthAndDeathDates": [1801, 1835]
+
   },
   {
     "works": [
@@ -4323,7 +4334,9 @@
         ]
       }
     ],
-    "composer": "Romberg,  Bernhard"
+    "composer": "Romberg,  Bernhard", 
+		"birthAndDeathDates": [1767, 1841]
+
   },
   {
     "works": [
@@ -4371,7 +4384,9 @@
         ]
       }
     ],
-    "composer": "Hummel,  Johann"
+    "composer": "Hummel,  Johann",
+		"birthAndDeathDates": [1778, 1837]
+
   },
   {
     "works": [
@@ -5187,7 +5202,9 @@
         ]
       }
     ],
-    "composer": "Haydn,  Franz  Joseph"
+    "composer": "Haydn,  Franz  Joseph",
+		"birthAndDeathDates": [1732, 1809]
+
   },
   {
     "works": [
@@ -5822,7 +5839,9 @@
         ]
       }
     ],
-    "composer": "Mendelssohn,  Felix"
+    "composer": "Mendelssohn,  Felix",
+		"birthAndDeathDates": [1809, 1847]
+
   },
   {
     "works": [
@@ -5972,7 +5991,9 @@
         ]
       }
     ],
-    "composer": "Spohr,  Louis"
+    "composer": "Spohr,  Louis",
+		"birthAndDeathDates": [1784, 1859]
+
   },
   {
     "works": [
@@ -5985,7 +6006,9 @@
         ]
       }
     ],
-    "composer": "Nini,  Alessandro"
+    "composer": "Nini,  Alessandro",
+		"birthAndDeathDates": [1805, 1880]
+
   },
   {
     "works": [
@@ -6125,7 +6148,8 @@
         ]
       }
     ],
-    "composer": "Donizetti,  Gaetano"
+    "composer": "Donizetti,  Gaetano",
+		"birthAndDeathDates": [1797, 1848]
   },
   {
     "works": [
@@ -6147,7 +6171,9 @@
         ]
       }
     ],
-    "composer": "Herold,  Louis  Joseph Ferdinand [Hérold]"
+    "composer": "Herold,  Louis  Joseph Ferdinand [Hérold]",
+		"birthAndDeathDates": [1791, 1833]
+
   },
   {
     "works": [
@@ -6225,7 +6251,8 @@
         ]
       }
     ],
-    "composer": "Vieuxtemps,  Henri"
+    "composer": "Vieuxtemps,  Henri",
+		"birthAndDeathDates": [1820, 1881]
   },
   {
     "works": [
@@ -6273,7 +6300,9 @@
         ]
       }
     ],
-    "composer": "Lindpaintner,  Peter  Von"
+    "composer": "Lindpaintner,  Peter  Von",
+		"birthAndDeathDates": [1791, 1856]
+
   },
   {
     "works": [
@@ -6300,7 +6329,9 @@
         ]
       }
     ],
-    "composer": "Marschner,  Heinrich  August"
+    "composer": "Marschner,  Heinrich  August",
+		"birthAndDeathDates": [1795, 1861]
+
   },
   {
     "works": [
@@ -6340,7 +6371,9 @@
         ]
       }
     ],
-    "composer": "Bennett,  William  Sterndale"
+    "composer": "Bennett,  William  Sterndale",
+		"birthAndDeathDates": [1816, 1875]
+
   },
   {
     "works": [
@@ -6412,7 +6445,9 @@
         ]
       }
     ],
-    "composer": "Meyerbeer,  Giacomo"
+    "composer": "Meyerbeer,  Giacomo",
+		"birthAndDeathDates": [1791, 1864]
+
   },
   {
     "works": [
@@ -6442,7 +6477,9 @@
         ]
       }
     ],
-    "composer": "Ries,  Ferdinand"
+    "composer": "Ries,  Ferdinand",
+		"birthAndDeathDates": [1784, 1838]
+
   },
   {
     "works": [
@@ -6471,7 +6508,9 @@
         ]
       }
     ],
-    "composer": "Kreutzer,  Conradin"
+    "composer": "Kreutzer,  Conradin",
+		"birthAndDeathDates": [1780, 1849]
+
   },
   {
     "works": [
@@ -6563,7 +6602,9 @@
         ]
       }
     ],
-    "composer": "Cherubini,  Luigi"
+    "composer": "Cherubini,  Luigi",
+		"birthAndDeathDates": [1760, 1842]
+
   },
   {
     "works": [
