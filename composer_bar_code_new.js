@@ -192,6 +192,8 @@ d3.json('top60_alt.json', composers => {
 	const SVG_WIDTH = 1200; 
 	console.log(composers);
 	
+	
+	//TODO some redundant code here. Clean up 
 	composers.forEach( composer => {
 		let works = composer.works; 
 		let worksByYears = {composer: composer.composer, seasons: {}, firstSeason: null}; 
@@ -207,6 +209,7 @@ d3.json('top60_alt.json', composers => {
 		composersByTotal.push(worksByYears); 
 	}); 
 	
+	//Reduce clutter
 	composersArray = composersByTotal.map( composer => {
 		let composerSeasonsArr = []; 
 		let composerSeasons = composer.seasons; 

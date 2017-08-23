@@ -1,9 +1,8 @@
 let composers = []; 
-let total_count = 0; 
 d3.json('compositions.json', (d) => {
 	d.forEach(composer => {
 
-		let composer_name = composer.composer.split(',').reverse().join(' '); 
+		let composer_name = composer.composer.split(',').reverse().join(' ').trim(); 
 		//TODO Need to do query and grab titles first using search API, THEN, do a query based on Title
 		
 		/**
@@ -26,7 +25,7 @@ d3.json('compositions.json', (d) => {
 		let composer_object = {
 			composer: composer.composer, 
 			birth: null, 
-			death: null, 
+			death: null,
 		}
 		
 		$.ajax({
@@ -41,12 +40,6 @@ d3.json('compositions.json', (d) => {
 				let dataObject = data.query.pages[id]; 
 				console.log(dataObject); 
 				
-				//TODO: 
-				//Check for names matching this : string.match(/\[[^\[\]]*\]/g)
-				//This matches the [hello] and [not] in "[hello] hello but [not]" 
-				
-				//Some composer names have special characters and are put into brackets which screw up wiki search
-				
 				
 				for (let i = 0; i < (categories ? categories.length : 0); i++) {
 					if (death = categories[i].title.match(/[0-9]+\sdeaths/)) {
@@ -58,13 +51,12 @@ d3.json('compositions.json', (d) => {
 					}
 				}
 				
-				total_count++; 
   		}, 
 			complete: function () {
 				//Write a conditional to check if there's at least a birth year. If so, push into array, if not try an ajax call again with querying for a list of results and taking the first
 
 				if (composer_object["birth"]) {
-					composers.push(composer_object); 
+					composers.push(Object.assign(composer_object, {searched: composer_name})); 
 				} else {
 					
 					let search; 
@@ -79,9 +71,36 @@ d3.json('compositions.json', (d) => {
 							console.log(search); 
   					}, 
 						complete: function() {
-							//$.ajax({
-							//	
-							//}); 
+							$.ajax({
+								url: '//en.wikipedia.org/w/api.php',
+  							data: { action: 'query', titles: search, format: 'json', prop: 'categories' },
+  							dataType: 'jsonp',
+								success: function (data) {
+  		  					let id = Object.keys(data.query.pages)[0]; 
+									let categories = data.query.pages[id].categories; 
+									let death, birth;
+									
+									let dataObject = data.query.pages[id]; 
+									console.log(dataObject); 
+									
+									
+									for (let i = 0; i < (categories ? categories.length : 0); i++) {
+										if (death = categories[i].title.match(/[0-9]+\sdeaths/)) {
+											death = death[0].split(" ")[0]; 
+											composer_object["death"] = death; 
+										} else if (birth = categories[i].title.match(/[0-9]+\sbirths/)) {
+											birth = birth[0].split(" ")[0]
+											composer_object["birth"] = birth; 
+										}
+									}
+									
+  							}, 
+								complete: function() {
+									if (composer_object["birth"]) {
+										composers.push(Object.assign(composer_object, {formattedName: composer_name, searched: search})); 
+									}
+								}
+							}); 
 						}
 					});
 				}
