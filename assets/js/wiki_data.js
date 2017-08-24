@@ -4,7 +4,6 @@ d3.json('../../data/compositions.json', (d) => {
 	d.forEach(composer => {
 		let composer_name = composer.composer.split(',').reverse().join(' ').trim(); 
 		//TODO Need to do query and grab titles first using search API, THEN, do a query based on Title
-		if (composer_name == "Charles Chaplin") console.log(composer);
 		/**
 		$.ajax({
   		url: '//en.wikipedia.org/w/api.php',
