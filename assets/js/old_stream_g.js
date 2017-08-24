@@ -185,7 +185,9 @@ const SVG_WIDTH = 1200;
 let transition; 
 let transition2; 
 
-d3.json('complete_latest_july_2017.json', d => {
+let stats0, stats1; 
+
+d3.json('../../../data/complete_latest_july_2017.json', d => {
 	const PROGRAMS = d.programs;
 
 	/*
@@ -321,22 +323,61 @@ d3.json('complete_latest_july_2017.json', d => {
 						piecesRepeat: seasonsByTotalPerfs[idx].count - firstPerfsOfSeasons[season].length}; 
 	}); 
 	
-	let statsPerc0 = statsVers2.map( (season) => {
+	let statsPerc0 = statsVers2.map( season => {
 		return {
+			season: season.season, 
 			pctRepeat: season.piecesRepeat/season.totalPieces, 
 			pctFirst: season.piecesFirst/season.totalPieces, 
 			//pctFirstMult: season.piecesFirstMultiple/season.totalPieces
 		}; 
 	});
 	
-	let statsPerc1 = statsVers2.map( (season) => {
+	function movingAverage(array) {
+		return array.map( (item, idx) => {
+			let beginIndex = idx-4 >= 0 ? idx-4 : 0, 
+					endIndex = idx+5, 
+					collection = array.slice(beginIndex, endIndex), 
+					collLength = collection.length; 
+			
+			return collection.reduce( (sum, val) => sum + val )/collLength; 
+			
+		}); 
+	}
+	
+	function movingAverageOfProps(array) {
+		
+		return array.map( (item, idx) => {
+			let beginIndex = idx-4 >= 0 ? idx-4 : 0, 
+					endIndex = idx+5, 
+					collection = array.slice(beginIndex, endIndex), 
+					collLength = collection.length; 
+			
+			let percentRepeat = collection.reduce( (sum, val) => sum + val.pctRepeat, 0 )/collLength, 
+					percentFirst = collection.reduce( (sum, val) => sum + val.pctFirst, 0 )/collLength; 
+			
+			return idx == 0 
+				? {season: item.season, percentRepeat: item.pctRepeat, percentFirst: item.pctFirst}
+				: {season: item.season, percentRepeat: percentRepeat, percentFirst: percentFirst}; 
+
+			
+		}); 
+	}
+	
+	
+	
+	let statsPerc1 = statsVers2.map( season => {
 		return {
+			season: season.season, 
 			pctRepeat: season.piecesRepeat/season.totalPieces, 
 			pctFirstMult: season.piecesFirstMultiple/season.totalPieces,
 			pctFirst: season.piecesFirstSingle/season.totalPieces, 
 		}; 
 	});
 	
+	stats0 = statsPerc0; 
+	stats1 = statsPerc1; 
+	
+	console.log(movingAverageOfProps(stats0));
 	console.log("STREAMGRAPH DATASET 1: With total pieces performed, first time pieces, repeat pieces:");
 	console.log(stats);
 	console.log("STREAMGRAPH DATASET 2: With deets of first-time pieces, including those that get at least one repeat perf\(s\):");
@@ -357,7 +398,7 @@ d3.json('complete_latest_july_2017.json', d => {
 	let stack0 = d3.stack()
 								//.keys(["piecesFirstSingle", "piecesFirstMultiple", "piecesRepeat"])
 								//.keys(["pctRepeat", "pctFirstSingle", "pctFirstMult"])
-								.keys(["pctRepeat", "pctFirst"]); 
+								.keys(["percentRepeat", "percentFirst"]); 
 								//.offset(d3.stackOffsetWiggle); 	
 	
 	let stack1 = d3.stack().keys(["pctRepeat", "pctFirstMult", "pctFirst"]); 
@@ -381,13 +422,13 @@ d3.json('complete_latest_july_2017.json', d => {
 							
 	
 	SVG.selectAll("path")
-  .data(stack1(statsPerc1))
+  .data(stack0(movingAverageOfProps(statsPerc0)))
   .enter().append("path")
     .attr("d", area)
 		.attr("fill", (d) => {
-			if (d.key == "pctFirst") return "Tomato";
+			if (d.key == "percentFirst") return "Tomato";
 			if (d.key == "pctFirstMult") return "Steelblue";
-			if (d.key == "pctRepeat") return "#59273e";
+			if (d.key == "percentRepeat") return "#59273e";
 		});
 		//.attr("stroke", "Black"); 
 

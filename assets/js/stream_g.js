@@ -186,21 +186,9 @@ let transition;
 let transition2; 
 
 d3.json('complete_latest_july_2017.json', d => {
+	
+	/* old
 	const PROGRAMS = d.programs;
-
-	/*
-	TODOS:
-
-	1) figure out whether to count each individual performance, or each 'program';
-	Programs are sometimes 'dirty', that's if something like a solo instrumental is played by the soloist
-	on one performance, the json data treats it as a seperate entity from the other concerns with
-	basically the same concert program.
-
-	2) Also, deal with multimovement works, in some seasons, works are broken up into seperate movements and this
-	causes some works to be counted multiple times. This is happening with works with lots of performances
-
-	3) Might be interesting to write shorter functions and code to clean and merge some data chunks first. Find a best practices that's robust to all the variations in the data
-	*/
 
 
 	let subscriptionConcerts = PROGRAMS.filter( p => {
@@ -265,6 +253,7 @@ d3.json('complete_latest_july_2017.json', d => {
 	
 	console.log(composersArray); 
 	console.log(JSON.stringify(composersArray)); 
+	*/ 
 	
 	let compositionsAllSorted = compositionsBySeasonCount(); 
 	
