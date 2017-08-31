@@ -3,8 +3,8 @@ let seasons = {},
 		percentagesLivingDead, 
 		percentagesFirstRepeat; 
 
+//generate seasons dynamically
 const ALL_SEASONS = generateSeasons(1842, 2016); 
-
 
 function generateSeasons (start, end) {
 	let seasons = []; 
