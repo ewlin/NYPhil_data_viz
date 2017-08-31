@@ -37,7 +37,7 @@ d3.json('../../data/compositions.json', (d) => {
 				//Write a conditional to check if there's at least a birth year. If so, push into array, if not try an ajax call again with querying for a list of results and taking the first
 
 				if (composer_object["birth"]) {
-					composers.push(composer_object); 
+					composers.push(Object.assign(composer_object, {searched: composer_name})); 
 				} else {
 					
 					let search; 
@@ -49,6 +49,7 @@ d3.json('../../data/compositions.json', (d) => {
   					success: function (data) {
 							let search_name = data.query.search.length ? data.query.search[0].title : ""; 
 							search = search_name;	
+							//console.log(search); 
   					}, 
 						complete: function() {
 							$.ajax({
@@ -81,7 +82,7 @@ d3.json('../../data/compositions.json', (d) => {
   							}, 
 								complete: function() {
 									//if (composer_object["birth"]) {
-										composers.push(composer_object); 
+										composers.push(Object.assign({formattedName: composer_name, searched: search}, composer_object)); 
 									//}
 								}, 
 								

@@ -185,6 +185,7 @@ const SVG_WIDTH = 1200;
 let transition; 
 let transition2; 
 
+let repeatCompositions; 
 let stats0, stats1; 
 
 d3.json('../../../data/complete_latest_july_2017.json', d => {
@@ -273,6 +274,7 @@ d3.json('../../../data/complete_latest_july_2017.json', d => {
 	
 	let firstPerfsOfSeasons = {}; 
 	let seasonsFirstTimeCompositions = []; 
+	repeatCompositions = seasonsFirstTimeCompositions; 
 	let seasonsNewCompRatios = []; 
 	
 	const seasonsByTotalPerfs = compositionsPerSeason(); 
@@ -296,6 +298,9 @@ d3.json('../../../data/complete_latest_july_2017.json', d => {
 	for (let season in firstPerfsOfSeasons) {
 		seasonsFirstTimeCompositions.push({season: season, compositions: firstPerfsOfSeasons[season]});
 	}
+	
+	console.log("first perfs of each season:")
+	console.log(seasonsFirstTimeCompositions);
 	
 	let ratiosOfFirstTime = seasonsByTotalPerfs.map(season => {
 		return {season: season.season, ratio: firstPerfsOfSeasons[season.season].length/season.count};
@@ -344,21 +349,47 @@ d3.json('../../../data/complete_latest_july_2017.json', d => {
 		}); 
 	}
 	
-	function movingAverageOfProps(array) {
+	//function movingAverageOfProps(array) {
+	//	
+	//	return array.map( (item, idx) => {
+	//		let beginIndex = idx-4 >= 0 ? idx-4 : 0, 
+	//				endIndex = idx+5, 
+	//				collection = array.slice(beginIndex, endIndex), 
+	//				collLength = collection.length; 
+	//		
+	//		let percentRepeat = collection.reduce( (sum, val) => sum + val.pctRepeat, 0 )/collLength, 
+	//				percentFirstRepeat = collection.reduce( (sum, val) => sum + val.pctFirstMult, 0 )/collLength, 
+	//				percentFirstSingle = collection.reduce( (sum, val) => sum + val.pctFirst, 0 )/collLength; 
+	//		
+	//		return idx == 0 
+	//			? {season: item.season, pctRepeat: item.pctRepeat, pctFirst: item.pctFirst, pctFirstMult: item.pctFirstMult}
+	//			: {season: item.season, pctRepeat: percentRepeat, pctFirst: percentFirstSingle, pctFirstMult: percentFirstRepeat}; 
+//
+	//		
+	//	}); 
+	//}
+	
+	function movingAverageOfProps(array, k) {
 		
 		return array.map( (item, idx) => {
 			let beginIndex = idx-4 >= 0 ? idx-4 : 0, 
 					endIndex = idx+5, 
 					collection = array.slice(beginIndex, endIndex), 
-					collLength = collection.length; 
+					collLength = collection.length, 
+					movingAvgs = {}; 
 			
-			let percentRepeat = collection.reduce( (sum, val) => sum + val.pctRepeat, 0 )/collLength, 
-					percentFirst = collection.reduce( (sum, val) => sum + val.pctFirst, 0 )/collLength; 
+			k.forEach(key => {
+				movingAvgs[key] = collection.reduce( (sum, val) => sum + val[key], 0)/collLength; 
+			}); 
 			
-			return idx == 0 
-				? {season: item.season, percentRepeat: item.pctRepeat, percentFirst: item.pctFirst}
-				: {season: item.season, percentRepeat: percentRepeat, percentFirst: percentFirst}; 
-
+			return Object.assign({season: item.season}, movingAvgs); 
+			//let percentRepeat = collection.reduce( (sum, val) => sum + val.pctRepeat, 0 )/collLength, 
+			//		percentFirstRepeat = collection.reduce( (sum, val) => sum + val.pctFirstMult, 0 )/collLength, 
+			//		percentFirstSingle = collection.reduce( (sum, val) => sum + val.pctFirst, 0 )/collLength; 
+			//
+			//return idx == 0 
+			//	? {season: item.season, pctRepeat: item.pctRepeat, pctFirst: item.pctFirst, pctFirstMult: item.pctFirstMult}
+			//	: {season: item.season, pctRepeat: percentRepeat, pctFirst: percentFirstSingle, pctFirstMult: percentFirstRepeat}; 
 			
 		}); 
 	}
@@ -419,16 +450,18 @@ d3.json('../../../data/complete_latest_july_2017.json', d => {
 							.x((d, i) => x(i) )
 							.y0(d => 28 )
 							.y1(d => 28 ); 
-							
+	let keys = ["pctRepeat", "pctFirstMult", "pctFirst"]; 
+	let testData = stack1(movingAverageOfProps(statsPerc1, "ehhhhe")); 
 	
 	SVG.selectAll("path")
-  .data(stack0(movingAverageOfProps(statsPerc0)))
+  //.data(stack1(movingAverageOfProps(statsPerc1)))
+	.data(testData)
   .enter().append("path")
     .attr("d", area)
 		.attr("fill", (d) => {
-			if (d.key == "percentFirst") return "Tomato";
+			if (d.key == "pctFirst") return "Tomato";
 			if (d.key == "pctFirstMult") return "Steelblue";
-			if (d.key == "percentRepeat") return "#59273e";
+			if (d.key == "pctRepeat") return "#59273e";
 		});
 		//.attr("stroke", "Black"); 
 
