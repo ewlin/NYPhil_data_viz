@@ -187,7 +187,7 @@ let transition = function() {};
 let screen_height = window.outerHeight; 
 
 
-d3.json('top60_alt.json', composers => {
+d3.json('../../data/top60_alt.json', composers => {
 	
 	const SVG_WIDTH = 1200; 
 	console.log(composers);

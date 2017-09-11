@@ -1,0 +1,90 @@
+/**#buttons {
+				position: fixed;
+			}**/
+			
+			/**
+
+			button:focus {
+				outline:0;
+			}
+			
+			button.active {
+				opacity: .5;
+			}
+			
+			button {
+				height: 28px;
+				font-size: 13px;
+				color: white;
+				border: none;
+				background: grey;
+				cursor: pointer;
+			}
+			/** Stuff for Composer Bar Code chart **/
+			/**
+			.container {
+				width: 1200px; 
+				margin: auto; 
+			}
+			/*.bars {
+			/*	margin-bottom: 10px;
+			/*}*/
+			/**
+			svg {
+				margin: 10px auto; 
+			}
+			
+			svg.axis {
+				margin-top: 40px;
+				position: fixed;
+				/**height: 600px;**/
+			}
+			
+			svg.main-svg {
+				margin-top: 80px;
+			}
+			
+			circle {
+  			fill: rgb(31, 119, 180);
+  			stroke: rgb(31, 119, 180);
+  			stroke-width: 0px;
+			}
+
+			.parent {
+	 			fill-opacity: 0;
+			}
+		
+			
+			
+			.leaf {
+  			stroke: rgb(31, 119, 180);
+  			stroke-width: 0px;
+				fill-opacity: .4;
+			}
+			
+			
+			/**
+			circle {
+  			fill: rgb(31, 119, 180);
+  			fill-opacity: 0;
+  			stroke: rgb(31, 119, 180);
+  			stroke-width: 0px;
+			}
+			**/
+			
+				
+			/** Beethoven Graph  
+		
+		
+			
+			.graphLegend g {
+				cursor: pointer;
+			}
+			
+		
+			.leaf {
+  			stroke: rgb(31, 119, 180);
+  			stroke-width: 0px;
+			}
+			**/
+			

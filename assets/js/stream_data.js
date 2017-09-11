@@ -36,7 +36,7 @@ d3.json('../../data/composers.json', (err, d) => {
 						dead: 0, 
 						unknown: 0, 
 						first: 0, 
-						repeat: 0
+						repeat: 0, 
 					}
 				}
 				
@@ -91,8 +91,17 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 	console.log(movingAverageOfProps(percentagesLivingDead, ["percentageAlive", "percentageDead"]));
 	console.log(movingAverageOfProps(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"]))
-	//console.log(d3.max(percentages, d => d.percentageAlive));
-	//console.log(d3.min(percentages, d => d.percentageAlive));
+
+	let mirrored = percentagesLivingDead.map( d => {
+		let {season, percentageAlive, percentageDead} = d; 
+	
+		return {
+			season: season, 
+			percentageAlive: percentageAlive, 
+			percentageDead: -percentageDead
+		}
+	}); 
+	
 	
 }); 
 
@@ -111,4 +120,57 @@ function movingAverageOfProps(array, keys) {
 		return Object.assign({season: item.season}, movingAvgs); 
 	}); 
 }
+
+
+
+
+///End Data Processing 
+///Begin Streamgraph rendering 
+
+const SVG_HEIGHT = 600;
+const SVG_WIDTH = 1200;
+
+const SVG = d3.select(".container")
+								.append("svg")
+								.attr("x", 0)
+								.attr("y", 0)
+								.attr("width", SVG_WIDTH)
+								.attr("height", SVG_HEIGHT)
+								.attr("transform", "translate(0,30)");
+
+//let xScale = d3.scaleBand().domain(ALL_SEASONS).range([0,SVG_WIDTH]).padding("3px"); 
+//let yScale = d3.linearScale().domain([-1,1]).range([])
+let x = d3.scaleLinear().domain([0,174]).range([0,SVG_WIDTH]); 
+let y = d3.scaleLinear().domain([-1,1]).range([SVG_HEIGHT, 0]);
+
+let stack = d3.stack()
+							.keys(["percentageAlive", "percentageDead"])
+							.offset(d3.stackOffsetSilhouette); 
+
+
+let area = d3.area()
+							.curve(d3.curveCardinal.tension(.1))
+							.x((d, i) => x(i) )
+							.y0(d => y( d[0]) )
+							.y1(d => y( d[1]) ); 
+
+//SVG.selectAll("path")
+//  //.data(stack1(movingAverageOfProps(statsPerc1)))
+//	.data(testData)
+//  .enter().append("path")
+//    .attr("d", area)
+//		.attr("fill", (d) => {
+//			if (d.key == "percentageAlive") return "Tomato";
+//			if (d.key == "percentageDead") return "Steelblue";
+//		});
+		//.attr("stroke", "Black"); 
+
+//SVG.append("rect")
+//		.attr("x", 0)
+//		.attr("y", 0)
+//		.attr("width", SVG_WIDTH)
+//		.attr("height", SVG_HEIGHT)
+//		.attr("fill", "Red")
+//		.attr("stroke", "White"); 
+
 
