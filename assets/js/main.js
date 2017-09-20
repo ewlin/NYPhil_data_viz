@@ -218,7 +218,7 @@ let svgHeight = 500;
 let svgWidth = 1200;
 
 
-d3.json('complete_latest_july_2017.json', d => {
+d3.json('../../data/complete_latest_july_2017.json', d => {
 	const PROGRAMS = d.programs;
 
 	/*

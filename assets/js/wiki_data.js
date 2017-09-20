@@ -8,7 +8,7 @@ d3.json('../../data/compositions.json', (d) => {
 			birth: null, 
 			death: null,
 		}); 
-		
+				
 		$.ajax({
   		url: '//en.wikipedia.org/w/api.php',
   		data: { action: 'query', titles: composer_name, format: 'json', prop: 'categories' },

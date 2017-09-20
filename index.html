@@ -8,6 +8,29 @@
 				background-color: #0e2b2b;
 			}
 			
+			.outer-container {
+				max-width: 1000px; 
+				position: relative; 
+				margin: auto; 
+			}
+			
+			.explain {
+				/*width: 23%; */
+			}
+			
+			.explain p {
+				margin-bottom: 180px;
+				width: 23%;  
+			}
+			.container {
+				position: absolute; 
+				top: 0; 
+				width: 75%; 
+				margin-left: 25rem;
+				/*float: right; */
+				/* top: 50%; */
+			}
+			
 			
 			#test-container {
 				width: 45%; 
@@ -29,12 +52,39 @@
 		
 		<div id="buttons">
 			<button id="transition">Transition</button>
-			<button id="transition-back">Transition Back</button>
+			<button id="transition-next">Transition 2</button>
 			<button id="by-first-season">Sort Composers By Earliest Performance by NYPhil</button>
 			<button class="active" id="by-most-performances">Sort Composers By Most Performances</button>
 		</div>
-		
-		<div class="container"></div>
+		<div>
+			<h1>Title of piece</h1>
+			<h2>Author</h2>
+			
+			
+			<p>Something about the new y Philharmonic</p>
+			<p>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+			<h3>Other headers</h3>
+			
+			<p>MOre info</p>
+		</div>
+		<div>
+			<h3>Other headers</h3>
+			
+			<p>MOre info</p>
+			<p>More prose to write yayaya!!!</p>
+		</div>
+		<div class="outer-container">
+			<div class="explain">
+				<p class="explain1">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+				<br />
+				<p class="explain2">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+				<br />
+				<p class="explain3">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+				<br />
+				<p>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+			</div>
+			<div class="container"></div>
+		</div>
 		
 		<!--
 		<div class="article">
@@ -104,7 +154,7 @@
 			</div>
 		</div>
 		-->
-
+		
 		<script
   		src="https://code.jquery.com/jquery-3.2.1.min.js"
   		integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
@@ -113,8 +163,10 @@
 		<script src="d3-v4.js"></script>
 		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 		<script src="assets/js/season_age_range.js"></script>
+
+		<script src="assets/js/temp.js"></script>
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>
-		<!--<script src="assets/js/app.js"></script>-->
+		<script src="assets/js/app.js"></script>
 
 
 

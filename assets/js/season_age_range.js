@@ -3,10 +3,13 @@ let seasons = {},
 		percentagesLivingDead, 
 		percentagesFirstRepeat, 
 		percentagesOfRepeatsLiving, 
+		totalWorksPerSeason, 
 		transition, 
 		seasonsBuckets = Array.apply(null,Array(7)).map((_) => {
 			return {}; 
 		});
+
+let sorted; 
 
 //generate seasons dynamically
 const ALL_SEASONS = generateSeasons(1842, 2016); 
@@ -44,6 +47,8 @@ d3.json('../../data/composers.json', (err, d) => {
 		
 		
 		works.forEach((work, workIdx) => {
+			
+			//create custom composition ID number 
 			let workID = composerIdx + ":" + workIdx; 
 			
 			work.seasons.forEach( (season, idx) => {
@@ -119,6 +124,24 @@ d3.json('../../data/composers.json', (err, d) => {
 	//Debugging 
 	console.log(seasons); 
 	
+	totalWorksPerSeason = ALL_SEASONS.map(season => {
+		let {first, repeat} = seasons[season], 
+				total = first + repeat; 
+		
+		return {
+			season: season,
+			total: total, 
+			first: first, 
+			repeat: repeat
+		}
+	}); 
+	
+	const MAX_NUMBER_PER_SEASON = totalWorksPerSeason.reduce( (best, current) => {
+		return best > current.total ? best : current.total; 
+	}, 0); 
+	
+	
+	
 	percentagesLivingDead = ALL_SEASONS.map(season => {
 		let {unknown, alive, dead} = seasons[season], 
 				total = unknown + alive + dead; 
@@ -166,8 +189,8 @@ d3.json('../../data/composers.json', (err, d) => {
 		}
 	}); 
 	
-	console.log(movingAverageOfProps(percentagesLivingDead, ["percentageAlive", "percentageDead"]));
-	console.log(movingAverageOfProps(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"])); 
+	console.log((movingAverageWithRange(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 7))); 
+	//console.log(movingAverageOfProps(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"])); 
 	console.log(percentagesOfRepeatsLiving); 
 	console.log(percentagesOfAllRepeatsLiving); 
 
@@ -193,9 +216,71 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 	console.log(sortedSeasonBuckets); 
 	
+	sorted = sortedSeasonBuckets; 
+	//Add rankings Done!!!
+	let rankings = sortedSeasonBuckets.map(bucket => {
+		let currentRank = 1; 
+		let currentCount = bucket[0][1].count;
+		let withSameCount = 0; 
+		
+		return bucket.map(composition => {
+			
+			let compositionCount = composition[1].count; 
+		
+			if (currentCount !== compositionCount) {
+				currentRank += withSameCount; 
+				currentCount = compositionCount; 
+				withSameCount = 1; 
+			} else {
+				withSameCount++; 
+			}
+			return composition.concat(currentRank); 
+		}); 
+	}); 
+	
+	//generalized solution to ranking items in an array
+	//assuming array is of objects with some id AND a value to rank by
+	
+	//so far, this assumes the array is already sorted 
+	function ranking(array,  /* array of arrays */accessor) {
+		let currentRank = 1, 
+				//currentValue = array[0][1].count, //initial value from first item in array
+				currentValue = accessor.call(null, array[0]), 
+				withSameValue = 0; 
+		
+		return array.map(item => {
+			let itemValue = accessor.call(null, item); //again, use acessor function to grab this 
+			
+			if (itemValue !== currentValue) {
+				currentRank += withSameValue; 
+				currentValue = itemValue; 
+				withSameValue = 1; 
+			} else {
+				withSameValue++; 
+			}
+			
+			return item.concat(currentRank); 
+		}); 
+	}
+	
+	//
+	
+	
+	
+	console.log(rankings); 
+	
 	//update to include upto a certain position 
 	//slice until logic. 1) remove US anthem 2) Keep taking until you hit next most often. If number 15 has 10 performances, take the rest of the pieces with at least 10 performances even if that results in more than 15 total pieces for that bucket. 
-	console.log(sortedSeasonBuckets.map((bucket,idx) => {
+	
+	//sortedSeasonBuckets.forEach((bucket,idx) => {
+	//	let total = bucket.reduce((sum, piece) => {
+	//		return sum + piece[1].count; 
+	//	}, 0);
+	//	console.log(idx);
+	//	console.log(total);
+	//});
+	
+	let top15 = sortedSeasonBuckets.map((bucket,idx) => {
 		let fifteenth = bucket[14];
 		
 		let count = fifteenth[1].count; 
@@ -203,23 +288,36 @@ d3.json('../../data/composers.json', (err, d) => {
 		let lastIndex = 0; 
 
 		let currentCount = bucket[lastIndex][1].count; 
-				
+		
 		while (currentCount >= count) {
 			++lastIndex; 
 			currentCount = bucket[lastIndex][1].count; 
+
 		}
 		console.log(lastIndex); 	
 		return bucket.slice(0,lastIndex).map(arr => {
 			return [arr[0], arr[1].title, arr[1].composer, arr[1].count]; 
-		}); 
-	})); 
+		}).filter(arr => arr[2] !== "Anthem,"); 
+	}); 
+	
+	console.log(top15); 
+	let top15Composers = []; 
+	top15.forEach(bucket => {
+		bucket.forEach(comp => {
+			if (!top15Composers.includes(comp[2])) top15Composers.push(comp[2]); 
+		})
+	}); 
+	
+	console.log(top15Composers); 
 	
 	
 	///End Data Processing 
 	///Begin Streamgraph rendering 
 	
-	const SVG_HEIGHT = 600;
-	const SVG_WIDTH = 1200;
+	console.log("width: ")
+	console.log($('.container').innerWidth()); 
+	const SVG_HEIGHT = 480;
+	const SVG_WIDTH = $('.container').innerWidth();
 	
 	const SVG = d3.select(".container")
 		.append("svg")
@@ -231,14 +329,38 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 	//let xScale = d3.scaleBand().domain(ALL_SEASONS).range([0,SVG_WIDTH]).padding("3px"); 
 	//let yScale = d3.linearScale().domain([-1,1]).range([])
-	let x = d3.scaleLinear().domain([0,174]).range([0,SVG_WIDTH]); 
+	let x = d3.scaleLinear().domain([0,174]).range([0,.9*SVG_WIDTH]); 
 	let y = d3.scaleLinear().domain([0,1]).range([SVG_HEIGHT, 0]);
 	
+	let yAbs = d3.scaleLinear().domain([0,MAX_NUMBER_PER_SEASON]).range([SVG_HEIGHT, 0]);
+	let yPct = d3.scaleLinear().domain([0,1]).range([SVG_HEIGHT, 0]);
+
 	let stack = d3.stack()
 		.keys(["percentageAlive", "percentageDead"]); 	
 	
 	let stackA = d3.stack()
 		.keys(["percentageFirst", "percentageRepeat"]); 	
+	
+	let stackB = d3.stack()
+		.keys(["first", "repeat"]); 	
+	
+	let areaAbsolute = d3.area()
+		.curve(d3.curveCardinal.tension(.1))
+		.x((d, i) => x(i) )
+		.y0(d => yAbs( d[0]) )
+		.y1(d => yAbs( d[1]) ); 
+	
+	let yAxisAbs = d3.axisLeft()
+										.scale(yAbs); 
+	
+	let yAxisPct = d3.axisLeft()
+										.scale(yPct);
+	
+	let areaPercentage = d3.area()
+		.curve(d3.curveCardinal.tension(.1))
+		.x((d, i) => x(i) )
+		.y0(d => y( d[0]) )
+		.y1(d => y( d[1]) ); 
 	
 	let area = d3.area()
 		.curve(d3.curveCardinal.tension(.1))
@@ -246,33 +368,125 @@ d3.json('../../data/composers.json', (err, d) => {
 		.y0(d => y( d[0]) )
 		.y1(d => y( d[1]) ); 
 	
+	
 	SVG.selectAll("path")
-  //.data(stack1(movingAverageOfProps(statsPerc1)))
-	.data(stack(movingAverageOfProps(percentagesLivingDead, ["percentageAlive", "percentageDead"])))
+		.data(stackB(totalWorksPerSeason))
   .enter().append("path")
-    .attr("d", area)
+		.attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
+    .attr("d", areaAbsolute)
 		.attr("fill", (d) => {
-			if (d.key == "percentageAlive") return "Tomato";
-			if (d.key == "percentageDead") return "Steelblue";
+			if (d.key == "first") return "Tomato";
+			if (d.key == "repeat") return "Steelblue";
 		});
-	//.attr("stroke", "Black"); 
 	
+	SVG.selectAll("text")
+		.data(stackB(totalWorksPerSeason))
+		.enter()
+		.append("text")
+		.attr("x", 300)
+		.attr("y", (d, i) => Math.abs((-i+2) * 200))
+		.text(d => d.key); 
 	
+	SVG.append("g")
+			.attr("class", "yAxis")
+			.attr("transform", "translate(30,0)")
+			.call(yAxisAbs); 
+	
+	transitionOrg = function() {
+				let temp = SVG.selectAll("path")
+					.data(stackB(totalWorksPerSeason))
+					.transition().duration(1400)
+					.attr("d", areaAbsolute)
+					.attr("fill", (d) => {
+						if (d.key == "first") return "Tomato";
+						if (d.key == "repeat") return "Steelblue";
+					});
+	
+					let text = SVG.selectAll("text")
+						.data(stackB(totalWorksPerSeason)); 
+		
+				text.transition()
+				.duration(1400)
+				.text(d => d.key);
+		
+		SVG.select(".yAxis")
+			.transition()
+			.duration(1400)
+			.call(yAxisAbs); 
+	}
 	
 	
 	transition = function() {
+		let stackData = stackA(percentagesFirstRepeat); 
 		let newStuff = SVG.selectAll("path")
-			.data(stackA(movingAverageOfProps(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"])));
+			//.data(stack(percentagesLivingDead)); 
+		.data(stackData); 
+				//.data(stackA(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7))); 
 		
+		console.log(stackData); 
+		let text = SVG.selectAll("text")
+			.data(stackA(percentagesFirstRepeat)); 
+				//.data(stackA(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7))); 
+
 		//newStuff.exit().remove()//.attr("d",areaInit)//.attr("fill", (d) => {
 				//if (d.key == "pctFirstSingle") return "Steelblue";
 				//if (d.key == "pctFirstMult") return "Tomato";
 				//if (d.key == "pctRepeat") return "#59273e";
 		//})
-		newStuff.transition().duration(1000).attr("d", area).attr("fill", (d) => {
-			if (d.key == "percentageFirst") return "Tomato";
-			if (d.key == "percentageRepeat") return "Steelblue";
-		});
+		newStuff.transition()
+						.duration(1400)
+						.attr("d", area)
+						.attr("fill", (d) => {
+							if (d.key == "percentageFirst") return "Tomato";
+							if (d.key == "percentageRepeat") return "Steelblue";
+						});
+
+		text.transition()
+				.duration(1400)
+				.text(d => d.key);
+				
+		SVG.select(".yAxis")
+			.transition()
+			.duration(1400)
+			.call(yAxisPct);
+		
+			//.attr("d", area)
+		//.attr("fill", (d) => {
+		//		if (d.key == "pctFirstSingle") return "Steelblue";
+		//		if (d.key == "pctFirstMult") return "Tomato";
+		//		if (d.key == "pctRepeat") return "Grey";
+		//}); 
+
+	}
+	
+	transition2 = function() {
+		let newStuff = SVG.selectAll("path")
+			//.data(stack(percentagesLivingDead)); 
+		//.data(stackA(percentagesFirstRepeat)); 
+				.data(stackA(movingAverageWithRange(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 9)))
+				//.data(stackA(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7))); 
+			
+		let text = SVG.selectAll("text")
+			//.data(stackA(percentagesFirstRepeat)); 
+				.data(stackA(movingAverageWithRange(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 9)));
+
+		//newStuff.exit().remove()//.attr("d",areaInit)//.attr("fill", (d) => {
+				//if (d.key == "pctFirstSingle") return "Steelblue";
+				//if (d.key == "pctFirstMult") return "Tomato";
+				//if (d.key == "pctRepeat") return "#59273e";
+		//})
+		newStuff.transition()
+						.duration(1400)
+						.attr("d", area)
+						.attr("fill", (d) => {
+							if (d.key == "percentageFirst") return "Tomato";
+							if (d.key == "percentageRepeat") return "Steelblue";
+						});
+
+		text.transition()
+				.duration(1400)
+				.text(d => d.key);
+				
 
 			//.attr("d", area)
 		//.attr("fill", (d) => {
@@ -286,15 +500,33 @@ d3.json('../../data/composers.json', (err, d) => {
 	document.getElementById("buttons").addEventListener("click", (e) => {
 		let target = e.target; 
 		if (target.id === "transition") transition(); 
-		//if (target.id === "transition-back") transition2(); 
+		if (target.id === "transition-next") transition2(); 
 	}); 
 	
 }); 
 
-function movingAverageOfProps(array, keys) {
+//function movingAverageOfProps(array, keys) {
+//	return array.map( (item, idx) => {
+//		let beginIndex = idx-4 >= 0 ? idx-4 : 0, 
+//				endIndex = idx+5, 
+//				collection = array.slice(beginIndex, endIndex), 
+//				collLength = collection.length, 
+//				movingAvgs = {}; 
+//		
+//		keys.forEach(key => {
+//			movingAvgs[key] = collection.reduce( (sum, val) => sum + val[key], 0)/collLength; 
+//		})
+//		
+//		return Object.assign({season: item.season}, movingAvgs); 
+//	}); 
+//}
+
+function movingAverageWithRange(array, keys, range) {
+	let padding = Math.floor(range/2); 
+	
 	return array.map( (item, idx) => {
-		let beginIndex = idx-4 >= 0 ? idx-4 : 0, 
-				endIndex = idx+5, 
+		let beginIndex = idx-padding >= 0 ? idx-padding : 0, 
+				endIndex = idx + padding + 1, 
 				collection = array.slice(beginIndex, endIndex), 
 				collLength = collection.length, 
 				movingAvgs = {}; 
