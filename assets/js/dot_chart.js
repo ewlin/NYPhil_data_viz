@@ -26,7 +26,7 @@ let screen_height = window.outerHeight;
 let beethovenWorks = []; 
 
 
-d3.json('../../top60_alt.json', composers => {
+d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 	
 	const SVG_WIDTH = $('.main-container').innerWidth(); 
 	const SVG_HEIGHT = $(window).innerHeight()*.8; 
