@@ -22,7 +22,9 @@ let composersByFirstSeason;
 let transitionBar = function() {}; 
 let screen_height = window.outerHeight; 
 
+
 let beethovenWorks = []; 
+
 
 d3.json('../../data/top60_alt.json', composers => {
 	
@@ -31,10 +33,23 @@ d3.json('../../data/top60_alt.json', composers => {
 	console.log(SVG_WIDTH);
 	console.log(SVG_HEIGHT); 
 	
-	let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([5,SVG_WIDTH]); 
-	let yScale = d3.scaleLinear().domain([0,30]).range([SVG_HEIGHT, 0]);
+	let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([SVG_WIDTH*.05,SVG_WIDTH*.95]); 
+	let yScale = d3.scaleLinear().domain([0,30]).range([SVG_HEIGHT*.95, 0]);
 	let svg = d3.select('.main-container').append('svg').attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
 
+	let axisYears = d3.axisBottom(seasonsScale)
+										.tickValues(seasonsScale.domain().filter((season, i) => {
+											const S = ["1842-43", "1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01", "2016-17"];
+											return S.includes(season); 
+										})) 
+										.tickSize(SVG_HEIGHT*.9);
+	
+	let dotAxis = svg.append('g')
+									.attr('class', 'axis')
+									.attr('transform',`translate(${-seasonsScale.bandwidth()/2.4},35)`)
+									.call(axisYears); 
+	dotAxis.select('.domain').remove(); 
+	
 	$('.select-value').on('change', function(e) {
 		$('.composer-face').remove(); 
 		let index = this.value; 
@@ -49,6 +64,7 @@ d3.json('../../data/top60_alt.json', composers => {
 		let option = `<option value='${idx}'>${composer.composer}</option>`; 
 		$('.select-value').append(option); 
 	}); 
+	
 	function renderDots(number) {
 		let composer = composers[number]; 
 		let composerIndex = number; 
@@ -94,7 +110,7 @@ d3.json('../../data/top60_alt.json', composers => {
 			.attr('cx', d => seasonsScale(d.season))
 			.attr('cy', d => yScale(d.seasonWorkCount))
 			.attr('fill', d => {
-				if (d.orphanWork) return 'none'; 
+				if (d.orphanWork) return '#343434'; 
 				if (d.firstPerf) return 'Tomato'; 
 				else return 'Steelblue'; 
 			})
@@ -125,8 +141,11 @@ d3.json('../../data/top60_alt.json', composers => {
 				d3.select(d3.event.target)
 					.attr('stroke-width', 3)
 					.attr('r', seasonsScale.bandwidth()/1.5); 
-			})
-			.transition().duration(1400)	
+			}).on('mouseover', d => {
+				console.log('in'); 
+			}).on('mouseout', d => {
+				console.log('out');
+			}).transition().duration(1400)	
 			.attr('r', seasonsScale.bandwidth()/2.4)
 			.attr('cx', d => seasonsScale(d.season))
 			.attr('cy', d => yScale(d.seasonWorkCount))
@@ -192,6 +211,10 @@ d3.json('../../data/top60_alt.json', composers => {
 	let composerIndex = 0; 
 	console.log(beethoven); 
 	
+	let composer = beethoven.composer; 
+	let composerImage = composer.toLowerCase().split(' ')[0].match(/[a-z]*/)[0] + '.png';
+	$('.composer-face-container').append(`<img class='composer-face' src='assets/images/composer_sqs/${composerImage}'/>`); 
+	
 	ALL_SEASONS.forEach( (season, season_idx) => {
 		let works = beethoven.works; 
 		//let seasonWorks = []; 
@@ -230,7 +253,7 @@ d3.json('../../data/top60_alt.json', composers => {
 			.attr('cx', d => seasonsScale(d.season))
 			.attr('cy', d => yScale(d.seasonWorkCount))
 			.attr('fill', d => {
-				if (d.orphanWork) return 'none'; 
+				if (d.orphanWork) return '#343434'; 
 				if (d.firstPerf) return 'Tomato'; 
 				else return 'Steelblue'; 
 			})
@@ -251,9 +274,26 @@ d3.json('../../data/top60_alt.json', composers => {
 				d3.select(d3.event.target)
 					.attr('stroke-width', 3)
 					.attr('r', seasonsScale.bandwidth()/1.5); 
+			}).on('mouseover', d => {
+				console.log('in'); 
+				let dimensions = d3.event.target.getBoundingClientRect(); 
+				let tooltip = d3.select('.tooltip').style('left', (dimensions.right + 10) + "px")
+												.style('top', dimensions.top + "px"); 
+				tooltip.html(`${d.title}`); 
+				tooltip.transition().duration(500).style('opacity', .9); 
+				d3.select(d3.event.target)
+					.attr('stroke-width', 3)
+					.attr('r', seasonsScale.bandwidth()/1.5); 
+			}).on('mouseout', d => {
+				let tooltip = d3.select('.tooltip'); 
+				tooltip.transition().duration(300).style('opacity', 0); 
+				d3.select(d3.event.target)
+					.attr('stroke-width', 1)
+					.attr('r', seasonsScale.bandwidth()/2.4); 
 			}); 
 	
-	
+	d3.select('body').append('div').attr('class', 'tooltip').style('opcaity', 0); 
+
 	
 	
 	//TODO some redundant code here. Clean up 
@@ -299,12 +339,12 @@ d3.json('../../data/top60_alt.json', composers => {
 	
 	
 	
-  let axisYears = d3.axisTop(x)
-										.tickValues(x.domain().filter((season, i) => {
-											const S = ["1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01"];
-											return S.includes(season); 
-										}))
-										.tickSize(screen_height)
+  //let axisYears = d3.axisTop(x)
+	//									.tickValues(x.domain().filter((season, i) => {
+	//										const S = ["1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01"];
+	//										return S.includes(season); 
+	//									}))
+	//									.tickSize(screen_height)
 									
 	
 	
