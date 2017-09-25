@@ -25,9 +25,10 @@ let screen_height = window.outerHeight;
 
 let beethovenWorks = []; 
 
-
+//Github pages bug
 d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
-	
+//d3.json('../../data/top60_alt.json', composers => {
+
 	const SVG_WIDTH = $('.main-container').innerWidth(); 
 	const SVG_HEIGHT = $(window).innerHeight()*.8; 
 	console.log(SVG_WIDTH);
@@ -143,8 +144,20 @@ d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 					.attr('r', seasonsScale.bandwidth()/1.5); 
 			}).on('mouseover', d => {
 				console.log('in'); 
+				let dimensions = d3.event.target.getBoundingClientRect(); 
+				let tooltip = d3.select('.tooltip').style('left', (dimensions.right + 10) + "px")
+												.style('top', dimensions.top + "px"); 
+				tooltip.html(`${d.title}`); 
+				tooltip.transition().duration(500).style('opacity', .9); 
+				d3.select(d3.event.target)
+					.attr('stroke-width', 3)
+					.attr('r', seasonsScale.bandwidth()/1.5); 
 			}).on('mouseout', d => {
-				console.log('out');
+				let tooltip = d3.select('.tooltip'); 
+				tooltip.transition().duration(300).style('opacity', 0); 
+				d3.select(d3.event.target)
+					.attr('stroke-width', 1)
+					.attr('r', seasonsScale.bandwidth()/2.4); 
 			}).transition().duration(1400)	
 			.attr('r', seasonsScale.bandwidth()/2.4)
 			.attr('cx', d => seasonsScale(d.season))
