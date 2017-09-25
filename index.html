@@ -5,21 +5,73 @@
 		<style>
 			
 			body {
-				background-color: #0e2b2b;
+				background-color: #343434;
+				font-family: 'Lato', sans-serif;
+
+				/*font-family: 'IM Fell Great Primer', serif;
+				/*font-family: 'Arimo', sans-serif;
+				/*font-family: 'Titillium Web', sans-serif;*/
 			}
 			
 			.outer-container {
 				max-width: 1000px; 
 				position: relative; 
 				margin: auto; 
+				font-family: 'Slabo 13px', sans-serif;
+				letter-spacing: 1px;
 			}
 			
+			table {
+  			border-collapse: collapse;
+			}
+			
+			.table {
+				font-size: 15px; 
+				color: white; 
+				max-width: 60%; 
+				margin: auto; 
+				/*background-color: steelblue; */
+				padding-bottom: 3px;
+				margin: auto; 
+
+			}
+			
+			.table thead {
+				border-bottom: 2px solid steelblue;
+
+			}
+			
+			.table tr {
+				width: 100%; 
+				border-bottom: 1px solid steelblue;
+				
+			}
+			
+			td, th {
+				padding: 8px; 
+				text-align: left;
+			} 
+			
+			th {
+				font-weight: 700; 
+			}
+		
+			.titles {
+				font-weight: 700; 
+			}
+			.table img {
+				border-radius: 50%; 
+				width: 30px;
+				vertical-align: middle; 
+				margin-right: 5px;
+				border: 1px solid white; 
+			}
 			.explain {
 				/*width: 23%; */
 			}
 			
 			.explain p {
-				margin-bottom: 180px;
+				margin-bottom: 500px;
 				width: 23%;  
 			}
 			.container {
@@ -30,7 +82,10 @@
 				/*float: right; */
 				/* top: 50%; */
 			}
-			
+			.heat-container {
+				width: 100%; 
+				background-color: #0e2b2b;
+			}
 			
 			#test-container {
 				width: 45%; 
@@ -46,15 +101,47 @@
 			
 			
 		</style>
+		<link href="https://fonts.googleapis.com/css?family=IM+Fell+Great+Primer|Inconsolata|Oswald|Lato:400,700|Titillium+Web" rel="stylesheet">
+
 	</head>
 	
 	<body> 
+		<div>
+			<h1>Title of piece</h1>
+			<h2>Author</h2>
+			
+			
+			<p>Something about the new y Philharmonic</p>
+			<p>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+			<h3>Other headers</h3>
+			
+			<p>MOre info</p>
+		</div>
+		<div class="table">
+			<table>
+				<thead>
+					<th>RANK</th>
+					<th>TITLE</th>
+					<th>COMPOSER</th>
+					<th>NO. OF SEASONS</th>
+				</thead>
+				<tbody class="comp-rankings">
+				
+				</tbody>
+			</table>
+		</div>
+		<div>
+			<h3>Other headers</h3>
+			
+			<p>MOre info</p>
+			<p>More prose to write yayaya!!!</p>
+		</div>
 		
 		<div id="buttons">
-			<button id="transition">Transition</button>
-			<button id="transition-next">Transition 2</button>
-			<button id="by-first-season">Sort Composers By Earliest Performance by NYPhil</button>
-			<button class="active" id="by-most-performances">Sort Composers By Most Performances</button>
+			<a id="transition">Transition</a>
+			<a id="transition-next">Transition 2</a>
+			<a id="by-first-season">Sort Composers By Earliest Performance by NYPhil</a>
+			<a class="active" id="by-most-performances">Sort Composers By Most Performances</a>
 		</div>
 		<div>
 			<h1>Title of piece</h1>
@@ -73,6 +160,7 @@
 			<p>MOre info</p>
 			<p>More prose to write yayaya!!!</p>
 		</div>
+		<div class="heat-container"></div>
 		<div class="outer-container">
 			<div class="explain">
 				<p class="explain1">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
@@ -167,6 +255,8 @@
 		<script src="assets/js/temp.js"></script>
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>
 		<script src="assets/js/app.js"></script>
+		<script src="assets/js/composer_bar_code_new.js"></script>
+
 
 
 

@@ -1,4 +1,4 @@
-const ALL_SEASONS = [  
+/* const ALL_SEASONS = [  
    "1842-43",
    "1843-44",
 	 "1844-45",
@@ -176,6 +176,8 @@ const ALL_SEASONS = [
    "2016-17"
 ]; 
 
+*/
+
 const BAR_HEIGHT = 45; 
 
 let composersByTotal = []; 
@@ -183,7 +185,7 @@ let composersByTotal = [];
 let composerArray; 
 let composersByFirstSeason; 
 
-let transition = function() {}; 
+let transitionBar = function() {}; 
 let screen_height = window.outerHeight; 
 
 
@@ -244,7 +246,7 @@ d3.json('../../data/top60_alt.json', composers => {
 									
 	
 	
-	let axis = d3.select("body").select(".container")
+	let axis = d3.select("body").select(".heat-container")
 			.append("svg")
 			.attr("class", "axis")
 			.attr("width", SVG_WIDTH)
@@ -262,7 +264,7 @@ d3.json('../../data/top60_alt.json', composers => {
 							.attr("stroke", "White")
 							.attr("stroke-dasharray", "2,2")
 												
-	const SVG = d3.select(".container").append("svg")
+	const SVG = d3.select(".heat-container").append("svg")
 								.attr("class", "main-svg")
 								.attr("x", 0)
 								.attr("y", 0)
@@ -311,7 +313,7 @@ d3.json('../../data/top60_alt.json', composers => {
 	//console.log(SVG.selectAll(".composer-bar").sort(function(a, b) { return x0(a.letter) - x0(b.letter) })); 
 
 	
-	transition = function (newData, color) {
+	transitionBar = function (newData, color) {
 		
 		bars.data(newData)
 			.transition()
@@ -339,17 +341,17 @@ d3.json('../../data/top60_alt.json', composers => {
 	}
 	
 	//Sorting
-	document.getElementById("buttons").addEventListener("click", (e) => {
-		document.getElementsByClassName("active")[0].classList.remove("active");
-		let target = e.target; 
-		target.classList.add("active");
-		
-		if (target.id == "by-first-season") {
-			transition(composersByFirstSeason, "Steelblue"); 
-		} else if (target.id == "by-most-performances") {
-			transition(composersArray, "Tomato"); 
-		}
-	}); 
+	//document.getElementById("buttons").addEventListener("click", (e) => {
+	//	document.getElementsByClassName("active")[0].classList.remove("active");
+	//	let target = e.target; 
+	//	target.classList.add("active");
+	//	
+	//	if (target.id == "by-first-season") {
+	//		transition(composersByFirstSeason, "Steelblue"); 
+	//	} else if (target.id == "by-most-performances") {
+	//		transition(composersArray, "Tomato"); 
+	//	}
+	//}); 
 	
 
 }); 

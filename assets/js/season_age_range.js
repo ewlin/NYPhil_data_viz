@@ -5,6 +5,8 @@ let seasons = {},
 		percentagesOfRepeatsLiving, 
 		totalWorksPerSeason, 
 		transition, 
+		transitionOrg, 
+		transition2, 
 		seasonsBuckets = Array.apply(null,Array(7)).map((_) => {
 			return {}; 
 		});
@@ -140,7 +142,7 @@ d3.json('../../data/composers.json', (err, d) => {
 		return best > current.total ? best : current.total; 
 	}, 0); 
 	
-	
+	console.log(MAX_NUMBER_PER_SEASON)
 	
 	percentagesLivingDead = ALL_SEASONS.map(season => {
 		let {unknown, alive, dead} = seasons[season], 
@@ -279,8 +281,9 @@ d3.json('../../data/composers.json', (err, d) => {
 	//	console.log(idx);
 	//	console.log(total);
 	//});
-	
-	let top15 = sortedSeasonBuckets.map((bucket,idx) => {
+	//let top15 = sortedSeasonBuckets.map((bucket,idx) => {
+
+	let top15 = rankings.map((bucket,idx) => {
 		let fifteenth = bucket[14];
 		
 		let count = fifteenth[1].count; 
@@ -296,11 +299,31 @@ d3.json('../../data/composers.json', (err, d) => {
 		}
 		console.log(lastIndex); 	
 		return bucket.slice(0,lastIndex).map(arr => {
-			return [arr[0], arr[1].title, arr[1].composer, arr[1].count]; 
+			return [arr[0], arr[1].title, arr[1].composer, arr[1].count, arr[2]]; 
 		}).filter(arr => arr[2] !== "Anthem,"); 
 	}); 
 	
-	console.log(top15); 
+	console.log(top15);
+	
+	top15[2].forEach( (piece) => {
+		let composer = piece[2], 
+				composerImage = composer.toLowerCase().split(" ")[0].match(/[a-z]*/)[0] + '.png', 
+				title = piece[1], 
+				count = piece[3], 
+				rank = piece[4]; 
+		
+		let imageCell = `<td><img src='assets/images/composer_sqs/${composerImage}'/></td>`, 
+				freqCell = `<td>${count}</td>`, 
+				titleCell = `<td class="titles">${title}</td>`, 
+				composerCell = `<td><img src='assets/images/composer_sqs/${composerImage}'/>${composer}</td>`, 
+				rankCell = `<td>${rank}</td>`, 
+				row = `<tr>${imageCell}${rankCell}${titleCell}${composerCell}${freqCell}</tr>`; 
+		
+		//console.log(row); 
+		
+		$('.comp-rankings').append(`<tr>${rankCell}${titleCell}${composerCell}${freqCell}</tr>`); 
+		
+	}); 
 	let top15Composers = []; 
 	top15.forEach(bucket => {
 		bucket.forEach(comp => {
@@ -316,6 +339,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 	console.log("width: ")
 	console.log($('.container').innerWidth()); 
+	const PADDING = 25; 
 	const SVG_HEIGHT = 480;
 	const SVG_WIDTH = $('.container').innerWidth();
 	
@@ -330,10 +354,10 @@ d3.json('../../data/composers.json', (err, d) => {
 	//let xScale = d3.scaleBand().domain(ALL_SEASONS).range([0,SVG_WIDTH]).padding("3px"); 
 	//let yScale = d3.linearScale().domain([-1,1]).range([])
 	let x = d3.scaleLinear().domain([0,174]).range([0,.9*SVG_WIDTH]); 
-	let y = d3.scaleLinear().domain([0,1]).range([SVG_HEIGHT, 0]);
+	let y = d3.scaleLinear().domain([0,1]).range([SVG_HEIGHT-2*PADDING, 10]);
 	
-	let yAbs = d3.scaleLinear().domain([0,MAX_NUMBER_PER_SEASON]).range([SVG_HEIGHT, 0]);
-	let yPct = d3.scaleLinear().domain([0,1]).range([SVG_HEIGHT, 0]);
+	let yAbs = d3.scaleLinear().domain([0,MAX_NUMBER_PER_SEASON]).range([SVG_HEIGHT-2*PADDING, 10]);
+	let yPct = d3.scaleLinear().domain([0,1]).range([SVG_HEIGHT-2*PADDING, 10]);
 
 	let stack = d3.stack()
 		.keys(["percentageAlive", "percentageDead"]); 	
@@ -351,10 +375,20 @@ d3.json('../../data/composers.json', (err, d) => {
 		.y1(d => yAbs( d[1]) ); 
 	
 	let yAxisAbs = d3.axisLeft()
-										.scale(yAbs); 
+										.scale(yAbs)
+										.tickSize(0); 
+						 
 	
 	let yAxisPct = d3.axisLeft()
-										.scale(yPct);
+										.scale(yPct)
+										.tickSize(0)
+										.tickFormat( d => {
+											return `${d*100}%`;  
+										}); 
+	
+	let xAxisYear = d3.axisBottom()
+										.scale(x)
+										.tickSize(0)
 	
 	let areaPercentage = d3.area()
 		.curve(d3.curveCardinal.tension(.1))
@@ -387,10 +421,13 @@ d3.json('../../data/composers.json', (err, d) => {
 		.attr("y", (d, i) => Math.abs((-i+2) * 200))
 		.text(d => d.key); 
 	
+	//Add axis
 	SVG.append("g")
 			.attr("class", "yAxis")
 			.attr("transform", "translate(30,0)")
 			.call(yAxisAbs); 
+	
+	d3.select(".yAxis").select(".domain").remove(); 
 	
 	transitionOrg = function() {
 				let temp = SVG.selectAll("path")
@@ -413,6 +450,9 @@ d3.json('../../data/composers.json', (err, d) => {
 			.transition()
 			.duration(1400)
 			.call(yAxisAbs); 
+		
+			d3.select(".yAxis").select(".domain").remove(); 
+
 	}
 	
 	
@@ -449,6 +489,9 @@ d3.json('../../data/composers.json', (err, d) => {
 			.transition()
 			.duration(1400)
 			.call(yAxisPct);
+		
+		d3.select(".yAxis").select(".domain").remove(); 
+
 		
 			//.attr("d", area)
 		//.attr("fill", (d) => {
