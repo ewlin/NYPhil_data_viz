@@ -31,10 +31,24 @@ d3.json('../../data/top60_alt.json', composers => {
 	console.log(SVG_WIDTH);
 	console.log(SVG_HEIGHT); 
 	
-	let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([0,SVG_WIDTH]); 
+	let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([5,SVG_WIDTH]); 
 	let yScale = d3.scaleLinear().domain([0,30]).range([SVG_HEIGHT, 0]);
 	let svg = d3.select('.main-container').append('svg').attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
 
+	$('.select-value').on('change', function(e) {
+		$('.composer-face').remove(); 
+		let index = this.value; 
+		console.log(composers[index]); 
+		let composer = composers[index].composer; 
+		let composerImage = composer.toLowerCase().split(' ')[0].match(/[a-z]*/)[0] + '.png';
+		$('.composer-face-container').append(`<img class='composer-face' src='assets/images/composer_sqs/${composerImage}'/>`); 
+		renderDots(index); 
+	}); 
+	
+	composers.forEach( (composer, idx) => {
+		let option = `<option value='${idx}'>${composer.composer}</option>`; 
+		$('.select-value').append(option); 
+	}); 
 	function renderDots(number) {
 		let composer = composers[number]; 
 		let composerIndex = number; 
@@ -102,9 +116,11 @@ d3.json('../../data/top60_alt.json', composers => {
 				d3.selectAll('.piece').attr('stroke', d => {
 					if (d.id == id) return 'white'; 
 				}).attr('opacity', d => {
-					if (d.id != id) return 0.4; 
+					if (d.id != id) return 0.9; 
 					else return 1; 
-				}).attr('r', seasonsScale.bandwidth()/2.4); 
+				})
+				.attr('r', seasonsScale.bandwidth()/2.4)					
+				.attr('stroke-width', 1); 
 		
 				d3.select(d3.event.target)
 					.attr('stroke-width', 3)
@@ -159,15 +175,16 @@ d3.json('../../data/top60_alt.json', composers => {
 	}
 	
 	//renderDots(1);
-	$('button').on('click', function(e) { 
-		$('.composer-face').remove(); 
-		let index = $('.nums').val(); 
-		console.log(composers[index]); 
-		let composer = composers[index].composer; 
-		let composerImage = composer.toLowerCase().split(' ')[0].match(/[a-z]*/)[0] + '.png';
-		$('.composer-face-container').append(`<img class='composer-face' src='assets/images/composer_sqs/${composerImage}'/>`); 
-		renderDots(index); 
-	})
+	
+	//$('button').on('click', function(e) { 
+	//	$('.composer-face').remove(); 
+	//	let index = $('.nums').val(); 
+	//	console.log(composers[index]); 
+	//	let composer = composers[index].composer; 
+	//	let composerImage = composer.toLowerCase().split(' ')[0].match(/[a-z]*/)[0] + '.png';
+	//	$('.composer-face-container').append(`<img class='composer-face' src='assets/images/composer_sqs/${composerImage}'/>`); 
+	//	renderDots(index); 
+	//})
 	
 	
 	
@@ -206,7 +223,7 @@ d3.json('../../data/top60_alt.json', composers => {
 	
 	svg.selectAll('.piece')
 			.data(beethovenWorks)
-			.enter()
+			.enter()	
 			.append('circle')
 			.attr('class', 'piece')
 			.attr('r', seasonsScale.bandwidth()/2.4)
@@ -229,8 +246,8 @@ d3.json('../../data/top60_alt.json', composers => {
 				}).attr('opacity', d => {
 					if (d.id != id) return 0.4; 
 					else return 1; 
-				}).attr('r', seasonsScale.bandwidth()/2.4); 
-		
+				}).attr('r', seasonsScale.bandwidth()/2.4).attr('stroke-width', 1); 
+
 				d3.select(d3.event.target)
 					.attr('stroke-width', 3)
 					.attr('r', seasonsScale.bandwidth()/1.5); 
