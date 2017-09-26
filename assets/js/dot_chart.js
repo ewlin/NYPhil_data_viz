@@ -25,31 +25,56 @@ let screen_height = window.outerHeight;
 
 let beethovenWorks = []; 
 
-//Github pages bug
-d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
-//d3.json('../../data/top60_alt.json', composers => {
+let svgDimensions; 
 
+//Github pages bug
+//d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
+//DEV
+d3.json('../../data/top60_alt.json', composers => {
+	
 	const SVG_WIDTH = $('.main-container').innerWidth(); 
-	const SVG_HEIGHT = $(window).innerHeight()*.8; 
+	const SVG_HEIGHT = $(window).innerHeight()*.75; 
 	console.log(SVG_WIDTH);
 	console.log(SVG_HEIGHT); 
 	
 	let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([SVG_WIDTH*.05,SVG_WIDTH*.95]); 
-	let yScale = d3.scaleLinear().domain([0,30]).range([SVG_HEIGHT*.95, 0]);
+	let yScale = d3.scaleLinear().domain([0,31]).range([SVG_HEIGHT*.92, 0]);
 	let svg = d3.select('.main-container').append('svg').attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
-
+	
+	svgDimensions = document.getElementsByTagName('svg')[0].getBoundingClientRect(); 
 	let axisYears = d3.axisBottom(seasonsScale)
 										.tickValues(seasonsScale.domain().filter((season, i) => {
 											const S = ["1842-43", "1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01", "2016-17"];
 											return S.includes(season); 
 										})) 
-										.tickSize(SVG_HEIGHT*.9);
+										.tickSize(SVG_HEIGHT*.92);
 	
-	let dotAxis = svg.append('g')
+	let axisFreq = d3.axisLeft(yScale)
+										.ticks(5)
+										.tickSize(SVG_WIDTH*.009); 
+			
+	let dotXAxis = svg.append('g')
 									.attr('class', 'axis')
-									.attr('transform',`translate(${-seasonsScale.bandwidth()/2.4},35)`)
+									.attr('transform',`translate(${-seasonsScale.bandwidth()/2.4},0)`)
 									.call(axisYears); 
-	dotAxis.select('.domain').remove(); 
+	
+	dotXAxis.select('.domain').remove(); 
+	dotXAxis.selectAll('.tick line')
+					.style('stroke', 'White')
+					.style('stroke-dasharray', '8,3'); 
+	
+	dotXAxis.selectAll('.tick text').attr('transform', `translate(0,${SVG_HEIGHT*.015})`); 
+	dotXAxis.append('text').attr('class', 'axis-label x-axis-label')
+					.text('SEASONS')
+					.attr('transform', `translate(${SVG_WIDTH/2+10},${SVG_HEIGHT*.99})`); 
+	
+	let dotFreqAxis = svg.append('g').attr('class', 'axis').attr('transform', `translate(${SVG_WIDTH*.05},0)`).call(axisFreq); 
+	
+	dotFreqAxis.select('.domain').remove(); 
+	dotFreqAxis.append('text').attr('class', 'axis-label').text('Number of Compositions per Season')
+														.attr("transform", "rotate(-90)")
+														//.attr('dx', -SVG_HEIGHT/2.5)
+														.attr('dy', -SVG_WIDTH*0.03); 
 	
 	$('.select-value').on('change', function(e) {
 		$('.composer-face').remove(); 
@@ -59,6 +84,13 @@ d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 		let composerImage = composer.toLowerCase().split(' ')[0].match(/[a-z]*/)[0] + '.png';
 		$('.composer-face-container').append(`<img class='composer-face' src='assets/images/composer_sqs/${composerImage}'/>`); 
 		renderDots(index); 
+	});
+	
+	//Reset dots 
+	$('svg').on('click', function(e) {
+		let index = $('.select-value').val() || 0; 
+		//THIS APPROACH IS PROBABLY WASTEFUL PERFORMANCE-WISE; redo without calling so much extra code 
+		if (e.target.tagName !== 'circle') renderDots(index); 
 	}); 
 	
 	composers.forEach( (composer, idx) => {
@@ -133,7 +165,7 @@ d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 				d3.selectAll('.piece').attr('stroke', d => {
 					if (d.id == id) return 'white'; 
 				}).attr('opacity', d => {
-					if (d.id != id) return 0.9; 
+					if (d.id != id) return 0.4; 
 					else return 1; 
 				})
 				.attr('r', seasonsScale.bandwidth()/2.4)					
@@ -143,11 +175,15 @@ d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 					.attr('stroke-width', 3)
 					.attr('r', seasonsScale.bandwidth()/1.5); 
 			}).on('mouseover', d => {
-				console.log('in'); 
+				//console.log('in'); 
 				let dimensions = d3.event.target.getBoundingClientRect(); 
-				let tooltip = d3.select('.tooltip').style('left', (dimensions.right + 10) + "px")
+				let left = dimensions.right > svgDimensions.left + svgDimensions.width/2 
+												? dimensions.right - 320
+												: dimensions.right + 10; 
+				let tooltip = d3.select('.tooltip').style('left', left + "px")
 												.style('top', dimensions.top + "px"); 
-				tooltip.html(`${d.title}`); 
+				let html = `<span class='tooltip-title'>${d.title}</span><br><span class='tooltip-content'>${d.season} season</span>`; 
+				tooltip.html(html); 
 				tooltip.transition().duration(500).style('opacity', .9); 
 				d3.select(d3.event.target)
 					.attr('stroke-width', 3)
@@ -275,8 +311,7 @@ d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 			})
 			.on('click', d => {
 				let id = d.id; 
-				console.log(d.id); 
-				console.log(d.title);
+			
 				d3.selectAll('.piece').attr('stroke', d => {
 					if (d.id == id) return 'white'; 
 				}).attr('opacity', d => {
@@ -288,11 +323,16 @@ d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 					.attr('stroke-width', 3)
 					.attr('r', seasonsScale.bandwidth()/1.5); 
 			}).on('mouseover', d => {
-				console.log('in'); 
+				//	console.log(document.getElementsByTagName('svg')[0].getBoundingClientRect()); 
+				// determine if tooltip goes on right or left side of dot depending on which side of center it's on
 				let dimensions = d3.event.target.getBoundingClientRect(); 
-				let tooltip = d3.select('.tooltip').style('left', (dimensions.right + 10) + "px")
+				let left = dimensions.right > svgDimensions.left + svgDimensions.width/2 
+												? dimensions.right - 320
+												: dimensions.right + 10; 
+				let tooltip = d3.select('.tooltip').style('left', left + "px")
 												.style('top', dimensions.top + "px"); 
-				tooltip.html(`${d.title}`); 
+				let html = `<span class='tooltip-title'>${d.title}</span><br><span class='tooltip-content'>${d.season} season</span>`; 
+				tooltip.html(html); 
 				tooltip.transition().duration(500).style('opacity', .9); 
 				d3.select(d3.event.target)
 					.attr('stroke-width', 3)

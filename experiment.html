@@ -5,6 +5,7 @@
 	
 		<style>
 			body {
+				/*background-color: white;*/
 				background-color: #343434;
 				font-family: 'Lato', sans-serif;
 				font-size: 25px;
@@ -25,11 +26,24 @@
 			.main-container {
 				width: 90%; 
 				margin: auto; 
+				padding-top: 18px;
 				/*background-color: blue; */ 
 			}
 			.axis {
 				font-family: 'Lato'; 
+				stroke: rgba(133,233,90,1);
+				font-weight: 400; 
+			}
+			
+			text.axis-label {
+				font-weight: 300; 
 				stroke: white; 
+				letter-spacing: 3px;
+				
+			}
+			
+			text.axis-label.x-axis-label {
+				letter-spacing: 2px;
 			}
 			
 			.piece {
@@ -39,13 +53,30 @@
 			.tooltip {
 				pointer-events: none; 
 				position: fixed; 
-				width: 300px; 
-				/*height: 100px; */
-				background-color: white; 
+				width: 280px; 
+				padding: 3px 10px;
+				background-color: rgb(219, 221, 224); 
+				box-shadow: 1px 5px 3px -4px #A6ADB3; 
+				border-radius: 3px; 
+				line-height: 13px;
 			}
+			
+			.tooltip .tooltip-title {
+				font-family: 'Alegreya Sans'; 
+				font-size: 17px; 
+				color: #414242; 
+			}
+			
+			.tooltip .tooltip-content {
+				font-family: 'Open Sans'; 
+				font-weight: 300; 
+				font-size: 12px; 
+				line-height: 12px; 
+			}
+			
 		</style>
-		<link href="https://fonts.googleapis.com/css?family=IM+Fell+Great+Primer|Inconsolata|Oswald|Lato:400,700|Titillium+Web" rel="stylesheet">
-	
+		<link href="https://fonts.googleapis.com/css?family=IM+Fell+Great+Primer|Inconsolata|Oswald|Lato:300,400,700|Titillium+Web" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Alegreya+Sans|Open+Sans:300,400" rel="stylesheet">
 	</head>
 
 	<body>
