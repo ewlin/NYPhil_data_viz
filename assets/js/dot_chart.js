@@ -28,9 +28,9 @@ let beethovenWorks = [];
 let svgDimensions; 
 
 //Github pages bug
-//d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
+d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 //DEV
-d3.json('../../data/top60_alt.json', composers => {
+//d3.json('../../data/top60_alt.json', composers => {
 	
 	const SVG_WIDTH = $('.main-container').innerWidth(); 
 	const SVG_HEIGHT = $(window).innerHeight()*.75; 
@@ -71,7 +71,7 @@ d3.json('../../data/top60_alt.json', composers => {
 	let dotFreqAxis = svg.append('g').attr('class', 'axis').attr('transform', `translate(${SVG_WIDTH*.05},0)`).call(axisFreq); 
 	
 	dotFreqAxis.select('.domain').remove(); 
-	dotFreqAxis.append('text').attr('class', 'axis-label').text('Number of Compositions per Season')
+	dotFreqAxis.append('text').attr('class', 'axis-label').text('NUMBER OF COMPOSITIONS PER SEASON')
 														.attr("transform", "rotate(-90)")
 														//.attr('dx', -SVG_HEIGHT/2.5)
 														.attr('dy', -SVG_WIDTH*0.03); 
