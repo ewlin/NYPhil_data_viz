@@ -345,7 +345,9 @@ d3.json('../../data/top60_alt.json', composers => {
 					.attr('r', seasonsScale.bandwidth()/2.4); 
 			}); 
 	
-	d3.select('body').append('div').attr('class', 'tooltip').style('opcaity', 0); 
+	d3.select('body').append('div')
+										.attr('class', 'tooltip')
+										.style('opacity', 0); 
 
 	
 	
