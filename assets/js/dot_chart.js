@@ -28,9 +28,9 @@ let beethovenWorks = [];
 let svgDimensions; 
 
 //Github pages bug
-//d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
+d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 //DEV
-d3.json('../../data/top60_alt.json', composers => {
+//d3.json('../../data/top60_alt.json', composers => {
 	
 	const SVG_WIDTH = $('.main-container').innerWidth(); 
 	const SVG_HEIGHT = $(window).innerHeight()*.75; 
