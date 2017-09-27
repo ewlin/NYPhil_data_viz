@@ -28,9 +28,9 @@ let beethovenWorks = [];
 let svgDimensions; 
 
 //Github pages bug
-d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
+//d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 //DEV
-//d3.json('../../data/top60_alt.json', composers => {
+d3.json('../../data/top60_alt.json', composers => {
 	
 	const SVG_WIDTH = $('.main-container').innerWidth(); 
 	const SVG_HEIGHT = $(window).innerHeight()*.75; 
@@ -44,7 +44,7 @@ d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 	svgDimensions = document.getElementsByTagName('svg')[0].getBoundingClientRect(); 
 	let axisYears = d3.axisBottom(seasonsScale)
 										.tickValues(seasonsScale.domain().filter((season, i) => {
-											const S = ["1842-43", "1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01", "2016-17"];
+											const S = ["1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01", "2016-17"];
 											return S.includes(season); 
 										})) 
 										.tickSize(SVG_HEIGHT*.92);
