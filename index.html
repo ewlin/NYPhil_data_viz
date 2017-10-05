@@ -5,20 +5,65 @@
 		<style>
 			
 			body {
-				background-color: #343434;
+				background-color: #DFE6E6; 
 				font-family: 'Lato', sans-serif;
-
+				margin: 0; 
 				/*font-family: 'IM Fell Great Primer', serif;
 				/*font-family: 'Arimo', sans-serif;
 				/*font-family: 'Titillium Web', sans-serif;*/
 			}
 			
+			#intro {
+				padding: 20px;
+			}
+			
+			.title {
+				padding-top: 25px; 
+				font-size: 58px;
+				max-width: 45rem; 
+				margin: auto; 
+				text-align: center; 
+				font-family: 'Lora'; 
+				line-height: 60px; 
+				color: #463D3D; 
+			}
+			
+			.subtitle {
+				font-family: 'Open Sans'; 
+				font-size: 20px;
+				text-align: center; 
+				color: #8D5C5C; 
+			}
+			
+			.byline {
+				padding-top: 20px;
+				margin: auto; 
+				text-align: center;
+			}
+			
+			.byline .name {
+				font-weight: 700; 
+			}
+			
+			.prose {
+				width: 40rem; 
+				margin: auto;
+				line-height: 1.7; 
+				margin-top: 60px;
+			}
+			
+			
 			.outer-container {
-				max-width: 1000px; 
+				width: 100%;
 				position: relative; 
 				margin: auto; 
-				font-family: 'Slabo 13px', sans-serif;
+				font-weight: 400; 
+				line-height: 22px;
+				font-size: 15px;
+				font-family: 'Lato', sans-serif;
+				font-style: normal; 
 				letter-spacing: 1px;
+				overflow: visible;  
 			}
 			
 			table {
@@ -67,21 +112,50 @@
 				border: 1px solid white; 
 			}
 			.explain {
+				position: relative;
 				/*width: 23%; */
+				padding-bottom: 55px;
+				padding-top: 65px;
 			}
 			
+			
 			.explain p {
-				margin-bottom: 500px;
-				width: 23%;  
+				/*margin-bottom: 500px;*/
+				max-width: 400px; 
+				margin: auto;
+				padding: 6px 12px;
+				background-color: rgb(24, 209, 209); 
+				box-shadow: 1px 5px 5px 1px #19A3A3;
+				border-radius: 3px; 
+				line-height: 1.7;
+				letter-spacing: 0; 
 			}
-			.container {
+			
+			
+			.inner-container {
 				position: absolute; 
 				top: 0; 
-				width: 75%; 
-				margin-left: 25rem;
-				/*float: right; */
-				/* top: 50%; */
+				width: 100%; 
+				/*margin-left: 20rem;*/
 			}
+			
+			.container {
+				position: relative; 
+				margin: auto; 
+				width: 80%;
+			}
+			
+			.at-bottom.inner-container {
+				bottom: 0; 
+				top: auto; 
+			}
+			
+			.fixed {
+				position: fixed; 
+				/*left: auto; */
+				/*top: 0; */
+			}
+			
 			.heat-container {
 				width: 100%; 
 				background-color: #0e2b2b;
@@ -94,154 +168,172 @@
 				top: 50%; 
 			}
 			
-			.fixed {
+			
+			
+			div.dark-graphic {
+				/*background-color: white;*/
+				background-color: #343434;
+				font-family: 'Lato', sans-serif;
+				font-size: 25px;
+				width: 100%;
+				padding: 20px;
+				box-sizing: border-box; 
+				/*font-family: 'IM Fell Great Primer', serif;
+				/*font-family: 'Arimo', sans-serif;
+				/*font-family: 'Titillium Web', sans-serif;*/
+			}
+			
+			h3.graphic-title {
+				font-family: 'Lora'; 
+				font-weight: 700; 
+				font-size: 24px; 
+				color: #A6ADB3; 
+				text-align: center;
+			}
+			
+			.composer-face-container {
+				width: 68px; 
+				height: 68px; 
+				margin: auto; 
+			}
+			.composer-face {
+				width: 68px; 
+				height: 68px; 
+				border-radius: 50%; 
+			}
+			.main-container {
+				width: 90%; 
+				margin: auto; 
+				padding-top: 18px;
+				/*background-color: blue; */ 
+			}
+			.axis {
+				font-family: 'Lato'; 
+				stroke: rgba(133, 233, 90, 1);
+				font-weight: 300; 
+				letter-spacing: 2px;
+			}
+			
+			.stream-axis {
+				stroke: rgb(59, 22, 22); 
+			}
+			
+			.tick line {
+				opacity: .25; 
+				stroke-width: 2; 
+			}
+			
+			text.axis-label {
+				font-weight: 300; 
+				stroke: white; 
+				letter-spacing: 3px;
+				
+			}
+			
+			text.axis-label.stream-label {
+				stroke: rgb(59, 22, 22);	
+				font-weight: 400; 
+			}
+			
+			text.axis-label.x-axis-label {
+				letter-spacing: 2px;
+			}
+			
+			.piece {
+				cursor: pointer; 
+			}
+			
+			.tooltip {
+				pointer-events: none; 
 				position: fixed; 
-				/*top: 0; */
+				width: 280px; 
+				padding: 3px 10px;
+				background-color: rgb(219, 221, 224); 
+				box-shadow: 1px 5px 5px -3px #A6ADB3;
+				border-radius: 3px; 
+				line-height: 13px;
+			}
+			
+			.tooltip .tooltip-title {
+				font-family: 'Alegreya Sans'; 
+				font-size: 17px; 
+				color: #414242; 
+			}
+			
+			.tooltip .tooltip-content {
+				font-family: 'Open Sans'; 
+				font-weight: 300; 
+				font-size: 12px; 
+				line-height: 12px; 
 			}
 			
 			
 		</style>
-		<link href="https://fonts.googleapis.com/css?family=IM+Fell+Great+Primer|Inconsolata|Oswald|Lato:400,700|Titillium+Web" rel="stylesheet">
-
+		<link href="https://fonts.googleapis.com/css?family=IM+Fell+Great+Primer|Inconsolata|Oswald|Lato:300,400,700|Titillium+Web|Lora:400,400i,700,700i|Alegreya+Sans|Open+Sans:300,400" rel="stylesheet">
+		
 	</head>
 	
 	<body> 
-		<div>
-			<h1>Title of piece</h1>
-			<h2>Author</h2>
-			
-			
-			<p>Something about the new y Philharmonic</p>
-			<p>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
-			<h3>Other headers</h3>
-			
-			<p>MOre info</p>
-		</div>
-		<div class="table">
-			<table>
-				<thead>
-					<th>RANK</th>
-					<th>TITLE</th>
-					<th>COMPOSER</th>
-					<th>NO. OF SEASONS</th>
-				</thead>
-				<tbody class="comp-rankings">
-				
-				</tbody>
-			</table>
-		</div>
-		<div>
-			<h3>Other headers</h3>
-			
-			<p>MOre info</p>
-			<p>More prose to write yayaya!!!</p>
-		</div>
 		
-		<div id="buttons">
-			<a id="transition">Transition</a>
-			<a id="transition-next">Transition 2</a>
-			<a id="by-first-season">Sort Composers By Earliest Performance by NYPhil</a>
-			<a class="active" id="by-most-performances">Sort Composers By Most Performances</a>
-		</div>
-		<div>
-			<h1>Title of piece</h1>
-			<h2>Author</h2>
-			
-			
-			<p>Something about the new y Philharmonic</p>
-			<p>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
-			<h3>Other headers</h3>
-			
-			<p>MOre info</p>
-		</div>
-		<div>
-			<h3>Other headers</h3>
-			
-			<p>MOre info</p>
-			<p>More prose to write yayaya!!!</p>
-		</div>
-		<div class="heat-container"></div>
-		<div class="outer-container">
-			<div class="explain">
-				<p class="explain1">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
-				<br />
-				<p class="explain2">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
-				<br />
-				<p class="explain3">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
-				<br />
-				<p>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
-			</div>
-			<div class="container"></div>
-		</div>
+		<header></header>		
 		
-		<!--
-		<div class="article">
-			<h1>TEST</h1>
-			<div>
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				HELLO
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>	
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>	
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>	
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>
-				<h2 id="trigger">HELLO</h2>	
-			</div>	
-			<div>
-					<div id="test-container"></div>
-					<div id="side-content">TEST jkjjkjkjkfdjslfk</div>
+		<main>
+			<h1 class="title">Is Classical Music Still a Living Art Form?</h1>
+			<p class="subtitle">Extrapolating trends from 175 seasons at the New York Philharmonic</p>
+			<p class="byline">By <span class="name">Eric William Lin</span></p>
+			
+			<div class="prose">
+				<p>Something about the new y Philharmonic</p>
+				<p>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about? More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+				<p>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about? More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
 			</div>
-			<div>
-				<h2 id="trigger2">HELLO</h2>
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>	
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>	
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>	
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>
-				<h2>HELLO</h2>	
+			
+			<!--
+			<div class="table">
+				<table>
+					<thead>
+						<th>RANK</th>
+						<th>TITLE</th>
+						<th>COMPOSER</th>
+						<th>NO. OF SEASONS</th>
+					</thead>
+					<tbody class="comp-rankings">
+					
+					</tbody>
+				</table>
 			</div>
-		</div>
-		-->
+			-->
+		
+			<div class="outer-container streamgraph-section">
+				<div class="inner-container">
+					<h3 class='graphic-title'>1st Movement: Is the Concert Hall More MoMA or MET?</h3>
+					<div class="container"></div>
+				</div>
+				<div class="explain">
+					<p class="explain1">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about? More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+					<br />
+					<p class="explain2">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about? More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+					<br />
+					<p class="explain3">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+					<br />
+					<p class="explain4">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+					<br />
+					<p id="last-explain">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+				</div>
+			</div>
+		
+		
+		
+		
+		
+			<div class="dark-graphic">
+				<h3 class='graphic-title'>Top 60 Composers By Number of Pieces Programmed</h3>
+				<select class="select-value"><option value="">Choose a composer:</option></select>
+				<div class="composer-face-container"></div>
+				<div class="main-container"></div>
+			</div>
+		
+		</main>
 		
 		<script
   		src="https://code.jquery.com/jquery-3.2.1.min.js"
@@ -249,16 +341,14 @@
   		crossorigin="anonymous">
 		</script>
 		<script src="d3-v4.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.0.0/d3-annotation.js"></script>
 		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 		<script src="assets/js/season_age_range.js"></script>
 
 		<script src="assets/js/temp.js"></script>
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>
 		<script src="assets/js/app.js"></script>
-		<script src="assets/js/composer_bar_code_new.js"></script>
-
-
-
+		<script src="assets/js/dot_chart.js"></script>
 
 	</body>
 

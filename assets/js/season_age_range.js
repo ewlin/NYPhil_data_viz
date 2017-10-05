@@ -436,8 +436,6 @@ d3.json('../../data/composers.json', (err, d) => {
   	data: { i: 67, workCount: 105 },
   	dy: -80,
   	dx: -90, 
-		//x: 300, 
-		//y: 200
 	}]; 
 	
 	let makeAnnotations = d3.annotation().type(d3.annotationLabel)
