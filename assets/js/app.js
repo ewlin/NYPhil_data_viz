@@ -1,9 +1,10 @@
 //const SCROLLMAGIC = require('scrollmagic'); 
 let controller = new ScrollMagic.Controller();
+let containerScroll = document.querySelector('.outer-container'); 
 
 let scene = new ScrollMagic.Scene({
 																	 triggerElement: ".outer-container", 
-																	 duration: 1200, 
+																	 duration: containerScroll.offsetHeight - window.innerHeight, 
 																	 triggerHook: 0
 																	})
 					.addTo(controller);
@@ -29,11 +30,28 @@ let prose2 = new ScrollMagic.Scene({
 																	})
 						.addTo(controller);
 
+let prose3 = new ScrollMagic.Scene({
+																	 triggerElement: ".explain4", 
+																	 duration: 500, 
+																	 triggerHook: .5
+																	})
+						.addTo(controller);
+
 
 scene.on('enter', () => {
 	console.log("fixed"); 
-	$('.container').addClass("fixed"); 
+	$('.inner-container').addClass("fixed"); 
 });  
+
+scene.on('leave', (e) => {
+	console.log('exit scene'); 
+	$('.inner-container').removeClass("fixed"); 
+	if (e.scrollDirection === 'FORWARD') {
+		$('.inner-container').addClass('at-bottom'); 
+	} else {
+		$('.inner-container').removeClass('at-bottom'); 
+	}
+}); 
 
 prose0.on('enter', () => {
 	console.log("first"); 
@@ -41,11 +59,16 @@ prose0.on('enter', () => {
 }); 
 
 prose1.on('enter', () => {
-	console.log("first"); 
+	console.log("second"); 
 	transition(); 
 }); 
 
 prose2.on('enter', () => {
-	console.log("first"); 
+	console.log("third"); 
 	transition2(); 
+}); 
+
+prose3.on('enter', () => {
+	console.log("fourth"); 
+	transition3(); 
 })

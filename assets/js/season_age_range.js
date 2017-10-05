@@ -7,6 +7,7 @@ let seasons = {},
 		transition, 
 		transitionOrg, 
 		transition2, 
+		transition3,
 		seasonsBuckets = Array.apply(null,Array(7)).map((_) => {
 			return {}; 
 		});
@@ -40,6 +41,19 @@ function group (array, numPerGroup) {
 	return groups; 
 }
 
+
+// Dynamic margins on...
+//Reuse when writing re-sizing code 
+
+$('.explain p').css('margin-bottom', function() {
+	console.log(this); 
+	return this.id !== 'last-explain' ? $(window).innerHeight() : 0; 
+}); 
+
+//GITHUB pages bug 
+//d3.json('/NYPhil_data_viz//data/composers.json', (err, d) => {
+
+//DEV
 d3.json('../../data/composers.json', (err, d) => {
 	
 	d.forEach( (composer, composerIdx) => {
@@ -283,55 +297,6 @@ d3.json('../../data/composers.json', (err, d) => {
 	//});
 	//let top15 = sortedSeasonBuckets.map((bucket,idx) => {
 
-	let top15 = rankings.map((bucket,idx) => {
-		let fifteenth = bucket[14];
-		
-		let count = fifteenth[1].count; 
-		
-		let lastIndex = 0; 
-
-		let currentCount = bucket[lastIndex][1].count; 
-		
-		while (currentCount >= count) {
-			++lastIndex; 
-			currentCount = bucket[lastIndex][1].count; 
-
-		}
-		console.log(lastIndex); 	
-		return bucket.slice(0,lastIndex).map(arr => {
-			return [arr[0], arr[1].title, arr[1].composer, arr[1].count, arr[2]]; 
-		}).filter(arr => arr[2] !== "Anthem,"); 
-	}); 
-	
-	console.log(top15);
-	
-	top15[2].forEach( (piece) => {
-		let composer = piece[2], 
-				composerImage = composer.toLowerCase().split(" ")[0].match(/[a-z]*/)[0] + '.png', 
-				title = piece[1], 
-				count = piece[3], 
-				rank = piece[4]; 
-		
-		let imageCell = `<td><img src='assets/images/composer_sqs/${composerImage}'/></td>`, 
-				freqCell = `<td>${count}</td>`, 
-				titleCell = `<td class="titles">${title}</td>`, 
-				composerCell = `<td><img src='assets/images/composer_sqs/${composerImage}'/>${composer}</td>`, 
-				rankCell = `<td>${rank}</td>`, 
-				row = `<tr>${imageCell}${rankCell}${titleCell}${composerCell}${freqCell}</tr>`; 
-		
-		//console.log(row); 
-		
-		$('.comp-rankings').append(`<tr>${rankCell}${titleCell}${composerCell}${freqCell}</tr>`); 
-		
-	}); 
-	let top15Composers = []; 
-	top15.forEach(bucket => {
-		bucket.forEach(comp => {
-			if (!top15Composers.includes(comp[2])) top15Composers.push(comp[2]); 
-		})
-	}); 
-	
-	console.log(top15Composers); 
 	
 	
 	///End Data Processing 
@@ -340,8 +305,8 @@ d3.json('../../data/composers.json', (err, d) => {
 	console.log("width: ")
 	console.log($('.container').innerWidth()); 
 	const PADDING = 25; 
-	const SVG_HEIGHT = 480;
-	const SVG_WIDTH = $('.container').innerWidth();
+	const SVG_HEIGHT = $(window).innerHeight() * .9; 
+	const SVG_WIDTH = $('.container').innerWidth(); 
 	
 	const SVG = d3.select(".container")
 		.append("svg")
@@ -353,11 +318,12 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 	//let xScale = d3.scaleBand().domain(ALL_SEASONS).range([0,SVG_WIDTH]).padding("3px"); 
 	//let yScale = d3.linearScale().domain([-1,1]).range([])
-	let x = d3.scaleLinear().domain([0,174]).range([0,.9*SVG_WIDTH]); 
-	let y = d3.scaleLinear().domain([0,1]).range([SVG_HEIGHT-2*PADDING, 10]);
+	let x = d3.scaleLinear().domain([0, 174]).range([0, .9*SVG_WIDTH]); 
+	let y = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
 	
-	let yAbs = d3.scaleLinear().domain([0,MAX_NUMBER_PER_SEASON]).range([SVG_HEIGHT-2*PADDING, 10]);
-	let yPct = d3.scaleLinear().domain([0,1]).range([SVG_HEIGHT-2*PADDING, 10]);
+	let yAbs = d3.scaleLinear().domain([0, MAX_NUMBER_PER_SEASON]).range([SVG_HEIGHT-4*PADDING, 10]);
+	let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
+
 
 	let stack = d3.stack()
 		.keys(["percentageAlive", "percentageDead"]); 	
@@ -367,6 +333,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 	let stackB = d3.stack()
 		.keys(["first", "repeat"]); 	
+	
 	
 	let areaAbsolute = d3.area()
 		.curve(d3.curveCardinal.tension(.1))
@@ -388,7 +355,15 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 	let xAxisYear = d3.axisBottom()
 										.scale(x)
-										.tickSize(0)
+										.tickValues([8, 33, 58, 83, 108, 133, 158, 174])
+										.tickFormat( d => {
+											return ALL_SEASONS[d]; 
+										})
+										
+										//.map( i => {
+										//	return ALL_SEASONS[i]; 
+										//})) 
+										.tickSize(10); 
 	
 	let areaPercentage = d3.area()
 		.curve(d3.curveCardinal.tension(.1))
@@ -402,10 +377,13 @@ d3.json('../../data/composers.json', (err, d) => {
 		.y0(d => y( d[0]) )
 		.y1(d => y( d[1]) ); 
 	
+
 	
-	SVG.selectAll("path")
+	
+	SVG.append('g').selectAll("path")
 		.data(stackB(totalWorksPerSeason))
   .enter().append("path")
+			//Can also consolidate this with the scale; 
 		.attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
     .attr("d", areaAbsolute)
 		.attr("fill", (d) => {
@@ -417,32 +395,80 @@ d3.json('../../data/composers.json', (err, d) => {
 		.data(stackB(totalWorksPerSeason))
 		.enter()
 		.append("text")
-		.attr("x", 300)
-		.attr("y", (d, i) => Math.abs((-i+2) * 200))
-		.text(d => d.key); 
+		.attr("x", 600)
+		.attr("y", (d, i) => {
+			//Math.abs((-i+2) * 200)
+			return i == 0 ? SVG_HEIGHT - 120 : $(window).innerHeight()/2; 
+		}).text(d => {
+				let text = d.key.match(/[A-Z][a-z0-9]*/); 
+				return text ? text[0] : d.key;  	 
+		}); 
 	
-	//Add axis
-	SVG.append("g")
-			.attr("class", "yAxis")
-			.attr("transform", "translate(30,0)")
+	//Add Y axis
+	let yStreamAxis = SVG.append("g")
+			.attr("class", "yAxis axis stream-axis")
+			.attr("transform", "translate(50,0)")
 			.call(yAxisAbs); 
 	
 	d3.select(".yAxis").select(".domain").remove(); 
 	
-	transitionOrg = function() {
-				let temp = SVG.selectAll("path")
-					.data(stackB(totalWorksPerSeason))
-					.transition().duration(1400)
-					.attr("d", areaAbsolute)
-					.attr("fill", (d) => {
-						if (d.key == "first") return "Tomato";
-						if (d.key == "repeat") return "Steelblue";
-					});
+	yStreamAxis.append('text').attr('class', 'axis-label stream-label y-axis-label').text('NUMBER OF COMPOSITIONS PER SEASON').attr("transform", "rotate(-90)").attr('dy', -SVG_WIDTH*0.038); 
 	
-					let text = SVG.selectAll("text")
-						.data(stackB(totalWorksPerSeason)); 
+	//Add X axis
+	let xStreamAxis = SVG.append("g")
+			.attr("class", "xAxis axis stream-axis")
+			.attr("transform", `translate(${0.05*SVG_WIDTH},${SVG_HEIGHT-3.9*PADDING})`)
+			.call(xAxisYear); 
+	
+	d3.select(".xAxis").select(".domain").remove(); 
+
+	xStreamAxis.append('text').attr('class', 'axis-label x-axis-label stream-label')
+					.text('NEW YORK PHILHARMONIC SUBSCRIPTION SEASONS')
+					.attr('transform', `translate(${SVG_WIDTH*.95*.5},${1.6*PADDING})`); 
+	
+	//annotation experiment 
+	const annotations = [{
+  	note: {
+  	  title: "Annotation A", 
+			label: "temp I'm a much longer text what happens now? Hahah let's see ..... ooops",
+  	},
+  	//can use x, y directly instead of data
+  	data: { i: 67, workCount: 105 },
+  	dy: -80,
+  	dx: -90, 
+		//x: 300, 
+		//y: 200
+	}]; 
+	
+	let makeAnnotations = d3.annotation().type(d3.annotationLabel)
+		.accessors({
+  	  x: d => x(d.i),
+  	  y: d => yAbs(d.workCount)
+  	})
+		.annotations(annotations); 
+	
+	SVG
+  	.append("g")
+  	.attr("class", "annotation-group")
+		.attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
+  	.call(makeAnnotations); 
+	
+	transitionOrg = function() {
+		let temp = SVG.selectAll("path")
+			.data(stackB(totalWorksPerSeason))
+			.transition().duration(1400)
+			.attr("d", areaAbsolute)
+			.attr("fill", (d) => {
+				if (d.key == "first") return "Tomato";
+				if (d.key == "repeat") return "Steelblue";
+			});
+	
+		let text = SVG.selectAll("text")
+							.data(stackB(totalWorksPerSeason)); 
 		
-				text.transition()
+		SVG.select('.annotation-group').transition().duration(1400).style('opacity', 1); 
+		
+		text.transition()
 				.duration(1400)
 				.text(d => d.key);
 		
@@ -451,9 +477,12 @@ d3.json('../../data/composers.json', (err, d) => {
 			.duration(1400)
 			.call(yAxisAbs); 
 		
-			d3.select(".yAxis").select(".domain").remove(); 
+		d3.select(".yAxis").select(".domain").remove(); 
+		
+		d3.select('.y-axis-label').transition().duration(1400).text('NUMBER OF COMPOSITIONS PER SEASON');
 
-	}
+		
+	}; 
 	
 	
 	transition = function() {
@@ -473,6 +502,9 @@ d3.json('../../data/composers.json', (err, d) => {
 				//if (d.key == "pctFirstMult") return "Tomato";
 				//if (d.key == "pctRepeat") return "#59273e";
 		//})
+		
+		SVG.select('.annotation-group').transition().duration(1400).style('opacity', 0); 
+		
 		newStuff.transition()
 						.duration(1400)
 						.attr("d", area)
@@ -483,7 +515,10 @@ d3.json('../../data/composers.json', (err, d) => {
 
 		text.transition()
 				.duration(1400)
-				.text(d => d.key);
+				.text(d => {
+					let text = d.key.match(/[A-Z][a-z0-9]*/); 
+					return text ? text[0] : d.key;  	 
+				}); 
 				
 		SVG.select(".yAxis")
 			.transition()
@@ -492,6 +527,7 @@ d3.json('../../data/composers.json', (err, d) => {
 		
 		d3.select(".yAxis").select(".domain").remove(); 
 
+		d3.select('.y-axis-label').transition().duration(1400).text("PERCENTAGE OF PIECES PER SEASON");
 		
 			//.attr("d", area)
 		//.attr("fill", (d) => {
@@ -500,7 +536,7 @@ d3.json('../../data/composers.json', (err, d) => {
 		//		if (d.key == "pctRepeat") return "Grey";
 		//}); 
 
-	}
+	}; 
 	
 	transition2 = function() {
 		let newStuff = SVG.selectAll("path")
@@ -528,7 +564,10 @@ d3.json('../../data/composers.json', (err, d) => {
 
 		text.transition()
 				.duration(1400)
-				.text(d => d.key);
+				.text(d => {
+					let text = d.key.match(/[A-Z][a-z0-9]*/); 
+					return text ? text[0] : d.key;  	 
+				}); 
 				
 
 			//.attr("d", area)
@@ -538,13 +577,40 @@ d3.json('../../data/composers.json', (err, d) => {
 		//		if (d.key == "pctRepeat") return "Grey";
 		//}); 
 
-	}
+	}; 
 	
-	document.getElementById("buttons").addEventListener("click", (e) => {
-		let target = e.target; 
-		if (target.id === "transition") transition(); 
-		if (target.id === "transition-next") transition2(); 
-	}); 
+	transition3 = function () {
+		let newStuff = SVG.selectAll("path")
+			//.data(stack(percentagesLivingDead)); 
+		//.data(stackA(percentagesFirstRepeat)); 
+				.data(stack(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 9))); 
+			
+		let text = SVG.selectAll("text")
+			//.data(stackA(percentagesFirstRepeat)); 
+				.data(stack(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 9))); 
+
+		//newStuff.exit().remove()//.attr("d",areaInit)//.attr("fill", (d) => {
+				//if (d.key == "pctFirstSingle") return "Steelblue";
+				//if (d.key == "pctFirstMult") return "Tomato";
+				//if (d.key == "pctRepeat") return "#59273e";
+		//})
+		newStuff.transition()
+						.duration(1400)
+						.attr("d", area)
+						.attr("fill", (d) => {
+							if (d.key == "percentageAlive") return "#ff645f";
+							if (d.key == "percentageDead") return "#7776bd";
+						});
+
+		text.transition()
+				.duration(1400)
+				.text(d => {
+					let text = d.key.match(/[A-Z][a-z0-9]*/); 
+					return text ? text[0] : d.key;  	 
+				}); 
+	}; 
+	
+	
 	
 }); 
 

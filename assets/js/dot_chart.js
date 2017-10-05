@@ -10,7 +10,7 @@ function generateSeasons (start, end) {
 }
 
 
-const ALL_SEASONS = generateSeasons(1842, 2016); 
+//const ALL_SEASONS = generateSeasons(1842, 2016); 
 
 const BAR_HEIGHT = 45; 
 
@@ -28,9 +28,9 @@ let beethovenWorks = [];
 let svgDimensions; 
 
 //Github pages bug
-d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
+//d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 //DEV
-//d3.json('../../data/top60_alt.json', composers => {
+d3.json('../../data/top60_alt.json', composers => {
 	
 	const SVG_WIDTH = $('.main-container').innerWidth(); 
 	const SVG_HEIGHT = $(window).innerHeight()*.75; 
@@ -41,6 +41,7 @@ d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 	let yScale = d3.scaleLinear().domain([0,31]).range([SVG_HEIGHT*.92, 0]);
 	let svg = d3.select('.main-container').append('svg').attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
 	
+	//Axes logic and display 
 	svgDimensions = document.getElementsByTagName('svg')[0].getBoundingClientRect(); 
 	let axisYears = d3.axisBottom(seasonsScale)
 										.tickValues(seasonsScale.domain().filter((season, i) => {
@@ -65,8 +66,8 @@ d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 	
 	dotXAxis.selectAll('.tick text').attr('transform', `translate(0,${SVG_HEIGHT*.015})`); 
 	dotXAxis.append('text').attr('class', 'axis-label x-axis-label')
-					.text('SEASONS')
-					.attr('transform', `translate(${SVG_WIDTH/2+10},${SVG_HEIGHT*.99})`); 
+					.text('NEW YORK PHILHARMONIC SUBSCRIPTION SEASONS')
+					.attr('transform', `translate(${SVG_WIDTH*.5},${SVG_HEIGHT*.995})`); 
 	
 	let dotFreqAxis = svg.append('g').attr('class', 'axis').attr('transform', `translate(${SVG_WIDTH*.05},0)`).call(axisFreq); 
 	
@@ -76,6 +77,8 @@ d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 														//.attr('dx', -SVG_HEIGHT/2.5)
 														.attr('dy', -SVG_WIDTH*0.03); 
 	
+	
+	//Event listeners
 	$('.select-value').on('change', function(e) {
 		$('.composer-face').remove(); 
 		let index = this.value; 
@@ -113,7 +116,8 @@ d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 					let workMetaData = {id: `${composerIndex}:${work_idx}`, 
 															title: work.title, 
 															season: season,
-															seasonWorkCount: seasonWorkCount}; 
+															seasonWorkCount: seasonWorkCount, 
+														  seasonCount: work.seasonCount}; 
 					if (workSeasons.length === 1) {
 						workMetaData["orphanWork"] = true; 
 					} else if (workSeasons.indexOf(season) === 0) {
@@ -182,7 +186,7 @@ d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 												: dimensions.right + 10; 
 				let tooltip = d3.select('.tooltip').style('left', left + "px")
 												.style('top', dimensions.top + "px"); 
-				let html = `<span class='tooltip-title'>${d.title}</span><br><span class='tooltip-content'>${d.season} season</span>`; 
+				let html = `<span class='tooltip-title'>${d.title}</span><br><span class='tooltip-content'>${d.season} season</span><br><span class='tooltip-content'>Appeared in ${d.seasonCount} ${d.seasonCount == 1 ? 'season' : 'seasons'}</span>`;
 				tooltip.html(html); 
 				tooltip.transition().duration(500).style('opacity', .9); 
 				d3.select(d3.event.target)
@@ -270,11 +274,15 @@ d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 		let seasonWorkCount = 1; 
 		works.forEach( (work, work_idx) => {
 			let workSeasons = work.seasons; 
+			let numOfPerformances = workSeasons.length; 
+			
 			if (workSeasons.includes(season)) {
 				let workMetaData = {id: `${composerIndex}:${work_idx}`, 
 														title: work.title, 
 														season: season,
-														seasonWorkCount: seasonWorkCount}; 
+														seasonWorkCount: seasonWorkCount, 
+													  seasonCount: work.seasonCount, 
+													 	numOfPerfs: numOfPerformances}; 
 				if (workSeasons.length === 1) {
 					workMetaData["orphanWork"] = true; 
 				} else if (workSeasons.indexOf(season) === 0) {
@@ -331,7 +339,7 @@ d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 												: dimensions.right + 10; 
 				let tooltip = d3.select('.tooltip').style('left', left + "px")
 												.style('top', dimensions.top + "px"); 
-				let html = `<span class='tooltip-title'>${d.title}</span><br><span class='tooltip-content'>${d.season} season</span>`; 
+				let html = `<span class='tooltip-title'>${d.title}</span><br><span class='tooltip-content'>${d.season} season</span><br><span class='tooltip-content'>Appeared in ${d.seasonCount} ${d.seasonCount == 1 ? 'season' : 'seasons'}</span><br><span class='tooltip-content'>${((d.numOfPerfs/beethovenWorks.length)*100).toFixed(2)}% of all performances of works by ${beethoven.composer}</span>`; 
 				tooltip.html(html); 
 				tooltip.transition().duration(500).style('opacity', .9); 
 				d3.select(d3.event.target)
