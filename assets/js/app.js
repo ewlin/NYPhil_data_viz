@@ -54,21 +54,21 @@ scene.on('leave', (e) => {
 }); 
 
 prose0.on('enter', () => {
-	console.log("first"); 
+	//console.log("first"); 
 	transitionOrg(); 
 }); 
 
 prose1.on('enter', () => {
-	console.log("second"); 
+	//console.log("second"); 
 	transition(); 
 }); 
 
 prose2.on('enter', () => {
-	console.log("third"); 
+	//console.log("third"); 
 	transition2(); 
 }); 
 
 prose3.on('enter', () => {
-	console.log("fourth"); 
+	//console.log("fourth"); 
 	transition3(); 
 })

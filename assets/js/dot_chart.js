@@ -337,10 +337,13 @@ d3.json('../../data/top60_alt.json', composers => {
 				let left = dimensions.right > svgDimensions.left + svgDimensions.width/2 
 												? dimensions.right - 320
 												: dimensions.right + 10; 
-				let tooltip = d3.select('.tooltip').style('left', left + "px")
-												.style('top', dimensions.top + "px"); 
+				let tooltip = d3.select('.tooltip').style('left', left + "px"); 
+				//let tooltip = d3.select('.tooltip').style('left', left + "px")
+				//								.style('top', dimensions.top + "px"); 
 				let html = `<span class='tooltip-title'>${d.title}</span><br><span class='tooltip-content'>${d.season} season</span><br><span class='tooltip-content'>Appeared in ${d.seasonCount} ${d.seasonCount == 1 ? 'season' : 'seasons'}</span><br><span class='tooltip-content'>${((d.numOfPerfs/beethovenWorks.length)*100).toFixed(2)}% of all performances of works by ${beethoven.composer}</span>`; 
 				tooltip.html(html); 
+				let height = document.querySelector('.tooltip').getBoundingClientRect().height; 
+				tooltip.style('top', (dimensions.top - Math.floor(height/2)) + "px"); 
 				tooltip.transition().duration(500).style('opacity', .9); 
 				d3.select(d3.event.target)
 					.attr('stroke-width', 3)
