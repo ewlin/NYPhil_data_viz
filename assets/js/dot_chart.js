@@ -12,15 +12,13 @@ function generateSeasons (start, end) {
 
 //const ALL_SEASONS = generateSeasons(1842, 2016); 
 
-const BAR_HEIGHT = 45; 
+//let composersByTotal = []; 
 
-let composersByTotal = []; 
+//let composerArray; 
+//let composersByFirstSeason; 
 
-let composerArray; 
-let composersByFirstSeason; 
-
-let transitionBar = function() {}; 
-let screen_height = window.outerHeight; 
+//let transitionBar = function() {}; 
+//let screen_height = window.outerHeight; 
 
 
 let beethovenWorks = []; 
@@ -96,6 +94,7 @@ d3.json('../../data/top60_alt.json', composers => {
 		if (e.target.tagName !== 'circle') renderDots(index); 
 	}); 
 	
+	//Create Options for select elements populated with composer names
 	composers.forEach( (composer, idx) => {
 		let option = `<option value='${idx}'>${composer.composer}</option>`; 
 		$('.select-value').append(option); 
@@ -210,55 +209,8 @@ d3.json('../../data/top60_alt.json', composers => {
 			.attr('stroke', d => {
 				if (d.orphanWork) return 'gray'; 
 			}); 
-			
-		
-					//.attr('cy', d => -5).attr('cx', d => -5) 
-		/*
-		dots.transition().duration(1400)	
-			.attr('r', seasonsScale.bandwidth()/2.4)
-			.attr('cx', d => seasonsScale(d.season))
-			.attr('cy', d => yScale(d.seasonWorkCount))
-			.attr('fill', d => {
-				if (d.orphanWork) return 'none'; 
-				if (d.firstPerf) return 'Tomato'; 
-				else return 'Steelblue'; 
-			})
-			.attr('stroke', d => {
-				if (d.orphanWork) return 'gray'; 
-			})
-			.on('click', d => {
-				let id = d.id; 
-				console.log(d.title); 
-				console.log(d3.select(d3.event.target)); 
-				d3.selectAll('.piece').attr('stroke', d => {
-					if (d.id == id) return 'white'; 
-				}).attr('opacity', d => {
-					if (d.id != id) return 0.4; 
-					else return 1; 
-				}).attr('r', seasonsScale.bandwidth()/2.4); 
-		
-				d3.select(d3.event.target)
-					.attr('stroke-width', 3)
-					.attr('r', seasonsScale.bandwidth()/1.5); 
-			}); 
-		*/
-			
-		
+	
 	}
-	
-	//renderDots(1);
-	
-	//$('button').on('click', function(e) { 
-	//	$('.composer-face').remove(); 
-	//	let index = $('.nums').val(); 
-	//	console.log(composers[index]); 
-	//	let composer = composers[index].composer; 
-	//	let composerImage = composer.toLowerCase().split(' ')[0].match(/[a-z]*/)[0] + '.png';
-	//	$('.composer-face-container').append(`<img class='composer-face' src='assets/images/composer_sqs/${composerImage}'/>`); 
-	//	renderDots(index); 
-	//})
-	
-	
 	
 	let beethoven = composers[0]; 
 	let composerIndex = 0; 
@@ -361,7 +313,7 @@ d3.json('../../data/top60_alt.json', composers => {
 										.style('opacity', 0); 
 
 	
-	
+	/**
 	//TODO some redundant code here. Clean up 
 	composers.forEach( composer => {
 		let works = composer.works; 
@@ -402,136 +354,10 @@ d3.json('../../data/top60_alt.json', composers => {
 										.padding(.1); 
 	
 	let densityScale = d3.scalePow().exponent(.8).domain([0,30]).range([0,1]); 
-	
-	
-	
-  //let axisYears = d3.axisTop(x)
-	//									.tickValues(x.domain().filter((season, i) => {
-	//										const S = ["1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01"];
-	//										return S.includes(season); 
-	//									}))
-	//									.tickSize(screen_height)
-									
-	
-	
-	let axis = d3.select("body").select(".heat-container")
-			.append("svg")
-			.attr("class", "axis")
-			.attr("width", SVG_WIDTH)
-			.attr("height", screen_height)
-			.attr("x", 0)
-			.attr("y", 0)
-			.append("g")
-	    .attr("transform", `translate(-${x.bandwidth()/2},${screen_height+20})`)
-			.call(axisYears)
-			
-	axis.selectAll("text").attr("fill", "white").attr("font-size", "15px");
-	axis.select(".domain").remove(); 
-	
-	d3.select("body").selectAll(".tick").select("line")
-							.attr("stroke", "White")
-							.attr("stroke-dasharray", "2,2")
-												
-	const SVG = d3.select(".heat-container").append("svg")
-								.attr("class", "main-svg")
-								.attr("x", 0)
-								.attr("y", 0)
-								.attr("width", SVG_WIDTH)
-								.attr("height", composers.length * BAR_HEIGHT + 50); 
-		
-	
-	
-	let bars = SVG.selectAll(".composer")
-			.data(composersArray)
-			.enter()
-			.append("g")
-			.attr("class", "composer-bar")
-			.attr("transform", (d, i) => "translate(0," + i*BAR_HEIGHT + ")"); 
-	
-	bars.selectAll(".season")
-			.data( d => d.seasons)
-			.enter()
-			.append("rect")
-			.attr("y", 0)
-			.attr("x", d => x(d.season))
-			.attr("height", BAR_HEIGHT)
-			.attr("width", x.bandwidth)
-			.attr("fill", "Tomato")
-			.attr("fill-opacity", d => densityScale(d.count))
+	**/
 
-
-			////Borders around works that have 5+ performances
-			//.attr("stroke", "#369c9c")
-			////.attr("stroke-width", d => d.count >= 10 ? 2 : 0)
-			//.attr("stroke-width", d => d.season >= "2007-08" && d.count > 0 ? 2 : 0)
-			//.attr("stroke-opacity", 0.7)
-	
-	bars.append("text")
-			.attr("class", "composer-name")
-			.text( (d) => { 
-				let c = d.composer.split("  "); 
-				let first = c[0].match(/\[.*\]/) ? c[0].match(/\[.*\]/)[0].slice(1,c[0].match(/\[.*\]/)[0].length-1) : c[0]; 
-				return `${first} ${c[1].trim().slice(0,1)}.`; 
-			}).attr("transform", `translate(1060, 27)`)
-			.attr("fill", "White")
-			.attr("font-family", "Arial")
-			.attr("font-size", "14px"); 
-
-	
-	//console.log(SVG.selectAll(".composer-bar").sort(function(a, b) { return x0(a.letter) - x0(b.letter) })); 
-
-	
-	transitionBar = function (newData, color) {
-		
-		bars.data(newData)
-			.transition()
-			.duration(0);
-		
-		bars.selectAll("rect").data(d => d.seasons)
-								.transition()
-								.duration(1200)
-								.attr("fill", color)
-								.attr("fill-opacity", d => densityScale(d.count))
-						//.attr("stroke", "#369c9c")
-						////.attr("stroke-width", d => d.count >= 10 ? 2 : 0)
-						//.attr("stroke-width", d => d.season >= "2007-08" && d.count > 0 ? 2 : 0)
-						//.attr("stroke-opacity", 0.7);
-		
-		bars.select(".composer-name")
-			.transition()
-			.duration(1200)
-			.text( (d) => { 
-				let c = d.composer.split(","); 
-				let first = c[0].match(/\[.*\]/) ? c[0].match(/\[.*\]/)[0].slice(1,c[0].match(/\[.*\]/)[0].length-1) : c[0]; 
-				return `${first}, ${c[1].trim().slice(0,1)}.`; 
-			});
-				
-	}
-	
-	//Sorting
-	//document.getElementById("buttons").addEventListener("click", (e) => {
-	//	document.getElementsByClassName("active")[0].classList.remove("active");
-	//	let target = e.target; 
-	//	target.classList.add("active");
-	//	
-	//	if (target.id == "by-first-season") {
-	//		transition(composersByFirstSeason, "Steelblue"); 
-	//	} else if (target.id == "by-most-performances") {
-	//		transition(composersArray, "Tomato"); 
-	//	}
-	//}); 
-	
 
 }); 
 
-function findMax(composersArr) {
-	return composersArr.reduce( (max, composer) => {
-		let seasons = composer.seasons; 
-		let highest = 0; 
-		for (let season in seasons) {
-			highest = seasons[season] > highest ? seasons[season] : highest; 
-		}
-		return max > highest ? max : highest; 
-	}, 0); 
-}
+
 
