@@ -1,16 +1,15 @@
 function generateSeasons (start, end) {
 	let seasons = []; 
 	
-	for (let i=start; i<=end; i++) {
-		let nextSeas = String(i+1).slice(2,4);
+	for (let i = start; i <= end; i++) {
+		let nextSeas = String(i + 1).slice(2, 4);
 		seasons.push(String(`${i}-${nextSeas}`)); 
 	}
 	
 	return seasons; 
 }
 
-
-//const ALL_SEASONS = generateSeasons(1842, 2016); 
+const ALL_SEASONS = generateSeasons(1842, 2016); 
 
 //let composersByTotal = []; 
 
@@ -28,7 +27,7 @@ let svgDimensions;
 //Github pages bug
 //d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
 //DEV
-d3.json('../../data/top60_alt.json', composers => {
+d3.json('../../data/new_top60.json', composers => {
 	
 	const SVG_WIDTH = $('.main-container').innerWidth(); 
 	const SVG_HEIGHT = $(window).innerHeight()*.75; 
@@ -38,6 +37,10 @@ d3.json('../../data/top60_alt.json', composers => {
 	let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([SVG_WIDTH*.05,SVG_WIDTH*.95]); 
 	let yScale = d3.scaleLinear().domain([0,31]).range([SVG_HEIGHT*.92, 0]);
 	let svg = d3.select('.main-container').append('svg').attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
+	/*
+	svg.append('rect').attr('x', 0).attr('y', 0)
+	.attr('width', 80).attr('height', SVG_HEIGHT*.92).attr('opacity', .3).attr('fill', 'grey'); 
+	*/
 	
 	//Axes logic and display 
 	svgDimensions = document.getElementsByTagName('svg')[0].getBoundingClientRect(); 
@@ -82,8 +85,11 @@ d3.json('../../data/top60_alt.json', composers => {
 		let index = this.value; 
 		console.log(composers[index]); 
 		let composer = composers[index].composer; 
-		let composerImage = composer.toLowerCase().split(' ')[0].match(/[a-z]*/)[0] + '.png';
+		let composerImage = composer === 'Strauss,  Johann, II'
+												? 'strauss_j.png' 
+												: composer.toLowerCase().split(' ')[0].match(/[a-z]*/)[0] + '.png';
 		$('.composer-face-container').append(`<img class='composer-face' src='assets/images/composer_sqs/${composerImage}'/>`); 
+		
 		renderDots(index); 
 	});
 	
@@ -103,6 +109,24 @@ d3.json('../../data/top60_alt.json', composers => {
 	function renderDots(number) {
 		let composer = composers[number]; 
 		let composerIndex = number; 
+		//let birthSeason = composer.birth + "-" + (+composer.birth.substr(2) + 1); 
+		let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(composer.birth) )]; 
+		console.log(birthSeason); 
+		let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(composer.death) )]; 
+
+		//let deathSeason = composer.death + "-" + (+composer.death.substr(2) + 1); 
+		console.log(deathSeason); 
+
+		let rectX = seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
+
+		let rectWidth; 
+		
+		if (!seasonsScale(deathSeason)) {
+			rectWidth = 0; 
+		} else {
+			rectWidth = seasonsScale(deathSeason) - rectX; 
+		}
+		
 		//console.log(beethoven); 
 		beethovenWorks = []; 
 		ALL_SEASONS.forEach( (season, season_idx) => {
@@ -111,12 +135,16 @@ d3.json('../../data/top60_alt.json', composers => {
 			let seasonWorkCount = 1; 
 			works.forEach( (work, work_idx) => {
 				let workSeasons = work.seasons; 
+				let numOfPerformances = workSeasons.length; 
+
 				if (workSeasons.includes(season)) {
 					let workMetaData = {id: `${composerIndex}:${work_idx}`, 
-															title: work.title, 
-															season: season,
-															seasonWorkCount: seasonWorkCount, 
-														  seasonCount: work.seasonCount}; 
+														title: work.title, 
+														season: season,
+														seasonWorkCount: seasonWorkCount, 
+													  seasonCount: work.seasonCount, 
+													 	numOfPerfs: numOfPerformances, 
+													  composer: work.composer}; 
 					if (workSeasons.length === 1) {
 						workMetaData["orphanWork"] = true; 
 					} else if (workSeasons.indexOf(season) === 0) {
@@ -130,10 +158,21 @@ d3.json('../../data/top60_alt.json', composers => {
 		//beethovenSeasons.push({season: season, works: seasonWorks}); 
 		
 		}); 
-		//DOT Chart scales
-		//let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([0,SVG_WIDTH]); 
-		//let yScale = d3.scaleLinear().domain([0,30]).range([SVG_HEIGHT, 0]);
-		//let svg = d3.select('.main-container').append('svg').attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
+		
+		
+		// Composer birth-death box 
+		svg.select('rect').transition().duration(1400).attr('x', rectX)
+		//		let birthSeason = d.birth + "-" + (+d.birth.substr(2) + 1); 
+		//		return seasonsScale(birthSeason) ? seasonsScale(birthSeason) : -100; 
+		//.attr('y', 0)
+		.attr('width', rectWidth); 
+		
+		//		let birthSeason = d.birth + "-" + (+d.birth.substr(2) + 1); 
+		//		let deathSeason = d.death + "-" + (+d.death.substr(2) + 1); 
+		//		if (seasonsScale(birthSeason))
+		//.attr('height', SVG_HEIGHT*.92)
+		//.attr('opacity', .3).attr('fill', 'grey'); 
+		
 		
 		let dots = svg.selectAll('circle')
 			.data(beethovenWorks); 
@@ -148,7 +187,7 @@ d3.json('../../data/top60_alt.json', composers => {
 			.attr('fill', d => {
 				if (d.orphanWork) return '#343434'; 
 				if (d.firstPerf) return 'Tomato'; 
-				else return 'Steelblue'; 
+				else return '#3f74a1'; 
 			})
 			.attr('stroke', d => {
 				if (d.orphanWork) return 'gray'; 
@@ -178,15 +217,18 @@ d3.json('../../data/top60_alt.json', composers => {
 					.attr('stroke-width', 3)
 					.attr('r', seasonsScale.bandwidth()/1.5); 
 			}).on('mouseover', d => {
-				//console.log('in'); 
+				console.log(composer.composer); 
 				let dimensions = d3.event.target.getBoundingClientRect(); 
 				let left = dimensions.right > svgDimensions.left + svgDimensions.width/2 
 												? dimensions.right - 320
 												: dimensions.right + 10; 
-				let tooltip = d3.select('.tooltip').style('left', left + "px")
-												.style('top', dimensions.top + "px"); 
-				let html = `<span class='tooltip-title'>${d.title}</span><br><span class='tooltip-content'>${d.season} season</span><br><span class='tooltip-content'>Appeared in ${d.seasonCount} ${d.seasonCount == 1 ? 'season' : 'seasons'}</span>`;
+				let tooltip = d3.select('.tooltip').style('left', left + "px"); 
+				let height; 
+				//let html = `<span class='tooltip-title'>${d.title}</span><br><span class='tooltip-content'>${d.season} season</span><br><span class='tooltip-content'>Appeared in ${d.seasonCount} ${d.seasonCount == 1 ? 'season' : 'seasons'}</span>`;
+				let html = `<span class='tooltip-title'>${d.title}</span><br><span class='tooltip-content'><em>${d.season} season</em></span><br><span class='tooltip-content'>Appeared in ${d.seasonCount} ${d.seasonCount == 1 ? 'season' : 'seasons'}</span><br><span class='tooltip-content'>${((d.numOfPerfs/beethovenWorks.length)*100).toFixed(2)}% of all performances of works by ${d.composer}</span>`; 
 				tooltip.html(html); 
+				height = document.querySelector('.tooltip').getBoundingClientRect().height; 
+				tooltip.style('top', (dimensions.top - Math.floor(height/2)) + "px"); 
 				tooltip.transition().duration(500).style('opacity', .9); 
 				d3.select(d3.event.target)
 					.attr('stroke-width', 3)
@@ -204,7 +246,7 @@ d3.json('../../data/top60_alt.json', composers => {
 			.attr('fill', d => {
 				if (d.orphanWork) return 'none'; 
 				if (d.firstPerf) return 'Tomato'; 
-				else return 'Steelblue'; 
+				else return '#3f74a1'; 
 			})
 			.attr('stroke', d => {
 				if (d.orphanWork) return 'gray'; 
@@ -220,6 +262,31 @@ d3.json('../../data/top60_alt.json', composers => {
 	let composerImage = composer.toLowerCase().split(' ')[0].match(/[a-z]*/)[0] + '.png';
 	$('.composer-face-container').append(`<img class='composer-face' src='assets/images/composer_sqs/${composerImage}'/>`); 
 	
+	let birthSeason = beethoven.birth + "-" + (+beethoven.birth.substr(2) + 1); 
+	console.log(birthSeason); 
+	let deathSeason = beethoven.death + "-" + (+beethoven.death.substr(2) + 1); 
+	console.log(deathSeason); 
+	let rectX = seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
+	let rectWidth; 
+	
+	if (!seasonsScale(deathSeason)) {
+		rectWidth = 0; 
+	} else {
+		rectWidth = seasonsScale(deathSeason) - rectX; 
+	}
+	
+	svg.append('g').attr('class', 'lifetime-box').append('rect').attr('x', rectX)
+		//		let birthSeason = d.birth + "-" + (+d.birth.substr(2) + 1); 
+		//		return seasonsScale(birthSeason) ? seasonsScale(birthSeason) : -100; 
+		.attr('y', 0)
+		.attr('width', rectWidth)
+		//		let birthSeason = d.birth + "-" + (+d.birth.substr(2) + 1); 
+		//		let deathSeason = d.death + "-" + (+d.death.substr(2) + 1); 
+		//		if (seasonsScale(birthSeason))
+		.attr('height', SVG_HEIGHT*.92)
+		.attr('opacity', .3).attr('fill', 'grey'); 
+	
+	
 	ALL_SEASONS.forEach( (season, season_idx) => {
 		let works = beethoven.works; 
 		//let seasonWorks = []; 
@@ -234,7 +301,8 @@ d3.json('../../data/top60_alt.json', composers => {
 														season: season,
 														seasonWorkCount: seasonWorkCount, 
 													  seasonCount: work.seasonCount, 
-													 	numOfPerfs: numOfPerformances}; 
+													 	numOfPerfs: numOfPerformances, 
+													  composer: work.composer}; 
 				if (workSeasons.length === 1) {
 					workMetaData["orphanWork"] = true; 
 				} else if (workSeasons.indexOf(season) === 0) {
@@ -264,7 +332,7 @@ d3.json('../../data/top60_alt.json', composers => {
 			.attr('fill', d => {
 				if (d.orphanWork) return '#343434'; 
 				if (d.firstPerf) return 'Tomato'; 
-				else return 'Steelblue'; 
+				else return '#3f74a1'; 
 			})
 			.attr('stroke', d => {
 				if (d.orphanWork) return 'gray'; 
@@ -290,11 +358,12 @@ d3.json('../../data/top60_alt.json', composers => {
 												? dimensions.right - 320
 												: dimensions.right + 10; 
 				let tooltip = d3.select('.tooltip').style('left', left + "px"); 
+				let height; 
 				//let tooltip = d3.select('.tooltip').style('left', left + "px")
 				//								.style('top', dimensions.top + "px"); 
-				let html = `<span class='tooltip-title'>${d.title}</span><br><span class='tooltip-content'>${d.season} season</span><br><span class='tooltip-content'>Appeared in ${d.seasonCount} ${d.seasonCount == 1 ? 'season' : 'seasons'}</span><br><span class='tooltip-content'>${((d.numOfPerfs/beethovenWorks.length)*100).toFixed(2)}% of all performances of works by ${beethoven.composer}</span>`; 
+				let html = `<span class='tooltip-title'>${d.title}</span><br><span class='tooltip-content'><em>${d.season} season</em></span><br><span class='tooltip-content'>Appeared in ${d.seasonCount} ${d.seasonCount == 1 ? 'season' : 'seasons'}</span><br><span class='tooltip-content'>${((d.numOfPerfs/beethovenWorks.length)*100).toFixed(2)}% of all performances of works by ${d.composer}</span>`; 
 				tooltip.html(html); 
-				let height = document.querySelector('.tooltip').getBoundingClientRect().height; 
+				height = document.querySelector('.tooltip').getBoundingClientRect().height; 
 				tooltip.style('top', (dimensions.top - Math.floor(height/2)) + "px"); 
 				tooltip.transition().duration(500).style('opacity', .9); 
 				d3.select(d3.event.target)
@@ -312,7 +381,10 @@ d3.json('../../data/top60_alt.json', composers => {
 										.attr('class', 'tooltip')
 										.style('opacity', 0); 
 
-	
+	d3.select("body").selectAll(".tick").select("line")
+							.attr("stroke", "White")
+							.attr("stroke-dasharray", "2,2"); 
+
 	/**
 	//TODO some redundant code here. Clean up 
 	composers.forEach( composer => {

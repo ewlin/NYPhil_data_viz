@@ -2,10 +2,19 @@
 
 <html> 
 	<head>
+		<title>Pulsecheck: Trends from 175 seasons at the New York Philharmonic</title>
+		<link rel="icon" 
+      type="image/png" 
+      href="new-graph.png">
+		
 		<style>
 			
+			:root {
+				--main-background: #DFE6E6; 
+				--links-color: #302B2B; 
+			}
 			body {
-				background-color: #DFE6E6; 
+				background-color: var(--main-background);  
 				font-family: 'Lato', sans-serif;
 				margin: 0; 
 				/*font-family: 'IM Fell Great Primer', serif;
@@ -13,8 +22,48 @@
 				/*font-family: 'Titillium Web', sans-serif;*/
 			}
 			
+			a {
+				color: var(--links-color); 
+			}
+			
+			header {
+				margin: auto; 
+				font-family: 'Spectral'; 
+				text-align: center; 
+				padding: 20px 0;
+			}
+			
+			header img {
+				width: 50px; 
+				vertical-align: middle;
+			}
+			
+			header span {
+				padding-left: 12px;
+				font-size: 1.3em; 
+				font-weight: 400; 
+			}
+			
 			#intro {
 				padding: 20px;
+			}
+			
+			.annotation-group {
+				/*font-size: 13px;*/
+			}
+			
+			.annotation-note-title {
+				fill: #302B2B; 
+				font-size: 13px;
+			}
+			
+			.annotation-note-label {
+				fill: #6E5D5D; 
+				font-size: 12px;
+			}
+			
+			.annotation-connector path.connector {
+				stroke: #302B2B;
 			}
 			
 			.title {
@@ -23,7 +72,8 @@
 				max-width: 45rem; 
 				margin: auto; 
 				text-align: center; 
-				font-family: 'Lora'; 
+				font-weight: 400; 
+				font-family: 'Playfair Display', serif; 
 				line-height: 60px; 
 				color: #463D3D; 
 			}
@@ -51,6 +101,20 @@
 				line-height: 1.7; 
 				margin-top: 60px;
 			}
+			
+			.prose .epigraph { 
+				width: 30rem; 
+				margin: auto; 
+				padding-bottom: 20px; 
+			}
+			
+			.prose .epigraph span {
+				display: block;
+				padding-top: 10px;
+			}
+				
+			
+			
 			
 			
 			.outer-container {
@@ -184,7 +248,7 @@
 			}
 			
 			h3.graphic-title {
-				font-family: 'Lora'; 
+				font-family: 'Playfair Display'; 
 				font-weight: 700; 
 				font-size: 24px; 
 				color: #A6ADB3; 
@@ -247,7 +311,7 @@
 				pointer-events: none; 
 				position: fixed; 
 				width: 280px; 
-				padding: 3px 10px;
+				padding: 13px 10px;
 				background-color: rgb(219, 221, 224); 
 				box-shadow: 1px 5px 5px -3px #A6ADB3;
 				border-radius: 3px; 
@@ -255,27 +319,30 @@
 			}
 			
 			.tooltip .tooltip-title {
+				display: block;
 				font-family: 'Alegreya Sans'; 
-				font-size: 17px; 
+				font-size: 18px; 
 				color: #414242; 
 			}
 			
 			.tooltip .tooltip-content {
 				font-family: 'Open Sans'; 
 				font-weight: 300; 
-				font-size: 12px; 
-				line-height: 12px; 
+				font-size: 13px; 
+				line-height: 14px; 
 			}
 			
 			
 		</style>
-		<link href="https://fonts.googleapis.com/css?family=IM+Fell+Great+Primer|Inconsolata|Oswald|Lato:300,400,700|Titillium+Web|Lora:400,400i,700,700i|Alegreya+Sans|Open+Sans:300,400" rel="stylesheet">
+
+		<link href="https://fonts.googleapis.com/css?family=IM+Fell+Great+Primer|Inconsolata|Oswald|Lato:300,400,700|Titillium+Web|Lora:400,400i,700,700i|Alegreya+Sans|Open+Sans:300,400,400i|Playfair+Display:400,700,900|Spectral:400,700" rel="stylesheet">
+
 		
 	</head>
 	
 	<body> 
 		
-		<header></header>		
+		<header><a href="/"><img src='new-graph.png' /><span>DATA HOMER</span></a></header>		
 		
 		<main>
 			<h1 class="title">Is Classical Music Still a Living Art Form?</h1>
@@ -283,9 +350,10 @@
 			<p class="byline">By <span class="name">Eric William Lin</span></p>
 			
 			<div class="prose">
-				<p>Something about the new y Philharmonic</p>
-				<p>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about? More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
-				<p>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about? More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+				<p class='epigraph'><em>When people hear "classical," they think "dead." The music is described in terms of its distance from the present, its resistance to the mass-what it is not[...] But the same story could have been written ten years ago or twenty. If this be death, the record is skipping. A complete version of the Death of Classical Music Archive would go back to the fourteenth century, when the sensuous melodies of ars nova were thought to signal the end of civilization.</em><span>-Alex Ross, <a target='_blank' href='https://www.newyorker.com/magazine/2004/02/16/listen-to-this'>"Listen to This"</a>, <em>The New Yorker</em> (2004)</span></p>
+				<p>According to Alex Ross, the music critic at <em>The New Yorker</em>, the popular conception of Classical Music as a dying art form in our modern times is somewhat overblown. Throughout the history of the genre, this perception has always been a recurring motif. Each generation of 'Classical Music' connoisseurs have always looked wistfully back at the past, longingly towards the music of the dead masters, while abhorring new styles and the myriad ways in which new generations of composers are desecrating the genre.</p>
+				<p>On some metrics, Classical Music is undoubtedly in trouble. Let's start with demographics. In 2012, the National Endowment for the Arts (NEA) released a report documenting the changes and trends of national participation in the arts between 2002 to 2012. While the percentage of adults engaging in activities like reading and moviegoing stayed relatively stable during the decade (small drops among the US adult population from 56.6% to 54.2% for reading, and from 60.0% to 59.4% for movie-going), Classical Music participation went from an already low 10.8% to 8.1%.</p>
+				<p>While the situation seems dire when looking at the consumer-side of the equation, we can also measure the health of the art form from the producer/creator-side as well. For example, during the decades-long decline of traditional television consumption, daring and ambitious writers and showrunners took their ideas to alternative platforms, jumpstarting what we now call a modern TV Renaissance, with the number of original tv programming hitting a high of 455 in 2016 (compared to 182 shows in 2002). Clearly, great and breakthrough content can have some impact on consumer habits and trends.</p>
 			</div>
 			
 			<!--
@@ -312,9 +380,9 @@
 				<div class="explain">
 					<p class="explain1">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about? More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
 					<br />
-					<p class="explain2">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about? More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+					<p class="explain2">The data is complicated by the dramatic spike in the total number of pieces played per season, starting in the 1909-10 season, when the orchestra <a target='_blank' href='http://www.nytimes.com/1982/03/07/arts/the-philharmonic-on-disk-the-maestro-is-the-message.html?pagewanted=2'>increased the number of concerts it performed each season from 18 to 54</a>. Furthermore, the absolute number of compositions performed each season actually varies quite a bit even with a fixed number of concerts. To account for this, I normalized the data, and re-graphed the first performances and repeat performances as a percentage of total pieces performed each season. But even as a percentage, the season-to-season fluctuation of first time-to-repeat performances is still quite noisy.</p>
 					<br />
-					<p class="explain3">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+					<p class="explain3">To get a better sense of the overall trend across time, I applied a rolling average on the dataset to smooth out the noise.** By the sixth season, the average percentage of repeat performances each season is already over 40%. By the 1859-60 season, the average percentage of first-time performances each season drops below 50%. Repeat performances would be the norm from this point on in the Phil's history. Essentially, within two decades of the Philharmonic's founding, it had already turned into a 'Greatest Hits' band. This is actually a rather remarkable fact, since at this point in history, some of the most performed orchestral music today had yet to be composed; Johannes Brahms' First Symphony was completed in 1876, nearly two decades after the 1859-60 season. In fact, some of the most familiar composers like Mahler, Debussy, Ravel, Stravinsky, and Shostakovich were yet to be born.</p>
 					<br />
 					<p class="explain4">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
 					<br />
@@ -327,7 +395,7 @@
 		
 		
 			<div class="dark-graphic">
-				<h3 class='graphic-title'>Top 60 Composers By Number of Pieces Programmed</h3>
+				<h3 class='graphic-title'>Top 60 Composers By Number of Times Pieces Programmed</h3>
 				<select class="select-value"><option value="">Choose a composer:</option></select>
 				<div class="composer-face-container"></div>
 				<div class="main-container"></div>
@@ -343,11 +411,13 @@
 		<script src="d3-v4.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.0.0/d3-annotation.js"></script>
 		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-		<script src="assets/js/season_age_range.js"></script>
+		
+		<!--<script src="assets/js/season_age_range.js"></script>-->
+		<script src="assets/js/bundle.js"></script>
 
 		<script src="assets/js/temp.js"></script>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>
-		<script src="assets/js/app.js"></script>
+		<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>-->
+		<!--<script src="assets/js/app.js"></script>-->
 		<script src="assets/js/dot_chart.js"></script>
 
 	</body>

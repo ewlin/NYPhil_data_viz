@@ -1,3 +1,6 @@
+let generateSeasons = require('../../temp_utils/generate_seasons.js'); 
+let ScrollMagic = require('scrollmagic'); 
+
 //data process to get # of works performed each season by living vs. deceased composers 
 let seasons = {}, 
 		percentagesLivingDead, 
@@ -18,16 +21,16 @@ let sorted;
 const ALL_SEASONS = generateSeasons(1842, 2016); 
 
 
-function generateSeasons (start, end) {
-	let seasons = []; 
-	
-	for (let i=start; i<=end; i++) {
-		let nextSeas = String(i+1).slice(2,4);
-		seasons.push(String(`${i}-${nextSeas}`)); 
-	}
-	
-	return seasons; 
-}
+//function generateSeasons (start, end) {
+//	let seasons = []; 
+//	
+//	for (let i=start; i<=end; i++) {
+//		let nextSeas = String(i+1).slice(2,4);
+//		seasons.push(String(`${i}-${nextSeas}`)); 
+//	}
+//	
+//	return seasons; 
+//}
 
 function group (array, numPerGroup) {
 	numPerGroup = numPerGroup || array.length; 
@@ -211,12 +214,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	console.log(percentagesOfAllRepeatsLiving); 
 
 
-	
-	
-	
-	
-	
-	
+
 	//array-ify season buckets so I can sort 
 	let sortedSeasonBuckets = seasonsBuckets.map(bucket => {
 		let arr = []; 
@@ -378,8 +376,35 @@ d3.json('../../data/composers.json', (err, d) => {
 		.y0(d => y( d[0]) )
 		.y1(d => y( d[1]) ); 
 	
+	const ORG_TEXTS = ['New York Phil first-time performance', 'Repeat performances']; 
 
+	//annotation experiment 
+	const annotations = [{
+  	note: {
+  	  title: "1909-10 Season", 
+			label: "Gustav Mahler's first season as music director was also marked by a 3X increase in the number of concerts, from 18 to 54",
+  	},
+  	//can use x, y directly instead of data
+  	data: { i: 67, workCount: 105 },
+  	dy: -80,
+  	dx: -90, 
+	}]; 
 	
+	//, {
+	//	note: {
+	//		title: "Repeat performances"
+	//	}, 
+	//	data: { i: 170, workCount: 48 }, 
+	//	dy: -20,
+  //	dx: SVG_WIDTH * .07
+	//}, {
+	//	note: {
+	//		title: "New York Phil first-time performance"
+	//	}, 
+	//	data: { i: 170, workCount: 9 }, 
+	//	dy: -20,
+  //	dx: SVG_WIDTH * .07
+	//}]; 
 	
 	SVG.append('g').selectAll("path")
 		.data(stackB(totalWorksPerSeason))
@@ -390,20 +415,30 @@ d3.json('../../data/composers.json', (err, d) => {
 		.attr("fill", (d) => {
 			if (d.key == "first") return "Tomato";
 			if (d.key == "repeat") return "Steelblue";
+		}).each(function(data, i) {
+			annotations.push({
+				note: {
+					//title: "Hello performances"
+					title: ORG_TEXTS[i]
+				}, 
+				data: { i: 165, workCount: (data[174][1] - data[174][0])/2 + data[174][0] }, 
+				dy: -20,
+				dx: SVG_WIDTH * .12
+			}); 
 		});
 		
-	SVG.selectAll("text")
-		.data(stackB(totalWorksPerSeason))
-		.enter()
-		.append("text")
-		.attr("x", 600)
-		.attr("y", (d, i) => {
-			//Math.abs((-i+2) * 200)
-			return i == 0 ? SVG_HEIGHT - 120 : $(window).innerHeight()/2; 
-		}).text(d => {
-				let text = d.key.match(/[A-Z][a-z0-9]*/); 
-				return text ? text[0] : d.key;  	 
-		}); 
+	//SVG.selectAll("text")
+	//	.data(stackB(totalWorksPerSeason))
+	//	.enter()
+	//	.append("text")
+	//	.attr("x", 600)
+	//	.attr("y", (d, i) => {
+	//		//Math.abs((-i+2) * 200)
+	//		return i == 0 ? SVG_HEIGHT - 120 : $(window).innerHeight()/2; 
+	//	}).text(d => {
+	//			let text = d.key.match(/[A-Z][a-z0-9]*/); 
+	//			return text ? text[0] : d.key;  	 
+	//	}); 
 	
 	//Add Y axis
 	let yStreamAxis = SVG.append("g")
@@ -427,33 +462,7 @@ d3.json('../../data/composers.json', (err, d) => {
 					.text('NEW YORK PHILHARMONIC SUBSCRIPTION SEASONS')
 					.attr('transform', `translate(${SVG_WIDTH*.95*.5},${1.6*PADDING})`); 
 	
-	//annotation experiment 
-	const annotations = [{
-  	note: {
-  	  title: "Annotation A", 
-			label: "temp I'm a much longer text what happens now? Hahah let's see ..... ooops",
-  	},
-  	//can use x, y directly instead of data
-  	data: { i: 67, workCount: 105 },
-  	dy: -80,
-  	dx: -90, 
-	}, {
-		note: {
-			title: "Repeat performances"
-		}, 
-		data: { i: 170, workCount: 48 }, 
-		dy: -20,
-  	dx: SVG_WIDTH * .07
-	}, {
-		note: {
-			title: "New York Phil first-time performance"
-		}, 
-		data: { i: 170, workCount: 9 }, 
-		dy: -20,
-  	dx: SVG_WIDTH * .07
-	}]; 
-	
-	let makeAnnotations = d3.annotation().type(d3.annotationCalloutElbow)
+	let makeAnnotations = d3.annotation().type(d3.annotationLabel)
 		.accessors({
   	  x: d => x(d.i),
   	  y: d => yAbs(d.workCount)
@@ -465,6 +474,7 @@ d3.json('../../data/composers.json', (err, d) => {
 		.attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
   	.call(makeAnnotations); 
 	
+	
 	transitionOrg = function() {
 		let temp = SVG.selectAll("path")
 			.data(stackB(totalWorksPerSeason))
@@ -475,14 +485,14 @@ d3.json('../../data/composers.json', (err, d) => {
 				if (d.key == "repeat") return "Steelblue";
 			});
 	
-		let text = SVG.selectAll("text")
-							.data(stackB(totalWorksPerSeason)); 
+		//let text = SVG.selectAll("text")
+		//					.data(stackB(totalWorksPerSeason)); 
 		
 		//SVG.select('.annotation-group').transition().duration(1400).style('opacity', 1); 
 		
-		text.transition()
-				.duration(1400)
-				.text(d => d.key);
+		//text.transition()
+		//		.duration(1400)
+		//		.text(d => d.key);
 		
 		SVG.select(".yAxis")
 			.transition()
@@ -502,14 +512,17 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 	
 	transition = function() {
+		const TEXTS = ['Percentage of first-time performance', 'Percentage of repeat performances']; 
+		let newAnnotations = []; 
+
 		let stackData = stackA(percentagesFirstRepeat); 
 		let newStuff = SVG.selectAll("path")
 			//.data(stack(percentagesLivingDead)); 
 		.data(stackData); 
 				//.data(stackA(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7))); 
 		
-		let text = SVG.selectAll("text")
-			.data(stackA(percentagesFirstRepeat)); 
+		//let text = SVG.selectAll("text")
+		//	.data(stackA(percentagesFirstRepeat)); 
 				//.data(stackA(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7))); 
 
 		//newStuff.exit().remove()//.attr("d",areaInit)//.attr("fill", (d) => {
@@ -519,8 +532,6 @@ d3.json('../../data/composers.json', (err, d) => {
 		//})
 		
 		//SVG.select('.annotation-group').transition().duration(1400).style('opacity', 0); 
-		let newAnnotations = []; 
-		const TEXTS = ['Repeat performances', 'New York Phil first-time performance']; 
 		
 		newStuff.transition()
 						.duration(1400)
@@ -548,13 +559,13 @@ d3.json('../../data/composers.json', (err, d) => {
 								}, 
 								data: { i: 165, perc: (data[174][1] - data[174][0])/2 + data[174][0] }, 
 								dy: -20,
-								dx: SVG_WIDTH * .07
+								dx: SVG_WIDTH * .12
 							}); 
 			
-							//if (this == this.parentNode.lastChild) 
+							if (this == this.parentNode.lastChild) makeAnnotations.annotations(newAnnotations); 
 							
 						}).on('end', (data) => {
-							makeAnnotations.annotations(newAnnotations); 
+							//makeAnnotations.annotations(newAnnotations); 
 							//SVG.select('.annotation-group').style('opacity', 1); 
 
 							//console.log(data); 
@@ -579,12 +590,12 @@ d3.json('../../data/composers.json', (err, d) => {
 							//SVG.select('.annotation-group').style('opacity', 1); 
 						}); 
 
-		text.transition()
-				.duration(1400)
-				.text(d => {
-					let text = d.key.match(/[A-Z][a-z0-9]*/); 
-					return text ? text[0] : d.key;  	 
-				});
+		//text.transition()
+		//		.duration(1400)
+		//		.text(d => {
+		//			let text = d.key.match(/[A-Z][a-z0-9]*/); 
+		//			return text ? text[0] : d.key;  	 
+		//		});
 				
 		SVG.select(".yAxis")
 			.transition()
@@ -599,15 +610,18 @@ d3.json('../../data/composers.json', (err, d) => {
 	}; 
 	
 	transition2 = function() {
+		const TEXTS = ['Percentage of first-time performance', 'Percentage of repeat performances']; 
+		let newAnnotations = []; 
+
 		let newStuff = SVG.selectAll("path")
 			//.data(stack(percentagesLivingDead)); 
 		//.data(stackA(percentagesFirstRepeat)); 
-				.data(stackA(movingAverageWithRange(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 9)))
+				.data(stackA(movingAverageWithRange(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 7)))
 				//.data(stackA(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7))); 
-			
-		let text = SVG.selectAll("text")
-			//.data(stackA(percentagesFirstRepeat)); 
-				.data(stackA(movingAverageWithRange(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 9)));
+			console.log((movingAverageWithRange(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 7))); 
+		//let text = SVG.selectAll("text")
+		//	//.data(stackA(percentagesFirstRepeat)); 
+		//		.data(stackA(movingAverageWithRange(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 9)));
 
 		//newStuff.exit().remove()//.attr("d",areaInit)//.attr("fill", (d) => {
 				//if (d.key == "pctFirstSingle") return "Steelblue";
@@ -620,14 +634,39 @@ d3.json('../../data/composers.json', (err, d) => {
 						.attr("fill", (d) => {
 							if (d.key == "percentageFirst") return "Tomato";
 							if (d.key == "percentageRepeat") return "Steelblue";
-						});
+						}).each(function(data, i) {
+							//Do hard-coded text instead--e.g. an array of strings to match up/pair up
+							//let text = data.key.match(/[A-Z][a-z0-9]*/); 
+							//let match = text ? text[0] : data.key;
 
-		text.transition()
-				.duration(1400)
-				.text(d => {
-					let text = d.key.match(/[A-Z][a-z0-9]*/); 
-					return text ? text[0] : d.key;  	 
-				}); 
+							console.log(this); 
+							console.log(this.parentNode);
+							console.log(this == this.parentNode.lastChild); 
+							makeAnnotations.accessors({
+  							x: d => x(d.i),
+  							y: d => yPct(d.perc)
+							}); 
+			
+							newAnnotations.push({
+								note: {
+									//title: "Hello performances"
+									title: TEXTS[i]
+								}, 
+								data: { i: 165, perc: (data[174][1] - data[174][0])/2 + data[174][0] }, 
+								dy: -20,
+								dx: SVG_WIDTH * .12
+							}); 
+			
+							if (this == this.parentNode.lastChild) makeAnnotations.annotations(newAnnotations); 
+							
+						}); 
+
+		//text.transition()
+		//		.duration(1400)
+		//		.text(d => {
+		//			let text = d.key.match(/[A-Z][a-z0-9]*/); 
+		//			return text ? text[0] : d.key;  	 
+		//		}); 
 				
 
 			//.attr("d", area)
@@ -640,12 +679,14 @@ d3.json('../../data/composers.json', (err, d) => {
 	}; 
 	
 	transition3 = function () {
+		const MORE_TEXTS = ['Percentage of living composers', 'Percentage of deceased composers']; 
+		let newAnnotations = []; 
 		let newStuff = SVG.selectAll("path")
 			//.data(stack(percentagesLivingDead)); 
 				.data(stack(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7))); 
 		console.log(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7));
-		let text = SVG.selectAll("text")
-				.data(stack(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 9))); 
+		//let text = SVG.selectAll("text")
+		//		.data(stack(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 9))); 
 
 		newStuff.transition()
 						.duration(1400)
@@ -653,15 +694,60 @@ d3.json('../../data/composers.json', (err, d) => {
 						.attr("fill", (d) => {
 							if (d.key == "percentageAlive") return "#ff645f";
 							if (d.key == "percentageDead") return "#7776bd";
-						});
+						}).each(function(data, i) {
+							//Do hard-coded text instead--e.g. an array of strings to match up/pair up
+							//let text = data.key.match(/[A-Z][a-z0-9]*/); 
+							//let match = text ? text[0] : data.key;
 
-		text.transition()
-				.duration(1400)
-				.text(d => {
-					let text = d.key.match(/[A-Z][a-z0-9]*/); 
-					return text ? text[0] : d.key;  	 
-				}); 
+							console.log(this); 
+							console.log(this.parentNode);
+							console.log(this == this.parentNode.lastChild); 
+							makeAnnotations.accessors({
+  							x: d => x(d.i),
+  							y: d => yPct(d.perc)
+							}); 
+			
+							newAnnotations.push({
+								note: {
+									//title: "Hello performances"
+									title: MORE_TEXTS[i]
+								}, 
+								data: { i: 165, perc: (data[174][1] - data[174][0])/2 + data[174][0] }, 
+								dy: -20,
+								dx: SVG_WIDTH * .12
+							}); 
+			
+							if (this == this.parentNode.lastChild) makeAnnotations.annotations(newAnnotations); 
+							
+						}); 
+
+		//text.transition()
+		//		.duration(1400)
+		//		.text(d => {
+		//			let text = d.key.match(/[A-Z][a-z0-9]*/); 
+		//			return text ? text[0] : d.key;  	 
+		//		}); 
 	}; 
+	
+	prose0.on('enter', () => {
+		//console.log("first"); 
+		transitionOrg(); 
+	}); 
+
+	prose1.on('enter', () => {
+		//console.log("second"); 
+		transition(); 
+	}); 
+	
+	prose2.on('enter', () => {
+		//console.log("third"); 
+		transition2(); 
+	}); 
+	
+	prose3.on('enter', () => {
+		//console.log("fourth"); 
+		transition3(); 
+	}); 
 	
 	
 	
@@ -700,6 +786,7 @@ d3.json('../../data/composers.json', (err, d) => {
 //		return Object.assign({season: item.season}, movingAvgs); 
 //	}); 
 //}
+
 function movingAverageWithRange(array, keys, range) {
     //number of values on each side of the central value
     let lastIndex = array.length - 1,
@@ -731,10 +818,7 @@ function movingAverageWithRange(array, keys, range) {
 	});
 }
 
-
-
-
-
+//
 let composersAlive = {}; 
 let medianAges = []; 
 for (let year in seasons) {
@@ -755,3 +839,60 @@ for (let year in seasons) {
 	//composersAlive[year] = {averageAge: alive}; 
 }
 
+
+
+
+//const ScrollMagic = require('scrollmagic'); 
+let controller = new ScrollMagic.Controller();
+let containerScroll = document.querySelector('.outer-container'); 
+
+let scene = new ScrollMagic.Scene({
+																	 triggerElement: ".outer-container", 
+																	 duration: containerScroll.offsetHeight - window.innerHeight, 
+																	 triggerHook: 0
+																	})
+					.addTo(controller);
+
+let prose0 = new ScrollMagic.Scene({
+																	 triggerElement: ".explain1", 
+																	 duration: 500, 
+																	 triggerHook: .5
+																	})
+						.addTo(controller);
+
+let prose1 = new ScrollMagic.Scene({
+																	 triggerElement: ".explain2", 
+																	 duration: 500, 
+																	 triggerHook: .5
+																	})
+						.addTo(controller);
+
+let prose2 = new ScrollMagic.Scene({
+																	 triggerElement: ".explain3", 
+																	 duration: 500, 
+																	 triggerHook: .5
+																	})
+						.addTo(controller);
+
+let prose3 = new ScrollMagic.Scene({
+																	 triggerElement: ".explain4", 
+																	 duration: 500, 
+																	 triggerHook: .5
+																	})
+						.addTo(controller);
+
+
+scene.on('enter', () => {
+	console.log("fixed"); 
+	$('.inner-container').addClass("fixed"); 
+});  
+
+scene.on('leave', (e) => {
+	console.log('exit scene'); 
+	$('.inner-container').removeClass("fixed"); 
+	if (e.scrollDirection === 'FORWARD') {
+		$('.inner-container').addClass('at-bottom'); 
+	} else {
+		$('.inner-container').removeClass('at-bottom'); 
+	}
+}); 

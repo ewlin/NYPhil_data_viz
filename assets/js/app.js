@@ -1,3 +1,4 @@
+
 //const SCROLLMAGIC = require('scrollmagic'); 
 let controller = new ScrollMagic.Controller();
 let containerScroll = document.querySelector('.outer-container'); 
@@ -71,4 +72,4 @@ prose2.on('enter', () => {
 prose3.on('enter', () => {
 	//console.log("fourth"); 
 	transition3(); 
-})
+}); 
