@@ -25,7 +25,7 @@ let beethovenWorks = [];
 let svgDimensions; 
 
 //Github pages bug
-d3.json('/NYPhil_data_viz/top60_alt.json', composers => {
+d3.json('/NYPhil_data_viz/new_top60.json', composers => {
 //DEV
 //d3.json('../../data/new_top60.json', composers => {
 	
