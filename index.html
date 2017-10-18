@@ -26,6 +26,7 @@
 				color: var(--links-color); 
 			}
 			
+			
 			header {
 				margin: auto; 
 				font-family: 'Spectral'; 
@@ -234,7 +235,7 @@
 			
 			
 			
-			div.dark-graphic {
+			div.dot-chart {
 				/*background-color: white;*/
 				background-color: #343434;
 				font-family: 'Lato', sans-serif;
@@ -265,6 +266,17 @@
 				height: 68px; 
 				border-radius: 50%; 
 			}
+			
+			select {
+				width: 400px; 
+				height: 35px; 
+				border: 5px solid Steelblue; 
+				font-family: 'Alegreya Sans';
+				font-size: 15px;
+				margin: 15px auto; 
+				display: block;
+			}
+			
 			.main-container {
 				width: 90%; 
 				margin: auto; 
@@ -342,7 +354,7 @@
 	
 	<body> 
 		
-		<header><a href="/"><img src='new-graph.png' /><span>DATA HOMER</span></a></header>		
+		<header><a href="/"><img src='new-graph.png' /><span>I'M YOUR DATA HOMER</span></a></header>		
 		
 		<main>
 			<h1 class="title">Pulsecheck: Is Classical Music Still a Living Art Form?</h1>
@@ -356,21 +368,6 @@
 				<p>While the situation seems dire when looking at the consumer-side of the equation, we can also measure the health of the art form from the producer/creator-side as well. For example, during the decades-long decline of traditional television consumption, daring and ambitious writers and showrunners took their ideas to alternative platforms, jumpstarting what we now call a modern TV Renaissance, with the number of original tv programming hitting a high of 455 in 2016 (compared to 182 shows in 2002). Clearly, great and breakthrough content can have some impact on consumer habits and trends.</p>
 			</div>
 			
-			<!--
-			<div class="table">
-				<table>
-					<thead>
-						<th>RANK</th>
-						<th>TITLE</th>
-						<th>COMPOSER</th>
-						<th>NO. OF SEASONS</th>
-					</thead>
-					<tbody class="comp-rankings">
-					
-					</tbody>
-				</table>
-			</div>
-			-->
 		
 			<div class="outer-container streamgraph-section">
 				<div class="inner-container">
@@ -386,6 +383,7 @@
 					<br />
 					<p class="explain4">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
 					<br />
+					<p class="explain5">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
 					<p id="last-explain">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
 				</div>
 			</div>
@@ -394,10 +392,11 @@
 		
 		
 		
-			<div class="dark-graphic">
+			<div class="dot-chart">
 				<h3 class='graphic-title'>Top 60 Composers By Number of Times Pieces Programmed</h3>
 				<select class="select-value"><option value="">Choose a composer:</option></select>
 				<div class="composer-face-container"></div>
+				
 				<div class="main-container"></div>
 			</div>
 		

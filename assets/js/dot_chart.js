@@ -9,6 +9,15 @@ function generateSeasons (start, end) {
 	return seasons; 
 }
 
+//Incomplete; need to finish and move to utilities folder
+function formatComposerName (name) {
+    let names = name.split(','); 
+	let match; 
+    let surname; 
+    surname = (match = names[0].match(/\[.*\]/)) ? match[0].substr(1, match[0].length - 2) : names[0]; 
+    console.log(surname); 
+}
+
 const ALL_SEASONS = generateSeasons(1842, 2016); 
 
 //let composersByTotal = []; 

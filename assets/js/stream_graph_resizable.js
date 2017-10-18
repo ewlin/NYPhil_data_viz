@@ -1,10 +1,74 @@
+//SET UP CHART
+	//if mobile
+	
+	//if desktop
+
+//RESIZE LOGIC
+function resize() {
+	//update scales
+	SVG_HEIGHT = $(window).innerHeight() * .9; 
+	SVG_WIDTH = $('.container').innerWidth(); 
+	SVG.attr("width", SVG_WIDTH) 
+		.attr("height", SVG_HEIGHT); 
+	x.range([0, .8*SVG_WIDTH]); 
+	yAbs.range([SVG_HEIGHT-4*PADDING, 10]);
+	SVG.selectAll('path')
+			.attr('d', areaAbsolute); 
+	//console.log('resized'); 
+	SVG.select('g.annotation-group').call(makeAnnotations); 
+	makeAnnotations.updatedAccessors(); 
+	//makeAnnotations.annotations(annotations); 
+}
+
+window.addEventListener('resize', resize); 
+
+
+
 let generateSeasons = require('../../temp_utils/generate_seasons.js'); 
 let ScrollMagic = require('scrollmagic'); 
+
+
+console.log("width: ")
+console.log($('.container').innerWidth()); 
+const PADDING = 25; 
+let SVG_HEIGHT = $(window).innerHeight() * .9; 
+//$('.container') is 80% of the width of div.outer-container (which is 100% of window), centered. 
+let SVG_WIDTH = $('.container').innerWidth(); 
+
+const SVG = d3.select(".container")
+	.append("svg")
+	.attr("x", 0)
+	.attr("y", 0)
+	.attr("width", SVG_WIDTH)
+	.attr("height", SVG_HEIGHT)
+	.attr("transform", "translate(0,30)");
+
+//let xScale = d3.scaleBand().domain(ALL_SEASONS).range([0,SVG_WIDTH]).padding("3px"); 
+//let yScale = d3.linearScale().domain([-1,1]).range([])
+let x = d3.scaleLinear().domain([0, 174]).range([0, .8*SVG_WIDTH]); //changed range to create space on right margin for annotation
+let y = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
+let yAbs = d3.scaleLinear().range([SVG_HEIGHT-4*PADDING, 10]);
+
+let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
+
+let areaAbsolute = d3.area()
+		.curve(d3.curveCardinal.tension(.1))
+		.x((d, i) => x(i) )
+		.y0(d => yAbs( d[0]) )
+		.y1(d => yAbs( d[1]) ); 
+
+let makeAnnotations = d3.annotation().type(d3.annotationLabel)
+		.accessors({
+  	  x: d => x(d.i),
+  	  y: d => yAbs(d.workCount)
+  	}); 
+
 //data process to get # of works performed each season by living vs. deceased composers 
 let seasons = {}, 
 		percentagesLivingDead, 
 		percentagesFirstRepeat, 
 		percentagesOfRepeatsLiving, 
+		percentagesOfAllRepeatsLiving, 
 		totalWorksPerSeason, 
 		transition, 
 		transitionOrg, 
@@ -203,13 +267,15 @@ d3.json('../../data/composers.json', (err, d) => {
 		
 		return {
 			season: season, 
-			percentageOfTotalRepeatsLiving: repeatAlive/total * 100 
+			percentageOfTotalRepeatsLiving: repeatAlive/total
+			//percentageOfTotalRepeatsLiving: repeatAlive/total * 100 
 		}
 	}); 
 	
 	console.log((movingAverageWithRange(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 7))); 
 	//console.log(movingAverageOfProps(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"])); 
 	console.log(percentagesOfRepeatsLiving); 
+	console.log("percentagesOfAllRepeatsLiving"); 
 	console.log(percentagesOfAllRepeatsLiving); 
 
 
@@ -299,28 +365,29 @@ d3.json('../../data/composers.json', (err, d) => {
 	///End Data Processing 
 	///Begin Streamgraph rendering 
 	
-	console.log("width: ")
-	console.log($('.container').innerWidth()); 
-	const PADDING = 25; 
-	const SVG_HEIGHT = $(window).innerHeight() * .9; 
-	//$('.container') is 80% of the width of div.outer-container (which is 100% of window), centered. 
-	const SVG_WIDTH = $('.container').innerWidth(); 
-	
-	const SVG = d3.select(".container")
-		.append("svg")
-		.attr("x", 0)
-		.attr("y", 0)
-		.attr("width", SVG_WIDTH)
-		.attr("height", SVG_HEIGHT)
-		.attr("transform", "translate(0,30)");
-	
-	//let xScale = d3.scaleBand().domain(ALL_SEASONS).range([0,SVG_WIDTH]).padding("3px"); 
-	//let yScale = d3.linearScale().domain([-1,1]).range([])
-	let x = d3.scaleLinear().domain([0, 174]).range([0, .8*SVG_WIDTH]); //changed range to create space on right margin for annotation
-	let y = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
-	
-	let yAbs = d3.scaleLinear().domain([0, MAX_NUMBER_PER_SEASON]).range([SVG_HEIGHT-4*PADDING, 10]);
-	let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
+	//console.log("width: ")
+	//console.log($('.container').innerWidth()); 
+	//const PADDING = 25; 
+	//const SVG_HEIGHT = $(window).innerHeight() * .9; 
+	////$('.container') is 80% of the width of div.outer-container (which is 100% of window), centered. 
+	//const SVG_WIDTH = $('.container').innerWidth(); 
+	//
+	//const SVG = d3.select(".container")
+	//	.append("svg")
+	//	.attr("x", 0)
+	//	.attr("y", 0)
+	//	.attr("width", SVG_WIDTH)
+	//	.attr("height", SVG_HEIGHT)
+	//	.attr("transform", "translate(0,30)");
+	//
+	////let xScale = d3.scaleBand().domain(ALL_SEASONS).range([0,SVG_WIDTH]).padding("3px"); 
+	////let yScale = d3.linearScale().domain([-1,1]).range([])
+	//let x = d3.scaleLinear().domain([0, 174]).range([0, .8*SVG_WIDTH]); //changed range to create space on right margin for annotation
+	//let y = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
+	//
+	yAbs.domain([0, MAX_NUMBER_PER_SEASON]); 
+	//let yAbs = d3.scaleLinear().domain([0, MAX_NUMBER_PER_SEASON]).range([SVG_HEIGHT-4*PADDING, 10]);
+	//let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
 
 
 	let stack = d3.stack()
@@ -333,11 +400,11 @@ d3.json('../../data/composers.json', (err, d) => {
 		.keys(["first", "repeat"]); 	
 	
 	
-	let areaAbsolute = d3.area()
-		.curve(d3.curveCardinal.tension(.1))
-		.x((d, i) => x(i) )
-		.y0(d => yAbs( d[0]) )
-		.y1(d => yAbs( d[1]) ); 
+	//let areaAbsolute = d3.area()
+	//	.curve(d3.curveCardinal.tension(.1))
+	//	.x((d, i) => x(i) )
+	//	.y0(d => yAbs( d[0]) )
+	//	.y1(d => yAbs( d[1]) ); 
 	
 	let yAxisAbs = d3.axisLeft()
 										.scale(yAbs)
@@ -405,9 +472,11 @@ d3.json('../../data/composers.json', (err, d) => {
   //	dx: SVG_WIDTH * .07
 	//}]; 
 	
-	SVG.append('g').selectAll("path")
+	SVG.append('g')
+		.attr('class', 'graph-content')
+		.selectAll("path")
 		.data(stackB(totalWorksPerSeason))
-  .enter().append("path")
+  	.enter().append("path")
 			//Can also consolidate this with the scale; 
 		.attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
     .attr("d", areaAbsolute)
@@ -460,12 +529,12 @@ d3.json('../../data/composers.json', (err, d) => {
 	xStreamAxis.append('text').attr('class', 'axis-label x-axis-label stream-label')
 					.text('NEW YORK PHILHARMONIC SUBSCRIPTION SEASONS')
 					.attr('transform', `translate(${SVG_WIDTH*.95*.5},${1.6*PADDING})`); 
-	
-	let makeAnnotations = d3.annotation().type(d3.annotationLabel)
-		.accessors({
-  	  x: d => x(d.i),
-  	  y: d => yAbs(d.workCount)
-  	}).annotations(annotations);
+	//let makeAnnotations = d3.annotation().type(d3.annotationLabel)
+	//	.accessors({
+  //	  x: d => x(d.i),
+  //	  y: d => yAbs(d.workCount)
+  //	}).annotations(annotations); 
+	makeAnnotations.annotations(annotations); 
 	
 	SVG
   	.append("g")
@@ -473,6 +542,19 @@ d3.json('../../data/composers.json', (err, d) => {
 		.attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
   	.call(makeAnnotations); 
 	
+	let line = d3.line()
+							.x((d, i) => x(i))
+							.y(d => y(d.percentageOfTotalRepeatsLiving)); 
+	
+	let trendline = SVG.append('path').attr('class', 'trendline')
+			.attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
+			.datum(movingAverageWithRange(percentagesOfAllRepeatsLiving, ['percentageOfTotalRepeatsLiving'], 7))
+			//.enter()
+			.attr('fill', 'none')
+			.attr('stroke', 'rgb(218, 155, 103)')
+			.attr('stroke-dasharray', '7, 2')
+			.attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]))
+			.style('stroke-width', '2px'); 
 	
 	transitionOrg = function() {
 		let temp = SVG.selectAll("path")
@@ -563,39 +645,8 @@ d3.json('../../data/composers.json', (err, d) => {
 			
 							if (this == this.parentNode.lastChild) makeAnnotations.annotations(newAnnotations); 
 							
-						}).on('end', (data) => {
-							//makeAnnotations.annotations(newAnnotations); 
-							//SVG.select('.annotation-group').style('opacity', 1); 
-
-							//console.log(data); 
-							//makeAnnotations.annotations([{
-							//	note: {
-							//		//title: "Hello performances"
-							//		title: match
-							//	}, 
-							//	data: { i: 170, perc: (data[170][1] - data[170][0])/2 }, 
-							//	dy: -20,
-							//	dx: SVG_WIDTH * .07
-							//}, {
-							//	note: {
-							//		//title: "Hello performances"
-							//		title: match
-							//	}, 
-							//	data: { i: 170, perc: (data[174][1] - data[174][0])/2 + data[174][0] }, 
-							//	dy: -20,
-							//	dx: SVG_WIDTH * .07
-							//}]); 
-
-							//SVG.select('.annotation-group').style('opacity', 1); 
 						}); 
 
-		//text.transition()
-		//		.duration(1400)
-		//		.text(d => {
-		//			let text = d.key.match(/[A-Z][a-z0-9]*/); 
-		//			return text ? text[0] : d.key;  	 
-		//		});
-				
 		SVG.select(".yAxis")
 			.transition()
 			.duration(1400)
@@ -604,7 +655,6 @@ d3.json('../../data/composers.json', (err, d) => {
 		d3.select(".yAxis").select(".domain").remove(); 
 
 		d3.select('.y-axis-label').transition().duration(1400).text("PERCENTAGE OF PIECES PER SEASON");
-
 		
 	}; 
 	
@@ -678,15 +728,15 @@ d3.json('../../data/composers.json', (err, d) => {
 	}; 
 	
 	transition3 = function () {
-		const MORE_TEXTS = ['Percentage of living composers', 'Percentage of deceased composers']; 
+		const MORE_TEXTS = ['Percentage of pieces by living composers', 'Percentage of pieces by deceased composers']; 
 		let newAnnotations = []; 
 		let newStuff = SVG.selectAll("path")
 			//.data(stack(percentagesLivingDead)); 
-				.data(stack(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7))); 
-		console.log(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7));
-		//let text = SVG.selectAll("text")
-		//		.data(stack(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 9))); 
-
+			.data(stack(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7))); 
+		
+		d3.select('.trendline')
+			.attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]));
+		
 		newStuff.transition()
 						.duration(1400)
 						.attr("d", area)
@@ -717,16 +767,58 @@ d3.json('../../data/composers.json', (err, d) => {
 							}); 
 			
 							if (this == this.parentNode.lastChild) makeAnnotations.annotations(newAnnotations); 
-							
+			
 						}); 
-
-		//text.transition()
-		//		.duration(1400)
-		//		.text(d => {
-		//			let text = d.key.match(/[A-Z][a-z0-9]*/); 
-		//			return text ? text[0] : d.key;  	 
-		//		}); 
 	}; 
+	
+	transitionLine = function () {
+		const MORE_TEXTS = ['Percentage of pieces by living composers', 'Percentage of pieces by deceased composers']; 
+		let startIndex = 1; 
+		
+		let animateLine = d3.timer(function() {
+			if (startIndex >= 175) {
+				animateLine.stop();
+				makeAnnotations.annotations(annotations3); 
+			} else {
+				startIndex += 1;  
+				d3.select('.trendline')
+					.attr('d', d => line(d.slice(0, startIndex)));
+			}
+		});
+		
+		let annotations3 = []; 
+		
+		d3.select('.graph-content')
+			.selectAll('path')
+			.each(function(data, i) {
+				annotations3.push({
+					note: {
+						//title: "Hello performances"
+						title: MORE_TEXTS[i]
+					}, 
+					data: { i: 165, perc: (data[174][1] - data[174][0])/2 + data[174][0] }, 
+					dy: -20,
+					dx: SVG_WIDTH * .12
+				}); 
+		});
+		
+		annotations3.push({
+			note: {
+				//title: "Hello performances"
+				title: "Percentage of repeat-performance pieces by living composers"
+			}, 
+			data: { i: 79, perc: percentagesOfAllRepeatsLiving[79].percentageOfTotalRepeatsLiving }, 
+			dy: -95,
+			dx: -70
+		}); 
+					
+	}; 
+	
+	transitionLineExit = function () {
+		d3.select('.trendline')
+			.attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]));
+	}
+	
 	
 	prose0.on('enter', () => {
 		//console.log("first"); 
@@ -748,7 +840,15 @@ d3.json('../../data/composers.json', (err, d) => {
 		transition3(); 
 	}); 
 	
+	prose4.on('enter', () => {
+		console.log("LAST"); 
+		transitionLine(); 
+	}); 
 	
+	prose4.on('leave', (e) => {
+		if (e.scrollDirection === 'REVERSE') transitionLineExit(); 	
+	}); 
+
 	
 }); 
 
@@ -880,6 +980,12 @@ let prose3 = new ScrollMagic.Scene({
 																	})
 						.addTo(controller);
 
+let prose4 = new ScrollMagic.Scene({
+																	 triggerElement: ".explain5", 
+																	 duration: 500, 
+																	 triggerHook: .5
+																	})
+						.addTo(controller);
 
 scene.on('enter', () => {
 	console.log("fixed"); 
