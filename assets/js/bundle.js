@@ -118,10 +118,10 @@ $('.explain p').css('margin-bottom', function() {
 }); 
 
 //GITHUB pages bug 
-d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
+//d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 
 //DEV
-//d3.json('../../data/composers.json', (err, d) => {
+d3.json('../../data/composers.json', (err, d) => {
 	
 	d.forEach( (composer, composerIdx) => {
 		let works = composer.works, //[] of work objects
@@ -253,6 +253,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 	percentagesOfRepeatsLiving = ALL_SEASONS.map(season => {
 		let {repeatAlive, repeat} = seasons[season]; 
 		
+		//prevent dividing by 0
 		repeat = repeat == 0 ? 1 : repeat; 
 		
 		return {
@@ -261,10 +262,19 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 		}
 	}); 
 	
-	percentagesOfAllRepeatsLiving = ALL_SEASONS.map(season => {
-		let {repeatAlive, repeat, alive} = seasons[season]; 
+	percentagesOfLivingRepeats = ALL_SEASONS.map(season => {
+		let {repeatAlive, alive} = seasons[season]; 
 		
-		total = repeat + alive; 
+		return {
+			season: season, 
+			percentageOfLivingRepeats: repeatAlive/alive 
+		}
+	}); 
+	
+	percentagesOfAllRepeatsLiving = ALL_SEASONS.map(season => {
+		let {repeatAlive, repeat, first} = seasons[season]; 
+		
+		total = repeat + first; 
 		
 		return {
 			season: season, 
@@ -276,9 +286,9 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 	console.log((movingAverageWithRange(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 7))); 
 	//console.log(movingAverageOfProps(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"])); 
 	console.log(percentagesOfRepeatsLiving); 
-	console.log("percentagesOfAllRepeatsLiving"); 
-	console.log(percentagesOfAllRepeatsLiving); 
-
+	console.log("percentagesOfLivingRepeats"); 
+	console.log(percentagesOfLivingRepeats); 
+	console.log(movingAverageWithRange(percentagesOfAllRepeatsLiving, ['percentageOfTotalRepeatsLiving'], 7)); 
 
 
 	//array-ify season buckets so I can sort 
@@ -806,7 +816,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 		annotations3.push({
 			note: {
 				//title: "Hello performances"
-				title: "Percentage of repeat-performance pieces by living composers"
+				title: "Percentage of repeat performances of pieces by a living composer"
 			}, 
 			data: { i: 79, perc: percentagesOfAllRepeatsLiving[79].percentageOfTotalRepeatsLiving }, 
 			dy: -95,
