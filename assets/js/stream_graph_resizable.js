@@ -252,6 +252,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	percentagesOfRepeatsLiving = ALL_SEASONS.map(season => {
 		let {repeatAlive, repeat} = seasons[season]; 
 		
+		//prevent dividing by 0
 		repeat = repeat == 0 ? 1 : repeat; 
 		
 		return {
@@ -260,10 +261,19 @@ d3.json('../../data/composers.json', (err, d) => {
 		}
 	}); 
 	
-	percentagesOfAllRepeatsLiving = ALL_SEASONS.map(season => {
-		let {repeatAlive, repeat, alive} = seasons[season]; 
+	percentagesOfLivingRepeats = ALL_SEASONS.map(season => {
+		let {repeatAlive, alive} = seasons[season]; 
 		
-		total = repeat + alive; 
+		return {
+			season: season, 
+			percentageOfLivingRepeats: repeatAlive/alive 
+		}
+	}); 
+	
+	percentagesOfAllRepeatsLiving = ALL_SEASONS.map(season => {
+		let {repeatAlive, repeat, first} = seasons[season]; 
+		
+		total = repeat + first; 
 		
 		return {
 			season: season, 
@@ -275,9 +285,9 @@ d3.json('../../data/composers.json', (err, d) => {
 	console.log((movingAverageWithRange(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 7))); 
 	//console.log(movingAverageOfProps(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"])); 
 	console.log(percentagesOfRepeatsLiving); 
-	console.log("percentagesOfAllRepeatsLiving"); 
-	console.log(percentagesOfAllRepeatsLiving); 
-
+	console.log("percentagesOfLivingRepeats"); 
+	console.log(percentagesOfLivingRepeats); 
+	console.log(movingAverageWithRange(percentagesOfAllRepeatsLiving, ['percentageOfTotalRepeatsLiving'], 7)); 
 
 
 	//array-ify season buckets so I can sort 
