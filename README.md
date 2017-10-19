@@ -9,6 +9,9 @@
 * X-Axis ticks sometimes not showing up in AREA graph
 * Trendline annotation needs to be removed earlier when scrolling upwards
 
+#### TESTS: 
+* Data processing/transforms code should be tested 
+* Utility library code should be tested 
 
 #### CODE: 
 
@@ -16,7 +19,7 @@
 * Mobile detection scaffold/outline
 * Mobile render code for Streamgraph
 * Window resize code
-* Heatmap alternative for mobile in place of dot chart 
+* Heatmap alternative for mobile in place of dot chart (kinda like github commit heatmap)
 
 ##### Streamgraph
 * *Add Seasons Axis to Stream/Area charts* [COMPLETED]
@@ -25,7 +28,7 @@
 * Annotations (A. on the side of chart + B. within chart)
 
 ##### Dot Chart 
-* Legend (Orphan, NYPhil premiere, repeat performance)
+* Legend (Orphan, NYPhil premiere, repeat performance) + Lifetime box
 * Fixed tooltip data for transitions 
 * Annotations? 
 
@@ -37,12 +40,11 @@
 
 #### Re-factoring: 
 
-##### DATA/JSON/ASSETS files 
-* Get the last few composer images
+##### DATA/JSON files 
 
 ##### JS
 * Modularize 
-* 
+* Move things to utilities folder 
 
 ##### CSS
 
