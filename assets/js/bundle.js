@@ -21,7 +21,7 @@ function resize() {
 	//makeAnnotations.annotations(annotations); 
 }
 
-//window.addEventListener('resize', resize); 
+window.addEventListener('resize', resize); 
 
 
 
@@ -806,7 +806,7 @@ d3.json('../../data/composers.json', (err, d) => {
 		annotations3.push({
 			note: {
 				//title: "Hello performances"
-				title: "Percentage of repeat-performance pieces by living composers"
+				title: "Percentage of repeat performances of pieces by a living composer"
 			}, 
 			data: { i: 79, perc: percentagesOfAllRepeatsLiving[79].percentageOfTotalRepeatsLiving }, 
 			dy: -95,
