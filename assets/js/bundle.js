@@ -118,10 +118,10 @@ $('.explain p').css('margin-bottom', function() {
 }); 
 
 //GITHUB pages bug 
-//d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
+d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 
 //DEV
-d3.json('../../data/composers.json', (err, d) => {
+//d3.json('../../data/composers.json', (err, d) => {
 	
 	d.forEach( (composer, composerIdx) => {
 		let works = composer.works, //[] of work objects
@@ -841,9 +841,9 @@ d3.json('../../data/composers.json', (err, d) => {
 		transition3(); 
 	}); 
 	
-	prose4.on('enter', () => {
+	prose4.on('enter', (e) => {
 		console.log("LAST"); 
-		transitionLine(); 
+		if (e.scrollDirection === 'FORWARD') transitionLine(); 
 	}); 
 	
 	prose4.on('leave', (e) => {
