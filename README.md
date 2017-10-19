@@ -4,6 +4,12 @@
 
 ### TODOs: 
 
+#### BUGS: 
+* Resizing issues 
+* X-Axis ticks sometimes not showing up in AREA graph
+* Trendline annotation needs to be removed earlier when scrolling upwards
+
+
 #### CODE: 
 
 ##### Mobile + Resizing
@@ -31,7 +37,8 @@
 
 #### Re-factoring: 
 
-##### DATA/JSON files 
+##### DATA/JSON/ASSETS files 
+* Get the last few composer images
 
 ##### JS
 * Modularize 

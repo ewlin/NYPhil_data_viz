@@ -827,6 +827,8 @@ d3.json('../../data/composers.json', (err, d) => {
 	transitionLineExit = function () {
 		d3.select('.trendline')
 			.attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]));
+		
+		//TODO Annotations to trendline is repainted/removed with a delay (concominant with transition3) and this is not good UX
 	}
 	
 	
