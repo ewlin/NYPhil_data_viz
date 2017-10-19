@@ -20,7 +20,7 @@ function resize() {
 	//makeAnnotations.annotations(annotations); 
 }
 
-window.addEventListener('resize', resize); 
+//window.addEventListener('resize', resize); 
 
 
 
