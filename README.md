@@ -1,6 +1,6 @@
 # Data Visualization Project w/New York Philharmonic Historical Concert Data
 
-### _(Updated 10/05/2017)_
+### _(Updated 10/18/2017)_
 
 ### TODOs: 
 
@@ -8,19 +8,19 @@
 
 ##### Mobile + Resizing
 * Mobile detection scaffold/outline
-* Mobile render code for Streamgraph
-* Window resize code
+* Mobile render code for Streamgraph (partially done)
+* Window resize code (partially done)
 * Heatmap alternative for mobile in place of dot chart 
 
 ##### Streamgraph
 * *Add Seasons Axis to Stream/Area charts* [COMPLETED]
 * *Add labeling to Stream/Area chart axes* [COMPLETED]
-* Add final chart to part one: percentage of all pieces that are repeat performances by living composers (area or line?)
-* Annotations (A. on the side of chart + B. within chart)
+* (FINISHED) Add final chart to part one: percentage of all pieces that are repeat performances by living composers (area or line?) [COMPLETED]
+* Annotations (A. on the side of chart + B. within chart) [COMPLETED]
 
 ##### Dot Chart 
 * Legend (Orphan, NYPhil premiere, repeat performance)
-* Fixed tooltip data for transitions 
+* Fixed tooltip data for transitions [COMPLETED]
 * Annotations? 
 
 #### PROSE: 
