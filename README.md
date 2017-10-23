@@ -18,7 +18,7 @@
 ##### Mobile + Resizing
 * Mobile detection scaffold/outline
 * Mobile render code for Streamgraph
-* Window resize code
+* Window resize code [Some done; streamgraph paths completed]
 * Heatmap alternative for mobile in place of dot chart (kinda like github commit heatmap)
 
 ##### Streamgraph

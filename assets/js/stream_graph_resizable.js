@@ -4,29 +4,14 @@
 	//if desktop
 
 //RESIZE LOGIC
-function resize() {
-	//update scales
-	SVG_HEIGHT = $(window).innerHeight() * .9; 
-	SVG_WIDTH = $('.container').innerWidth(); 
-	SVG.attr("width", SVG_WIDTH) 
-		.attr("height", SVG_HEIGHT); 
-	x.range([0, .8*SVG_WIDTH]); 
-	yAbs.range([SVG_HEIGHT-4*PADDING, 10]);
-	SVG.selectAll('path')
-			.attr('d', areaAbsolute); 
-	//console.log('resized'); 
-	SVG.select('g.annotation-group').call(makeAnnotations); 
-	makeAnnotations.updatedAccessors(); 
-	//makeAnnotations.annotations(annotations); 
-}
 
-//window.addEventListener('resize', resize); 
-
-
+//track current graph to determine which 'd' attribute area to use
+let currentGraph = "abs"; 
 
 let generateSeasons = require('../../temp_utils/generate_seasons.js'); 
 let movingAverage = require('../../temp_utils/moving_averages.js'); 
 let ScrollMagic = require('scrollmagic'); 
+let debounce = require('just-debounce-it'); 
 
 
 console.log("width: ")
@@ -35,6 +20,8 @@ const PADDING = 25;
 let SVG_HEIGHT = $(window).innerHeight() * .9; 
 //$('.container') is 80% of the width of div.outer-container (which is 100% of window), centered. 
 let SVG_WIDTH = $('.container').innerWidth(); 
+
+ 
 
 const SVG = d3.select(".container")
 	.append("svg")
@@ -47,9 +34,7 @@ const SVG = d3.select(".container")
 //let xScale = d3.scaleBand().domain(ALL_SEASONS).range([0,SVG_WIDTH]).padding("3px"); 
 //let yScale = d3.linearScale().domain([-1,1]).range([])
 let x = d3.scaleLinear().domain([0, 174]).range([0, .8*SVG_WIDTH]); //changed range to create space on right margin for annotation
-let y = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
 let yAbs = d3.scaleLinear().range([SVG_HEIGHT-4*PADDING, 10]);
-
 let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
 
 let areaAbsolute = d3.area()
@@ -57,6 +42,18 @@ let areaAbsolute = d3.area()
 		.x((d, i) => x(i) )
 		.y0(d => yAbs( d[0]) )
 		.y1(d => yAbs( d[1]) ); 
+
+let areaPercentage = d3.area()
+		.curve(d3.curveCardinal.tension(.1))
+		.x((d, i) => x(i) )
+		.y0(d => yPct( d[0]) )
+		.y1(d => yPct( d[1]) ); 
+
+let area = d3.area()
+		.curve(d3.curveCardinal.tension(.1))
+		.x((d, i) => x(i) )
+		.y0(d => yPct( d[0]) )
+		.y1(d => yPct( d[1]) ); 
 
 let makeAnnotations = d3.annotation().type(d3.annotationLabel)
 		.accessors({
@@ -83,19 +80,6 @@ let sorted;
 
 //generate seasons dynamically
 const ALL_SEASONS = generateSeasons(1842, 2016); 
-
-
-function group (array, numPerGroup) {
-	numPerGroup = numPerGroup || array.length; 
-	let groups = []; 
-	
-	while (array.length) {
-		groups.push(array.slice(0,numPerGroup)); 
-		array = array.slice(numPerGroup); 
-	}
-	
-	return groups; 
-}
 
 
 // Dynamic margins on...
@@ -309,17 +293,6 @@ d3.json('../../data/composers.json', (err, d) => {
 										//})) 
 										.tickSize(10); 
 	
-	let areaPercentage = d3.area()
-		.curve(d3.curveCardinal.tension(.1))
-		.x((d, i) => x(i) )
-		.y0(d => y( d[0]) )
-		.y1(d => y( d[1]) ); 
-	
-	let area = d3.area()
-		.curve(d3.curveCardinal.tension(.1))
-		.x((d, i) => x(i) )
-		.y0(d => y( d[0]) )
-		.y1(d => y( d[1]) ); 
 	
 	const ORG_TEXTS = ['New York Phil first-time performance', 'Repeat performances']; 
 
@@ -392,7 +365,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 	let line = d3.line()
 							.x((d, i) => x(i))
-							.y(d => y(d.percentageOfTotalRepeatsLiving)); 
+							.y(d => yPct(d.percentageOfTotalRepeatsLiving)); 
 	
 	let trendline = SVG.append('path').attr('class', 'trendline')
 			.attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
@@ -405,6 +378,8 @@ d3.json('../../data/composers.json', (err, d) => {
 			.style('stroke-width', '2px'); 
 	
 	transitionOrg = function() {
+		currentGraph = "abs"; 
+		
 		let temp = SVG.selectAll("path")
 			.data(stackB(totalWorksPerSeason))
 			.transition().duration(1400)
@@ -433,6 +408,8 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 	
 	transition = function() {
+		currentGraph = "pct"; 
+
 		const TEXTS = ['Percentage of first-time performance', 'Percentage of repeat performances']; 
 		let newAnnotations = []; 
 
@@ -480,6 +457,8 @@ d3.json('../../data/composers.json', (err, d) => {
 	}; 
 	
 	transition2 = function() {
+		currentGraph = "pct"; 
+
 		const TEXTS = ['Percentage of first-time performance', 'Percentage of repeat performances']; 
 		let newAnnotations = []; 
 
@@ -519,6 +498,8 @@ d3.json('../../data/composers.json', (err, d) => {
 	}; 
 	
 	transition3 = function () {
+		currentGraph = "pct"; 
+
 		const MORE_TEXTS = ['Percentage of pieces by living composers', 'Percentage of pieces by deceased composers']; 
 		let newAnnotations = []; 
 		let newStuff = SVG.selectAll("path")
@@ -557,6 +538,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	}; 
 	
 	transitionLine = function () {
+		currentGraph = 'line'; 
 		const MORE_TEXTS = ['Percentage of pieces by living composers', 'Percentage of pieces by deceased composers']; 
 		let startIndex = 1; 
 		
@@ -638,6 +620,55 @@ d3.json('../../data/composers.json', (err, d) => {
 	}); 
 
 	
+	function resize() {
+	//update scales
+		SVG_HEIGHT = $(window).innerHeight() * .9; 
+		SVG_WIDTH = $('.container').innerWidth(); 
+		SVG.attr("width", SVG_WIDTH) 
+			.attr("height", SVG_HEIGHT); 
+		x.range([0, .8*SVG_WIDTH]); 
+		yAbs.range([SVG_HEIGHT-4*PADDING, 10]);
+		yPct.range([SVG_HEIGHT-4*PADDING, 10]); 
+		
+		SVG.select('.xAxis').call(xAxisYear); 
+		SVG.select('.xAxis').select('.domain').remove(); 
+
+		
+		if (currentGraph === "abs") {
+			SVG.select('.graph-content').selectAll('path').attr('d', areaAbsolute); 
+			SVG.select(".yAxis").call(yAxisAbs); 
+		} else {
+			SVG.select('.graph-content').selectAll('path').attr('d', area); 
+			SVG.select(".yAxis").call(yAxisPct); 
+		}
+		
+		SVG.select('.yAxis').select('.domain').remove(); 
+		
+		if (currentGraph === 'line') {
+			let startIndex = 0; 
+			let animateLine = d3.timer(function() {
+				if (startIndex >= 175) {
+					animateLine.stop();
+					//makeAnnotations.annotations(annotations3); 
+				} else {
+					startIndex += 1;  
+					d3.select('.trendline')
+						.attr('d', d => line(d.slice(0, startIndex)));
+				}
+			});
+		} else {
+			SVG.select('.trendline').attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]));
+		}
+		
+		//console.log('resized'); 
+		SVG.select('g.annotation-group').call(makeAnnotations); 
+		makeAnnotations.updatedAccessors(); 
+		//makeAnnotations.annotations(annotations); 
+	}
+
+	window.addEventListener('resize', debounce(resize, 300)); 
+	
+
 }); 
 
 
