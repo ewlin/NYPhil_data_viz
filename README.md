@@ -24,13 +24,16 @@
 ##### Streamgraph
 * *Add Seasons Axis to Stream/Area charts* [COMPLETED]
 * *Add labeling to Stream/Area chart axes* [COMPLETED]
-* Add final chart to part one: percentage of all pieces that are repeat performances by living composers (area or line?)
-* Annotations (A. on the side of chart + B. within chart)
+* Add final chart to part one: percentage of all pieces that are repeat performances by living composers (area or line?) [COMPLETED]
+* Annotations (A. on the side of chart + B. within chart) [MOSTLY COMPLETED]
+* Add annotations of when some composers were born (Stravinsky, Mahler, Ravel, Debussy, Shostakovich, Rach etc.)
+* Change y axis label on first chart to 'Number of UNIQUE compositions...' [COMPLETED]
 
 ##### Dot Chart 
 * Legend (Orphan, NYPhil premiere, repeat performance) + Lifetime box
 * Fixed tooltip data for transitions 
 * Annotations? 
+* Optimize dot annotation rendering (cache some calculations?)
 
 #### PROSE: 
 * Methodology

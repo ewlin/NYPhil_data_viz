@@ -21,11 +21,12 @@ function resize() {
 	//makeAnnotations.annotations(annotations); 
 }
 
-window.addEventListener('resize', resize); 
+//window.addEventListener('resize', resize); 
 
 
 
 let generateSeasons = require('../../temp_utils/generate_seasons.js'); 
+let movingAverage = require('../../temp_utils/moving_averages.js'); 
 let ScrollMagic = require('scrollmagic'); 
 
 
@@ -84,17 +85,6 @@ let sorted;
 //generate seasons dynamically
 const ALL_SEASONS = generateSeasons(1842, 2016); 
 
-
-//function generateSeasons (start, end) {
-//	let seasons = []; 
-//	
-//	for (let i=start; i<=end; i++) {
-//		let nextSeas = String(i+1).slice(2,4);
-//		seasons.push(String(`${i}-${nextSeas}`)); 
-//	}
-//	
-//	return seasons; 
-//}
 
 function group (array, numPerGroup) {
 	numPerGroup = numPerGroup || array.length; 
@@ -267,7 +257,7 @@ d3.json('../../data/composers.json', (err, d) => {
 		
 		return {
 			season: season, 
-			percentageOfLivingRepeats: repeatAlive/alive 
+			percentageOfRepeatsLiving: repeatAlive/alive 
 		}
 	}); 
 	
@@ -283,123 +273,7 @@ d3.json('../../data/composers.json', (err, d) => {
 		}
 	}); 
 	
-	console.log((movingAverageWithRange(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 7))); 
-	//console.log(movingAverageOfProps(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"])); 
-	console.log(percentagesOfRepeatsLiving); 
-	console.log("percentagesOfLivingRepeats"); 
-	console.log(percentagesOfLivingRepeats); 
-	console.log(movingAverageWithRange(percentagesOfAllRepeatsLiving, ['percentageOfTotalRepeatsLiving'], 7)); 
-
-
-	//array-ify season buckets so I can sort 
-	let sortedSeasonBuckets = seasonsBuckets.map(bucket => {
-		let arr = []; 
-		for (let id in bucket) {
-			arr.push([id, bucket[id]]); 
-  	}
-		return arr; 
-	})
-	
-	sortedSeasonBuckets.forEach(bucket => {
-		bucket.sort((a,b) => b[1].count - a[1].count); 
-	}); 
-	
-	console.log(sortedSeasonBuckets); 
-	
-	sorted = sortedSeasonBuckets; 
-	//Add rankings Done!!!
-	let rankings = sortedSeasonBuckets.map(bucket => {
-		let currentRank = 1; 
-		let currentCount = bucket[0][1].count;
-		let withSameCount = 0; 
-		
-		return bucket.map(composition => {
-			
-			let compositionCount = composition[1].count; 
-		
-			if (currentCount !== compositionCount) {
-				currentRank += withSameCount; 
-				currentCount = compositionCount; 
-				withSameCount = 1; 
-			} else {
-				withSameCount++; 
-			}
-			return composition.concat(currentRank); 
-		}); 
-	}); 
-	
-	//generalized solution to ranking items in an array
-	//assuming array is of objects with some id AND a value to rank by
-	
-	//so far, this assumes the array is already sorted 
-	function ranking(array,  /* array of arrays */accessor) {
-		let currentRank = 1, 
-				//currentValue = array[0][1].count, //initial value from first item in array
-				currentValue = accessor.call(null, array[0]), 
-				withSameValue = 0; 
-		
-		return array.map(item => {
-			let itemValue = accessor.call(null, item); //again, use acessor function to grab this 
-			
-			if (itemValue !== currentValue) {
-				currentRank += withSameValue; 
-				currentValue = itemValue; 
-				withSameValue = 1; 
-			} else {
-				withSameValue++; 
-			}
-			
-			return item.concat(currentRank); 
-		}); 
-	}
-	
-	//
-	
-	
-	
-	console.log(rankings); 
-	
-	//update to include upto a certain position 
-	//slice until logic. 1) remove US anthem 2) Keep taking until you hit next most often. If number 15 has 10 performances, take the rest of the pieces with at least 10 performances even if that results in more than 15 total pieces for that bucket. 
-	
-	//sortedSeasonBuckets.forEach((bucket,idx) => {
-	//	let total = bucket.reduce((sum, piece) => {
-	//		return sum + piece[1].count; 
-	//	}, 0);
-	//	console.log(idx);
-	//	console.log(total);
-	//});
-	//let top15 = sortedSeasonBuckets.map((bucket,idx) => {
-
-	
-	
-	///End Data Processing 
-	///Begin Streamgraph rendering 
-	
-	//console.log("width: ")
-	//console.log($('.container').innerWidth()); 
-	//const PADDING = 25; 
-	//const SVG_HEIGHT = $(window).innerHeight() * .9; 
-	////$('.container') is 80% of the width of div.outer-container (which is 100% of window), centered. 
-	//const SVG_WIDTH = $('.container').innerWidth(); 
-	//
-	//const SVG = d3.select(".container")
-	//	.append("svg")
-	//	.attr("x", 0)
-	//	.attr("y", 0)
-	//	.attr("width", SVG_WIDTH)
-	//	.attr("height", SVG_HEIGHT)
-	//	.attr("transform", "translate(0,30)");
-	//
-	////let xScale = d3.scaleBand().domain(ALL_SEASONS).range([0,SVG_WIDTH]).padding("3px"); 
-	////let yScale = d3.linearScale().domain([-1,1]).range([])
-	//let x = d3.scaleLinear().domain([0, 174]).range([0, .8*SVG_WIDTH]); //changed range to create space on right margin for annotation
-	//let y = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
-	//
 	yAbs.domain([0, MAX_NUMBER_PER_SEASON]); 
-	//let yAbs = d3.scaleLinear().domain([0, MAX_NUMBER_PER_SEASON]).range([SVG_HEIGHT-4*PADDING, 10]);
-	//let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
-
 
 	let stack = d3.stack()
 		.keys(["percentageAlive", "percentageDead"]); 	
@@ -410,12 +284,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	let stackB = d3.stack()
 		.keys(["first", "repeat"]); 	
 	
-	
-	//let areaAbsolute = d3.area()
-	//	.curve(d3.curveCardinal.tension(.1))
-	//	.x((d, i) => x(i) )
-	//	.y0(d => yAbs( d[0]) )
-	//	.y1(d => yAbs( d[1]) ); 
+
 	
 	let yAxisAbs = d3.axisLeft()
 										.scale(yAbs)
@@ -460,6 +329,7 @@ d3.json('../../data/composers.json', (err, d) => {
   	note: {
   	  title: "1909-10 Season", 
 			label: "Gustav Mahler's first season as music director was also marked by a 3X increase in the number of concerts, from 18 to 54",
+			wrap: 180
   	},
   	//can use x, y directly instead of data
   	data: { i: 67, workCount: 105 },
@@ -467,21 +337,6 @@ d3.json('../../data/composers.json', (err, d) => {
   	dx: -90, 
 	}]; 
 	
-	//, {
-	//	note: {
-	//		title: "Repeat performances"
-	//	}, 
-	//	data: { i: 170, workCount: 48 }, 
-	//	dy: -20,
-  //	dx: SVG_WIDTH * .07
-	//}, {
-	//	note: {
-	//		title: "New York Phil first-time performance"
-	//	}, 
-	//	data: { i: 170, workCount: 9 }, 
-	//	dy: -20,
-  //	dx: SVG_WIDTH * .07
-	//}]; 
 	
 	SVG.append('g')
 		.attr('class', 'graph-content')
@@ -505,20 +360,7 @@ d3.json('../../data/composers.json', (err, d) => {
 				dx: SVG_WIDTH * .12
 			}); 
 		});
-		
-	//SVG.selectAll("text")
-	//	.data(stackB(totalWorksPerSeason))
-	//	.enter()
-	//	.append("text")
-	//	.attr("x", 600)
-	//	.attr("y", (d, i) => {
-	//		//Math.abs((-i+2) * 200)
-	//		return i == 0 ? SVG_HEIGHT - 120 : $(window).innerHeight()/2; 
-	//	}).text(d => {
-	//			let text = d.key.match(/[A-Z][a-z0-9]*/); 
-	//			return text ? text[0] : d.key;  	 
-	//	}); 
-	
+			
 	//Add Y axis
 	let yStreamAxis = SVG.append("g")
 			.attr("class", "yAxis axis stream-axis")
@@ -527,7 +369,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 	d3.select(".yAxis").select(".domain").remove(); 
 	
-	yStreamAxis.append('text').attr('class', 'axis-label stream-label y-axis-label').text('NUMBER OF COMPOSITIONS PER SEASON').attr("transform", "rotate(-90)").attr('dy', -SVG_WIDTH*0.038); 
+	yStreamAxis.append('text').attr('class', 'axis-label stream-label y-axis-label').text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON').attr("transform", "rotate(-90)").attr('dy', -SVG_WIDTH*0.038); 
 	
 	//Add X axis
 	let xStreamAxis = SVG.append("g")
@@ -540,15 +382,11 @@ d3.json('../../data/composers.json', (err, d) => {
 	xStreamAxis.append('text').attr('class', 'axis-label x-axis-label stream-label')
 					.text('NEW YORK PHILHARMONIC SUBSCRIPTION SEASONS')
 					.attr('transform', `translate(${SVG_WIDTH*.95*.5},${1.6*PADDING})`); 
-	//let makeAnnotations = d3.annotation().type(d3.annotationLabel)
-	//	.accessors({
-  //	  x: d => x(d.i),
-  //	  y: d => yAbs(d.workCount)
-  //	}).annotations(annotations); 
+	
+	
 	makeAnnotations.annotations(annotations); 
 	
-	SVG
-  	.append("g")
+	SVG.append("g")
   	.attr("class", "annotation-group")
 		.attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
   	.call(makeAnnotations); 
@@ -559,7 +397,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 	let trendline = SVG.append('path').attr('class', 'trendline')
 			.attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
-			.datum(movingAverageWithRange(percentagesOfAllRepeatsLiving, ['percentageOfTotalRepeatsLiving'], 7))
+			.datum(movingAverage(percentagesOfAllRepeatsLiving, ['percentageOfTotalRepeatsLiving'], 7))
 			//.enter()
 			.attr('fill', 'none')
 			.attr('stroke', 'rgb(218, 155, 103)')
@@ -577,14 +415,6 @@ d3.json('../../data/composers.json', (err, d) => {
 				if (d.key == "repeat") return "Steelblue";
 			});
 	
-		//let text = SVG.selectAll("text")
-		//					.data(stackB(totalWorksPerSeason)); 
-		
-		//SVG.select('.annotation-group').transition().duration(1400).style('opacity', 1); 
-		
-		//text.transition()
-		//		.duration(1400)
-		//		.text(d => d.key);
 		
 		SVG.select(".yAxis")
 			.transition()
@@ -593,7 +423,7 @@ d3.json('../../data/composers.json', (err, d) => {
 		
 		d3.select(".yAxis").select(".domain").remove(); 
 		
-		d3.select('.y-axis-label').transition().duration(1400).text('NUMBER OF COMPOSITIONS PER SEASON');
+		d3.select('.y-axis-label').transition().duration(1400).text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON');
 
 		makeAnnotations.accessors({
   	  x: d => x(d.i),
@@ -609,21 +439,8 @@ d3.json('../../data/composers.json', (err, d) => {
 
 		let stackData = stackA(percentagesFirstRepeat); 
 		let newStuff = SVG.selectAll("path")
-			//.data(stack(percentagesLivingDead)); 
 		.data(stackData); 
-				//.data(stackA(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7))); 
-		
-		//let text = SVG.selectAll("text")
-		//	.data(stackA(percentagesFirstRepeat)); 
-				//.data(stackA(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7))); 
-
-		//newStuff.exit().remove()//.attr("d",areaInit)//.attr("fill", (d) => {
-				//if (d.key == "pctFirstSingle") return "Steelblue";
-				//if (d.key == "pctFirstMult") return "Tomato";
-				//if (d.key == "pctRepeat") return "#59273e";
-		//})
-		
-		//SVG.select('.annotation-group').transition().duration(1400).style('opacity', 0); 
+				
 		
 		newStuff.transition()
 						.duration(1400)
@@ -632,13 +449,7 @@ d3.json('../../data/composers.json', (err, d) => {
 							if (d.key == "percentageFirst") return "Tomato";
 							if (d.key == "percentageRepeat") return "Steelblue";
 						}).each(function(data, i) {
-							//Do hard-coded text instead--e.g. an array of strings to match up/pair up
-							//let text = data.key.match(/[A-Z][a-z0-9]*/); 
-							//let match = text ? text[0] : data.key;
 
-							console.log(this); 
-							console.log(this.parentNode);
-							console.log(this == this.parentNode.lastChild); 
 							makeAnnotations.accessors({
   							x: d => x(d.i),
   							y: d => yPct(d.perc)
@@ -674,20 +485,8 @@ d3.json('../../data/composers.json', (err, d) => {
 		let newAnnotations = []; 
 
 		let newStuff = SVG.selectAll("path")
-			//.data(stack(percentagesLivingDead)); 
-		//.data(stackA(percentagesFirstRepeat)); 
-				.data(stackA(movingAverageWithRange(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 7)))
-				//.data(stackA(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7))); 
-			console.log((movingAverageWithRange(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 7))); 
-		//let text = SVG.selectAll("text")
-		//	//.data(stackA(percentagesFirstRepeat)); 
-		//		.data(stackA(movingAverageWithRange(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 9)));
+				.data(stackA(movingAverage(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 7))); 
 
-		//newStuff.exit().remove()//.attr("d",areaInit)//.attr("fill", (d) => {
-				//if (d.key == "pctFirstSingle") return "Steelblue";
-				//if (d.key == "pctFirstMult") return "Tomato";
-				//if (d.key == "pctRepeat") return "#59273e";
-		//})
 		newStuff.transition()
 						.duration(1400)
 						.attr("d", area)
@@ -695,9 +494,6 @@ d3.json('../../data/composers.json', (err, d) => {
 							if (d.key == "percentageFirst") return "Tomato";
 							if (d.key == "percentageRepeat") return "Steelblue";
 						}).each(function(data, i) {
-							//Do hard-coded text instead--e.g. an array of strings to match up/pair up
-							//let text = data.key.match(/[A-Z][a-z0-9]*/); 
-							//let match = text ? text[0] : data.key;
 
 							console.log(this); 
 							console.log(this.parentNode);
@@ -721,21 +517,6 @@ d3.json('../../data/composers.json', (err, d) => {
 							
 						}); 
 
-		//text.transition()
-		//		.duration(1400)
-		//		.text(d => {
-		//			let text = d.key.match(/[A-Z][a-z0-9]*/); 
-		//			return text ? text[0] : d.key;  	 
-		//		}); 
-				
-
-			//.attr("d", area)
-		//.attr("fill", (d) => {
-		//		if (d.key == "pctFirstSingle") return "Steelblue";
-		//		if (d.key == "pctFirstMult") return "Tomato";
-		//		if (d.key == "pctRepeat") return "Grey";
-		//}); 
-
 	}; 
 	
 	transition3 = function () {
@@ -743,7 +524,7 @@ d3.json('../../data/composers.json', (err, d) => {
 		let newAnnotations = []; 
 		let newStuff = SVG.selectAll("path")
 			//.data(stack(percentagesLivingDead)); 
-			.data(stack(movingAverageWithRange(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7))); 
+			.data(stack(movingAverage(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7))); 
 		
 		d3.select('.trendline')
 			.attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]));
@@ -755,13 +536,7 @@ d3.json('../../data/composers.json', (err, d) => {
 							if (d.key == "percentageAlive") return "#ff645f";
 							if (d.key == "percentageDead") return "#7776bd";
 						}).each(function(data, i) {
-							//Do hard-coded text instead--e.g. an array of strings to match up/pair up
-							//let text = data.key.match(/[A-Z][a-z0-9]*/); 
-							//let match = text ? text[0] : data.key;
-
-							console.log(this); 
-							console.log(this.parentNode);
-							console.log(this == this.parentNode.lastChild); 
+							
 							makeAnnotations.accessors({
   							x: d => x(d.i),
   							y: d => yPct(d.perc)
@@ -816,11 +591,12 @@ d3.json('../../data/composers.json', (err, d) => {
 		annotations3.push({
 			note: {
 				//title: "Hello performances"
-				title: "Percentage of repeat performances of pieces by a living composer"
+				title: 'Percentage of pieces that are repeat performances of music by a living composer', 
+				wrap: 155
 			}, 
 			data: { i: 79, perc: percentagesOfAllRepeatsLiving[79].percentageOfTotalRepeatsLiving }, 
-			dy: -95,
-			dx: -70
+			dy: -115,
+			dx: -65
 		}); 
 					
 	}; 
@@ -828,6 +604,8 @@ d3.json('../../data/composers.json', (err, d) => {
 	transitionLineExit = function () {
 		d3.select('.trendline')
 			.attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]));
+		
+		//TODO Annotations to trendline is repainted/removed with a delay (concominant with transition3) and this is not good UX
 	}
 	
 	
@@ -863,96 +641,8 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 }); 
 
-//function movingAverageOfProps(array, keys) {
-//	return array.map( (item, idx) => {
-//		let beginIndex = idx-4 >= 0 ? idx-4 : 0, 
-//				endIndex = idx+5, 
-//				collection = array.slice(beginIndex, endIndex), 
-//				collLength = collection.length, 
-//				movingAvgs = {}; 
-//		
-//		keys.forEach(key => {
-//			movingAvgs[key] = collection.reduce( (sum, val) => sum + val[key], 0)/collLength; 
-//		})
-//		
-//		return Object.assign({season: item.season}, movingAvgs); 
-//	}); 
-//}
-
-//function movingAverageWithRange(array, keys, range) {
-//	let padding = Math.floor(range/2); 
-//	
-//	return array.map( (item, idx) => {
-//		let beginIndex = idx-padding >= 0 ? idx-padding : 0, 
-//				endIndex = idx + padding + 1, 
-//				collection = array.slice(beginIndex, endIndex), 
-//				collLength = collection.length, 
-//				movingAvgs = {}; 
-//		
-//		keys.forEach(key => {
-//			movingAvgs[key] = collection.reduce( (sum, val) => sum + val[key], 0)/collLength; 
-//		})
-//		
-//		return Object.assign({season: item.season}, movingAvgs); 
-//	}); 
-//}
-
-function movingAverageWithRange(array, keys, range) {
-    //number of values on each side of the central value
-    let lastIndex = array.length - 1,
-        padding = Math.floor(range / 2),
-        maxIndex = lastIndex - padding;
 
 
-	return array.map( (item, idx) => {
-
-    if (idx < padding || idx > maxIndex) return item;
-
-		let beginIndex = idx - padding >= 0 ? idx - padding : 0,
-				endIndex = idx + padding + 1,
-				collection = array.slice(beginIndex, endIndex),
-				//collLength = collection.length,
-				movingAvgs = {};
-
-    if (!keys) {
-    	return collection.reduce( (sum, val) => sum + val, 0) / range;
-    }
-
-		keys.forEach(key => {
-            movingAvgs[key] = collection.reduce( (sum, val) => sum + val[key], 0) / range;
-		})
-
-    //TODO: Generalized this
-    return Object.assign({season: item.season}, movingAvgs);
-		//return Object.assign(movingAvgs, omit(item, keys));
-	});
-}
-
-//
-let composersAlive = {}; 
-let medianAges = []; 
-for (let year in seasons) {
-  let composers = seasons[year]["composers"]; 
-  let alive = []; 
-	let averageAge; 
-	let medianAge; 
-	//console.log(composers); 
-	for (let comp in composers) {
-		//console.log(composers[comp].ageDuringSeason); 
-		if (composers[comp].ageDuringSeason > 0) {
-			alive.push(composers[comp].ageDuringSeason); 
-		}
-	}
-	//console.log(alive); 
-	averageAge = alive.reduce( (sum, age) => sum + age )/alive.length; 
-	medianAges.push(alive[Math.floor(alive.length/2)]); 
-	//composersAlive[year] = {averageAge: alive}; 
-}
-
-
-
-
-//const ScrollMagic = require('scrollmagic'); 
 let controller = new ScrollMagic.Controller();
 let containerScroll = document.querySelector('.outer-container'); 
 
@@ -1012,7 +702,7 @@ scene.on('leave', (e) => {
 		$('.inner-container').removeClass('at-bottom'); 
 	}
 }); 
-},{"../../temp_utils/generate_seasons.js":3,"scrollmagic":2}],2:[function(require,module,exports){
+},{"../../temp_utils/generate_seasons.js":3,"../../temp_utils/moving_averages.js":4,"scrollmagic":2}],2:[function(require,module,exports){
 /*!
  * ScrollMagic v2.0.5 (2015-04-29)
  * The javascript library for magical scroll interactions.
@@ -3806,4 +3496,44 @@ function generateSeasons (start, end) {
 }
 
 module.exports = generateSeasons; 
+},{}],4:[function(require,module,exports){
+module.exports = movingAverage;
+
+/*
+  Examples:
+
+*/
+//let omit = require('just-omit');
+
+function movingAverage(array, keys, range) {
+    //number of values on each side of the central value
+    let lastIndex = array.length - 1,
+        padding = Math.floor(range / 2),
+        maxIndex = lastIndex - padding;
+
+
+	return array.map( (item, idx) => {
+
+    if (idx < padding || idx > maxIndex) return item;
+
+		let beginIndex = idx - padding >= 0 ? idx - padding : 0,
+				endIndex = idx + padding + 1,
+				collection = array.slice(beginIndex, endIndex),
+				//collLength = collection.length,
+				movingAvgs = {};
+
+    if (!keys) {
+    	return collection.reduce( (sum, val) => sum + val, 0) / range;
+    }
+
+		keys.forEach(key => {
+            movingAvgs[key] = collection.reduce( (sum, val) => sum + val[key], 0) / range;
+		})
+
+    //TODO: Generalized this
+    return Object.assign({season: item.season}, movingAvgs);
+		//return Object.assign(movingAvgs, omit(item, keys));
+	});
+}
+
 },{}]},{},[1]);

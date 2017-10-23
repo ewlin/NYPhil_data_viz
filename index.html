@@ -96,6 +96,21 @@
 				font-weight: 700; 
 			}
 			
+			.methodology {
+				width: 40rem; 
+				margin: auto;
+			}
+			
+			.methodology h4 {
+				font-family: 'Open Sans'; 
+				font-size: 15px;
+			}
+			
+			.methodology p {
+				font-family: 'Open Sans'; 
+				font-size: 12px;
+			}
+			
 			.prose {
 				width: 40rem; 
 				margin: auto;
@@ -398,6 +413,14 @@
 				<div class="composer-face-container"></div>
 				
 				<div class="main-container"></div>
+			</div>
+			<div class="methodology">
+				<hr>
+
+				<h4>Methodology</h4>
+				<p>The performance and concert data of the New York Philharmonic is publicly available through the orchestra's Github page. Throughout the NYP's 175+ year history, they've presented a concerts under a variety of different categories. This analysis focuses on the Subscription Series concerts, the core of the NYP's performances. We've noticed occasional miscategorization of concerts in the data, and we've flagged and corrected any of such data that affected the analysis around subscription series concerts. However, since the data is quite voluminous, we can't be sure that all mistakes are fully accounted for. Noise-reduction in the data was accomplished through a simple moving average algorithm, and both the code for that, as well as the datasets that resulted from the analysis of the raw concert data, can be found in the Github repository for this project.</p>
+				<p>Exclusion of pieces....rationale</p>
+				<p>Composer metadata, specifically birth and death years, was collected primarily from Wikipedia, via a script that leveraged the MediaWiki API. A small percentage of composers had no Wiki entries, and the birth and death years for these composers, if available, were collected manually, from a variety of sources found primarily through Google.</p>
 			</div>
 		
 		</main>
