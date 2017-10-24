@@ -372,15 +372,18 @@
 		<header><a href="/"><img src='new-graph.png' /><span>I'M YOUR DATA HOMER</span></a></header>		
 		
 		<main>
-			<h1 class="title">Pulsecheck: Is Classical Music Still a Living Art Form?</h1>
-			<p class="subtitle">Extrapolating trends from 175 seasons at the New York Philharmonic</p>
-			<p class="byline">By <span class="name">Eric William Lin</span></p>
+			<div>
+				<h1 class="title">Pulsecheck: Is Classical Music Still a Living Art Form?</h1>
+				<p class="subtitle">Extrapolating trends from 175 seasons at the New York Philharmonic</p>
+				<p class="byline">By <span class="name">Eric William Lin</span></p>
+			</div>
 			
 			<div class="prose">
 				<p class='epigraph'><em>When people hear "classical," they think "dead." The music is described in terms of its distance from the present, its resistance to the mass-what it is not[...] But the same story could have been written ten years ago or twenty. If this be death, the record is skipping. A complete version of the Death of Classical Music Archive would go back to the fourteenth century, when the sensuous melodies of ars nova were thought to signal the end of civilization.</em><span>-Alex Ross, <a target='_blank' href='https://www.newyorker.com/magazine/2004/02/16/listen-to-this'>"Listen to This"</a>, <em>The New Yorker</em> (2004)</span></p>
-				<p>According to Alex Ross, the music critic at <em>The New Yorker</em>, the popular conception of Classical Music as a dying art form in our modern times is somewhat overblown. Throughout the history of the genre, this perception has always been a recurring motif. Each generation of 'Classical Music' connoisseurs have always looked wistfully back at the past, longingly towards the music of the dead masters, while abhorring new styles and the myriad ways in which new generations of composers are desecrating the genre.</p>
-				<p>On some metrics, Classical Music is undoubtedly in trouble. Let's start with demographics. In 2012, the National Endowment for the Arts (NEA) released a report documenting the changes and trends of national participation in the arts between 2002 to 2012. While the percentage of adults engaging in activities like reading and moviegoing stayed relatively stable during the decade (small drops among the US adult population from 56.6% to 54.2% for reading, and from 60.0% to 59.4% for movie-going), Classical Music participation went from an already low 10.8% to 8.1%.</p>
+				<p>Throughout the history of Classical Music, the perception that the genre's on its deathbed has always been a recurring motif. But how accurate are these anecdotal impressions? Can we move beyond anecdotes and back it up with some data?</p>
+				<p>There are more than a few ways to assess the health of any particular artform. You can look at audience demographics and see who's engaging with the art. Are more or less people consuming the artform year-to-year? Decade-by-decade? Based on these metrics, Classical Music is undoubtedly in trouble. In 2012, the National Endowment for the Arts (NEA) <a target='_blank' href='https://www.arts.gov/sites/default/files/2012-sppa-jan2015-rev.pdf'>released a report</a> documenting the changes and trends of national participation in the arts between 2002 to 2012. While the percentage of adults engaging in activities like reading and moviegoing stayed relatively stable during the decade (small drops among the US adult population from 56.6% to 54.2% for reading, and from 60.0% to 59.4% for movie-going), Classical Music participation went from an already low 10.8% to 8.1%., a 25% drop.</p>
 				<p>While the situation seems dire when looking at the consumer-side of the equation, we can also measure the health of the art form from the producer/creator-side as well. For example, during the decades-long decline of traditional television consumption, daring and ambitious writers and showrunners took their ideas to alternative platforms, jumpstarting what we now call a modern TV Renaissance, with the number of original tv programming hitting a high of 455 in 2016 (compared to 182 shows in 2002). Clearly, great and breakthrough content can have some impact on consumer habits and trends.</p>
+				<p>So how can we measure the state of 'content' in Classical Music today? Qualities like changes in aesthetics and styles and 'innovation' can be hard to measure objectively. Luckily, we can use some other measures as proxies. To make sense of the state of Classical Music today, we'll need to compare it to some comparable 'benchmark' moments in history. These 'benchmark' moments need to A) have quantifiable, reliable, recorded metrics that we can use to compare with data today, and B) be periods of time that a general observer might see as the heyday of Classical Music, from periods when well-known composers of the genre were composing their major compositions.</p>
 			</div>
 			
 		
@@ -414,9 +417,9 @@
 				
 				<div class="main-container"></div>
 			</div>
+			
 			<div class="methodology">
 				<hr>
-
 				<h4>Methodology</h4>
 				<p>The performance and concert data of the New York Philharmonic is publicly available through the orchestra's Github page. Throughout the NYP's 175+ year history, they've presented a concerts under a variety of different categories. This analysis focuses on the Subscription Series concerts, the core of the NYP's performances. We've noticed occasional miscategorization of concerts in the data, and we've flagged and corrected any of such data that affected the analysis around subscription series concerts. However, since the data is quite voluminous, we can't be sure that all mistakes are fully accounted for. Noise-reduction in the data was accomplished through a simple moving average algorithm, and both the code for that, as well as the datasets that resulted from the analysis of the raw concert data, can be found in the Github repository for this project.</p>
 				<p>Exclusion of pieces....rationale</p>

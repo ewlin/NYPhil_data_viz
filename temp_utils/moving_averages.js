@@ -23,7 +23,7 @@ function movingAverage(array, keys, range) {
 				//collLength = collection.length,
 				movingAvgs = {};
 
-    if (!keys) {
+    if (!keys || keys.length === 0) {
     	return collection.reduce( (sum, val) => sum + val, 0) / range;
     }
 
@@ -36,3 +36,4 @@ function movingAverage(array, keys, range) {
 		//return Object.assign(movingAvgs, omit(item, keys));
 	});
 }
+

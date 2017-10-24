@@ -21,8 +21,6 @@ let SVG_HEIGHT = $(window).innerHeight() * .9;
 //$('.container') is 80% of the width of div.outer-container (which is 100% of window), centered. 
 let SVG_WIDTH = $('.container').innerWidth(); 
 
- 
-
 const SVG = d3.select(".container")
 	.append("svg")
 	.attr("x", 0)
@@ -364,6 +362,7 @@ d3.json('../../data/composers.json', (err, d) => {
   	.call(makeAnnotations); 
 	
 	let line = d3.line()
+							.curve(d3.curveCardinal.tension(.1))
 							.x((d, i) => x(i))
 							.y(d => yPct(d.percentageOfTotalRepeatsLiving)); 
 	
@@ -464,7 +463,7 @@ d3.json('../../data/composers.json', (err, d) => {
 
 		let newStuff = SVG.selectAll("path")
 				.data(stackA(movingAverage(percentagesFirstRepeat, ["percentageFirst", "percentageRepeat"], 7))); 
-
+		
 		newStuff.transition()
 						.duration(1400)
 						.attr("d", area)
@@ -505,10 +504,7 @@ d3.json('../../data/composers.json', (err, d) => {
 		let newStuff = SVG.selectAll("path")
 			//.data(stack(percentagesLivingDead)); 
 			.data(stack(movingAverage(percentagesLivingDead, ["percentageAlive", "percentageDead"], 7))); 
-		
-		d3.select('.trendline')
-			.attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]));
-		
+				
 		newStuff.transition()
 						.duration(1400)
 						.attr("d", area)
@@ -583,6 +579,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	}; 
 	
 	transitionLineExit = function () {
+		
 		d3.select('.trendline')
 			.attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]));
 		
