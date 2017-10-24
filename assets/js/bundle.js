@@ -22,6 +22,8 @@ let SVG_HEIGHT = $(window).innerHeight() * .9;
 //$('.container') is 80% of the width of div.outer-container (which is 100% of window), centered. 
 let SVG_WIDTH = $('.container').innerWidth(); 
 
+let animateLine; 
+
 const SVG = d3.select(".container")
 	.append("svg")
 	.attr("x", 0)
@@ -71,11 +73,11 @@ let seasons = {},
 		transitionOrg, 
 		transition2, 
 		transition3,
+		transitionLine, 
+		transitionLineExit, 
 		seasonsBuckets = Array.apply(null,Array(7)).map((_) => {
 			return {}; 
 		});
-
-let sorted; 
 
 //generate seasons dynamically
 const ALL_SEASONS = generateSeasons(1842, 2016); 
@@ -286,7 +288,6 @@ d3.json('../../data/composers.json', (err, d) => {
 										.tickFormat( d => {
 											return ALL_SEASONS[d]; 
 										})
-										
 										//.map( i => {
 										//	return ALL_SEASONS[i]; 
 										//})) 
@@ -311,7 +312,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 	SVG.append('g')
 		.attr('class', 'graph-content')
-		.selectAll("path")
+		.selectAll(".path")
 		.data(stackB(totalWorksPerSeason))
   	.enter().append("path")
 			//Can also consolidate this with the scale; 
@@ -331,10 +332,12 @@ d3.json('../../data/composers.json', (err, d) => {
 				dx: SVG_WIDTH * .12
 			}); 
 		});
-			
+	
+	console.log(`SVG_WIDTH IS: ${SVG_WIDTH}, ${SVG_WIDTH*0.05}`); 
 	//Add Y axis
 	let yStreamAxis = SVG.append("g")
 			.attr("class", "yAxis axis stream-axis")
+			//FIX THIS; relative
 			.attr("transform", "translate(50,0)")
 			.call(yAxisAbs); 
 	
@@ -537,9 +540,9 @@ d3.json('../../data/composers.json', (err, d) => {
 	transitionLine = function () {
 		currentGraph = 'line'; 
 		const MORE_TEXTS = ['Percentage of pieces by living composers', 'Percentage of pieces by deceased composers']; 
-		let startIndex = 1; 
+		let startIndex = 0; 
 		
-		let animateLine = d3.timer(function() {
+		animateLine = d3.timer(function() {
 			if (startIndex >= 175) {
 				animateLine.stop();
 				makeAnnotations.annotations(annotations3); 
@@ -581,12 +584,51 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 	transitionLineExit = function () {
 		
+		if (animateLine) animateLine.stop(); 
+		
 		d3.select('.trendline')
 			.attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]));
 		
 		//TODO Annotations to trendline is repainted/removed with a delay (concominant with transition3) and this is not good UX
 	}
 	
+	
+
+	let prose0 = new ScrollMagic.Scene({
+		triggerElement: ".explain1", 
+		duration: 500, 
+		triggerHook: .5
+	})
+	.addTo(controller);
+	
+	let prose1 = new ScrollMagic.Scene({
+		triggerElement: ".explain2", 
+		duration: 500, 
+		triggerHook: .5
+	})
+	.addTo(controller);
+	
+	let prose2 = new ScrollMagic.Scene({
+		triggerElement: ".explain3", 
+		//duration: 500, 
+		triggerHook: .5
+	})
+	.addTo(controller);
+	
+	let prose3 = new ScrollMagic.Scene({
+		triggerElement: ".explain4", 
+		duration: 500, 
+		triggerHook: .5
+	})
+	.addTo(controller);
+	
+	let prose4 = new ScrollMagic.Scene({
+		triggerElement: ".explain5", 
+		duration: 500, 
+		triggerHook: .5
+	})
+	.addTo(controller);
+
 	
 	prose0.on('enter', () => {
 		//console.log("first"); 
@@ -606,6 +648,11 @@ d3.json('../../data/composers.json', (err, d) => {
 	prose3.on('enter', () => {
 		//console.log("fourth"); 
 		transition3(); 
+	}); 
+	
+	prose3.on('leave', (e) => {
+		//console.log("fourth"); 
+		if (e.scrollDirection === 'REVERSE') transition2(); 
 	}); 
 	
 	prose4.on('enter', (e) => {
@@ -628,7 +675,9 @@ d3.json('../../data/composers.json', (err, d) => {
 		yAbs.range([SVG_HEIGHT-4*PADDING, 10]);
 		yPct.range([SVG_HEIGHT-4*PADDING, 10]); 
 		
-		SVG.select('.xAxis').call(xAxisYear); 
+		SVG.select('.xAxis')
+				.attr("transform", `translate(${0.05*SVG_WIDTH},${SVG_HEIGHT-3.9*PADDING})`)
+				.call(xAxisYear); 
 		SVG.select('.xAxis').select('.domain').remove(); 
 
 		
@@ -644,7 +693,8 @@ d3.json('../../data/composers.json', (err, d) => {
 		
 		if (currentGraph === 'line') {
 			let startIndex = 0; 
-			let animateLine = d3.timer(function() {
+			if (animateLine) animateLine.stop(); 
+			animateLine = d3.timer(function() {
 				if (startIndex >= 175) {
 					animateLine.stop();
 					//makeAnnotations.annotations(annotations3); 
@@ -664,63 +714,26 @@ d3.json('../../data/composers.json', (err, d) => {
 		//makeAnnotations.annotations(annotations); 
 	}
 
-	window.addEventListener('resize', debounce(resize, 300)); 
+	window.addEventListener('resize', debounce(resize, 200)); 
 	
-
 }); 
 
-
-
 let controller = new ScrollMagic.Controller();
+
 let containerScroll = document.querySelector('.outer-container'); 
 
 let scene = new ScrollMagic.Scene({
-																	 triggerElement: ".outer-container", 
-																	 duration: containerScroll.offsetHeight - window.innerHeight, 
-																	 triggerHook: 0
-																	})
-					.addTo(controller);
-
-let prose0 = new ScrollMagic.Scene({
-																	 triggerElement: ".explain1", 
-																	 duration: 500, 
-																	 triggerHook: .5
-																	})
-						.addTo(controller);
-
-let prose1 = new ScrollMagic.Scene({
-																	 triggerElement: ".explain2", 
-																	 duration: 500, 
-																	 triggerHook: .5
-																	})
-						.addTo(controller);
-
-let prose2 = new ScrollMagic.Scene({
-																	 triggerElement: ".explain3", 
-																	 duration: 500, 
-																	 triggerHook: .5
-																	})
-						.addTo(controller);
-
-let prose3 = new ScrollMagic.Scene({
-																	 triggerElement: ".explain4", 
-																	 duration: 500, 
-																	 triggerHook: .5
-																	})
-						.addTo(controller);
-
-let prose4 = new ScrollMagic.Scene({
-																	 triggerElement: ".explain5", 
-																	 duration: 500, 
-																	 triggerHook: .5
-																	})
-						.addTo(controller);
+	triggerElement: ".outer-container", 
+	duration: containerScroll.offsetHeight - window.innerHeight, 
+	triggerHook: 0
+})
+.addTo(controller);
 
 scene.on('enter', () => {
 	console.log("fixed"); 
 	$('.inner-container').addClass("fixed"); 
 });  
-
+	
 scene.on('leave', (e) => {
 	console.log('exit scene'); 
 	$('.inner-container').removeClass("fixed"); 
@@ -730,6 +743,66 @@ scene.on('leave', (e) => {
 		$('.inner-container').removeClass('at-bottom'); 
 	}
 }); 
+
+//let controller = new ScrollMagic.Controller();
+//let containerScroll = document.querySelector('.outer-container'); 
+//
+//let scene = new ScrollMagic.Scene({
+//																	 triggerElement: ".outer-container", 
+//																	 duration: containerScroll.offsetHeight - window.innerHeight, 
+//																	 triggerHook: 0
+//																	})
+//					.addTo(controller);
+//
+//let prose0 = new ScrollMagic.Scene({
+//																	 triggerElement: ".explain1", 
+//																	 //duration: 500, 
+//																	 triggerHook: .5
+//																	})
+//						.addTo(controller);
+//
+//let prose1 = new ScrollMagic.Scene({
+//																	 triggerElement: ".explain2", 
+//																	 //duration: 500, 
+//																	 triggerHook: .5
+//																	})
+//						.addTo(controller);
+//
+//let prose2 = new ScrollMagic.Scene({
+//																	 triggerElement: ".explain3", 
+//																	 //duration: 500, 
+//																	 triggerHook: .5
+//																	})
+//						.addTo(controller);
+//
+//let prose3 = new ScrollMagic.Scene({
+//																	 triggerElement: ".explain4", 
+//																	 duration: 500, 
+//																	 triggerHook: .5
+//																	})
+//						.addTo(controller);
+//
+//let prose4 = new ScrollMagic.Scene({
+//																	 triggerElement: ".explain5", 
+//																	 duration: 500, 
+//																	 triggerHook: .5
+//																	})
+//						.addTo(controller);
+//
+//scene.on('enter', () => {
+//	console.log("fixed"); 
+//	$('.inner-container').addClass("fixed"); 
+//});  
+//
+//scene.on('leave', (e) => {
+//	console.log('exit scene'); 
+//	$('.inner-container').removeClass("fixed"); 
+//	if (e.scrollDirection === 'FORWARD') {
+//		$('.inner-container').addClass('at-bottom'); 
+//	} else {
+//		$('.inner-container').removeClass('at-bottom'); 
+//	}
+//}); 
 },{"../../temp_utils/generate_seasons.js":4,"../../temp_utils/moving_averages.js":5,"just-debounce-it":2,"scrollmagic":3}],2:[function(require,module,exports){
 module.exports = debounce;
 
