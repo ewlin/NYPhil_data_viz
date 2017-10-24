@@ -271,6 +271,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 	let yAxisAbs = d3.axisLeft()
 										.scale(yAbs)
+										//.tickValues( d => d % 20 === 0)
 										.tickSize(0); 
 						 
 	

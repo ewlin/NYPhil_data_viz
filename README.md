@@ -1,11 +1,11 @@
 # Data Visualization Project w/New York Philharmonic Historical Concert Data
 
-### _(Updated 10/05/2017)_
+### _(Updated 10/24/2017)_
 
 ### TODOs: 
 
 #### BUGS: 
-* Resizing issues 
+* Resizing issues [Mostly fixed, some scale issues, margins etc. remain]
 * X-Axis ticks sometimes not showing up in AREA graph
 * Trendline annotation needs to be removed earlier when scrolling upwards
 
@@ -16,17 +16,15 @@
 #### CODE: 
 
 ##### Mobile + Resizing
-* Mobile detection scaffold/outline
+* {PRIORITY} Mobile detection scaffold/outline
 * Mobile render code for Streamgraph
-* Window resize code [Some done; streamgraph paths completed]
-* Window resize code (x-axis still problematic with resizes)
-* Heatmap alternative for mobile in place of dot chart (kinda like github commit heatmap)
+* Window resize code [Some done; streamgraph paths completed, still need to fix relative margins]
+* {PRIORITY} Heatmap alternative for mobile in place of dot chart (kinda like github commit heatmap)
+* X-axis label needs to float and stay in the center (calculate)
 
 ##### Streamgraph
-* *Add Seasons Axis to Stream/Area charts* [COMPLETED]
-* *Add labeling to Stream/Area chart axes* [COMPLETED]
-* Add final chart to part one: percentage of all pieces that are repeat performances by living composers (area or line?) [COMPLETED]
-* Annotations (A. on the side of chart + B. within chart) [MOSTLY COMPLETED]
+* *Add labeling to Stream/Area chart axes* [COMPLETED, fix x axis label positioning issue]
+* Annotations (A. on the side of chart + B. within chart) [MOSTLY COMPLETED, need to add mobile sizes/scale code] 
 * Add annotations of when some composers were born (Stravinsky, Mahler, Ravel, Debussy, Shostakovich, Rach etc.)
 * Change y axis label on first chart to 'Number of UNIQUE compositions...' [COMPLETED]
 
@@ -37,14 +35,15 @@
 * Optimize dot annotation rendering (cache some calculations?)
 
 #### PROSE: 
-* Methodology
+* {PRIORITY} Methodology
 * Introduction/Background
-* Chart one explainations 
-* Chart two explainations
+* {PRIORITY} Chart one explainations 
+* {PRIORITY} Chart two explainations
 
 #### Re-factoring: 
 
 ##### DATA/JSON files 
+* Have some code for including data based on absolute number of performances and not just counting unique compositions
 
 ##### JS
 * Modularize 

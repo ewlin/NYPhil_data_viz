@@ -272,6 +272,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	
 	let yAxisAbs = d3.axisLeft()
 										.scale(yAbs)
+										//.tickValues( d => d % 20 === 0)
 										.tickSize(0); 
 						 
 	
@@ -337,7 +338,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	//Add Y axis
 	let yStreamAxis = SVG.append("g")
 			.attr("class", "yAxis axis stream-axis")
-			//FIX THIS; relative
+			//FIX THIS; relative instead of absolute number
 			.attr("transform", "translate(50,0)")
 			.call(yAxisAbs); 
 	
