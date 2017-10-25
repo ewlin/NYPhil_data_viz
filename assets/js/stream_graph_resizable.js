@@ -1,7 +1,7 @@
 //SET UP CHART
-	//if mobile
-	
-	//if desktop
+  //if mobile
+  
+  //if desktop
 
 //RESIZE LOGIC
 
@@ -167,11 +167,9 @@ d3.json('../../data/composers.json', (err, d) => {
 				//	++seasons[season]["composers"][composerIdx]["numberOfPieces"]; 
 				//}
 				
-			}); 
-		}); 
-		
-	}); 
-	
+      });
+    });
+  }); 
 	
   totalWorksPerSeason = ALL_SEASONS.map(season => {
     let {first, repeat} = seasons[season], 
@@ -189,7 +187,7 @@ d3.json('../../data/composers.json', (err, d) => {
     return best > current.total ? best : current.total; 
   }, 0); 
 	
-	console.log(MAX_NUMBER_PER_SEASON)
+  //console.log(MAX_NUMBER_PER_SEASON)
 	
   percentagesLivingDead = ALL_SEASONS.map(season => {
     let {unknown, alive, dead} = seasons[season], 
@@ -329,7 +327,7 @@ d3.json('../../data/composers.json', (err, d) => {
     .attr("transform", "rotate(-90)")
     .attr('dy', -SVG_WIDTH*0.038); 
 	
-	//Add X axis
+  //Add X axis
   let xStreamAxis = SVG.append("g")
   .attr("class", "xAxis axis stream-axis")
   .attr("transform", `translate(${0.05*SVG_WIDTH},${SVG_HEIGHT-3.9*PADDING})`)
@@ -396,7 +394,7 @@ d3.json('../../data/composers.json', (err, d) => {
       x: d => x(d.i),
       y: d => yAbs(d.workCount)
     }).annotations(annotations);
- s 	
+ 
   }; 
 	
 	
