@@ -1,7 +1,4 @@
-function hello() {
- let something = 1; 
- let another; 
- return {
-	hello: something
- }; 
+function joy(hello, hello1) {
+ let something; 
+ return; 
 }
