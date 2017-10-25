@@ -38,31 +38,31 @@ let yAbs = d3.scaleLinear().range([SVG_HEIGHT-4*PADDING, 10]);
 let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
 
 let areaAbsolute = d3.area()
-		.curve(d3.curveCardinal.tension(.1))
-		.x((d, i) => x(i) )
-		.y0(d => yAbs( d[0]) )
-		.y1(d => yAbs( d[1]) ); 
+.curve(d3.curveCardinal.tension(.1))
+.x((d, i) => x(i) )
+.y0(d => yAbs( d[0]) )
+.y1(d => yAbs( d[1]) ); 
 
 let areaPercentage = d3.area()
-		.curve(d3.curveCardinal.tension(.1))
-		.x((d, i) => x(i) )
-		.y0(d => yPct( d[0]) )
-		.y1(d => yPct( d[1]) ); 
+.curve(d3.curveCardinal.tension(.1))
+.x((d, i) => x(i) )
+.y0(d => yPct( d[0]) )
+.y1(d => yPct( d[1]) ); 
 
 let area = d3.area()
-		.curve(d3.curveCardinal.tension(.1))
-		.x((d, i) => x(i) )
-		.y0(d => yPct( d[0]) )
-		.y1(d => yPct( d[1]) ); 
+.curve(d3.curveCardinal.tension(.1))
+.x((d, i) => x(i) )
+.y0(d => yPct( d[0]) )
+.y1(d => yPct( d[1]) ); 
 
 let makeAnnotations = d3.annotation().type(d3.annotationLabel)
-		.accessors({
-  	  x: d => x(d.i),
-  	  y: d => yAbs(d.workCount)
-  	}); 
+  .accessors({
+    x: d => x(d.i),
+    y: d => yAbs(d.workCount)
+  }); 
 
 //data process to get # of works performed each season by living vs. deceased composers 
-let seasons = {}, 
+let seasons = {},
 		percentagesLivingDead, 
 		percentagesFirstRepeat, 
 		percentagesOfRepeatsLiving, 
@@ -75,7 +75,7 @@ let seasons = {},
 		transitionLine, 
 		transitionLineExit, 
 		seasonsBuckets = Array.apply(null,Array(7)).map((_) => {
-			return {}; 
+		  return {}; 
 		});
 
 //generate seasons dynamically
@@ -86,8 +86,8 @@ const ALL_SEASONS = generateSeasons(1842, 2016);
 //Reuse when writing re-sizing code 
 
 $('.explain p').css('margin-bottom', function() {
-	console.log(this); 
-	return this.id !== 'last-explain' ? $(window).innerHeight() : 0; 
+  console.log(this); 
+  return this.id !== 'last-explain' ? $(window).innerHeight() : 0; 
 }); 
 
 //GITHUB pages bug 
@@ -96,45 +96,45 @@ $('.explain p').css('margin-bottom', function() {
 //DEV
 d3.json('../../data/composers.json', (err, d) => {
 	
-	d.forEach( (composer, composerIdx) => {
-		let works = composer.works, //[] of work objects
+  d.forEach( (composer, composerIdx) => {
+    let works = composer.works, //[] of work objects
 				birth = composer.birth, 
 				death = composer.death; 
 		
 		
-		works.forEach((work, workIdx) => {
+    works.forEach((work, workIdx) => {
 			
 			//create custom composition ID number 
-			let workID = composerIdx + ":" + workIdx; 
+		  let workID = composerIdx + ":" + workIdx; 
 			
-			work.seasons.forEach( (season, idx) => {
+      work.seasons.forEach( (season, idx) => {
 				//first time encountering season, should add object to object with season as key; 
 				
-				if (!seasons[season]) {
-					seasons[season] = {
-						repeat: 0, 
-						repeatAlive: 0, 
-						alive: 0, 
-						dead: 0, 
-						unknown: 0, 
-						first: 0, 
-						composers: {}
-					}
-				}
+        if (!seasons[season]) {
+				  seasons[season] = {
+				  	repeat: 0, 
+				  	repeatAlive: 0, 
+				  	alive: 0, 
+				  	dead: 0, 
+				  	unknown: 0, 
+				  	first: 0, 
+				  	composers: {}
+				  }
+        }
 				
 				//composer of work dead or alive during season (if composer died during season, consider alive)
-				let perfYear = parseInt(season); 
+        let perfYear = parseInt(season); 
 				
-				if (birth == null && death == null) {
-					++seasons[season]["unknown"] 
-				} else if (death) {
-					perfYear > death 
-						? ++seasons[season]["dead"]
-						: (++seasons[season]["alive"], idx != 0 ? ++seasons[season]["repeatAlive"] : void 0); 
-				} else {
-					++seasons[season]["alive"];
-					idx != 0 ? ++seasons[season]["repeatAlive"] : void 0; 
-				}
+        if (birth == null && death == null) {
+          ++seasons[season]["unknown"] 
+        } else if (death) {
+          perfYear > death 
+            ? ++seasons[season]["dead"]
+          : (++seasons[season]["alive"], idx != 0 ? ++seasons[season]["repeatAlive"] : void 0); 
+        } else {
+          ++seasons[season]["alive"];
+          idx != 0 ? ++seasons[season]["repeatAlive"] : void 0; 
+        }
 			
 				// quick + dirty way to grab whether a first performance or repeat
 				idx == 0 ? ++seasons[season]["first"] : ++seasons[season]["repeat"]
