@@ -8,3 +8,13 @@ function test(tree) {
   } 
   return 9;
 }
+
+function something() {
+  let his; 
+  let she; 
+  if (!something) {
+    //
+  } else {
+    return this; 
+  }
+}
