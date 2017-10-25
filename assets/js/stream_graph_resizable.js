@@ -24,12 +24,12 @@ let SVG_WIDTH = $('.container').innerWidth();
 let animateLine; 
 
 const SVG = d3.select(".container")
-	.append("svg")
-	.attr("x", 0)
-	.attr("y", 0)
-	.attr("width", SVG_WIDTH)
-	.attr("height", SVG_HEIGHT)
-	.attr("transform", "translate(0,30)");
+.append("svg")
+.attr("x", 0)
+.attr("y", 0)
+.attr("width", SVG_WIDTH)
+.attr("height", SVG_HEIGHT)
+.attr("transform", "translate(0,30)");
 
 //let xScale = d3.scaleBand().domain(ALL_SEASONS).range([0,SVG_WIDTH]).padding("3px"); 
 //let yScale = d3.linearScale().domain([-1,1]).range([])
@@ -63,11 +63,11 @@ let makeAnnotations = d3.annotation().type(d3.annotationLabel)
 
 //data process to get # of works performed each season by living vs. deceased composers 
 let seasons = {},
-		percentagesLivingDead, 
-		percentagesFirstRepeat, 
-		percentagesOfRepeatsLiving, 
-		percentagesOfAllRepeatsLiving, 
-		totalWorksPerSeason, 
+    percentagesLivingDead, 
+    percentagesFirstRepeat, 
+    percentagesOfRepeatsLiving, 
+    percentagesOfAllRepeatsLiving, 
+    totalWorksPerSeason, 
 		transition, 
 		transitionOrg, 
 		transition2, 
@@ -103,45 +103,40 @@ d3.json('../../data/composers.json', (err, d) => {
 		
 		
     works.forEach((work, workIdx) => {
-			
-			//create custom composition ID number 
-		  let workID = composerIdx + ":" + workIdx; 
+      let workID = composerIdx + ":" + workIdx;
 			
       work.seasons.forEach( (season, idx) => {
-				//first time encountering season, should add object to object with season as key; 
-				
+        //first time encountering season, should add object to object with season as key; 
         if (!seasons[season]) {
-				  seasons[season] = {
-				  	repeat: 0, 
-				  	repeatAlive: 0, 
-				  	alive: 0, 
-				  	dead: 0, 
-				  	unknown: 0, 
-				  	first: 0, 
-				  	composers: {}
-				  }
+           seasons[season] = {
+             repeat: 0,
+             repeatAlive: 0,
+             alive: 0,
+             dead: 0,
+             unknown: 0,
+             first: 0,
+             composers: {}
+           }
         }
-				
-				//composer of work dead or alive during season (if composer died during season, consider alive)
+        //composer of work dead or alive during season (if composer died during season, consider alive)
         let perfYear = parseInt(season); 
-				
+        
         if (birth == null && death == null) {
-          ++seasons[season]["unknown"] 
+          ++seasons[season]["unknown"];
         } else if (death) {
-          perfYear > death 
-            ? ++seasons[season]["dead"]
-          : (++seasons[season]["alive"], idx != 0 ? ++seasons[season]["repeatAlive"] : void 0); 
+          perfYear > death
+          ? ++seasons[season]["dead"]
+          : (++seasons[season]["alive"], idx != 0 ? ++seasons[season]["repeatAlive"] : void 0);
         } else {
           ++seasons[season]["alive"];
           idx != 0 ? ++seasons[season]["repeatAlive"] : void 0; 
         }
-			
-				// quick + dirty way to grab whether a first performance or repeat
-				idx == 0 ? ++seasons[season]["first"] : ++seasons[season]["repeat"]
-				
-				// sort compositions into season buckets
-				
+        // quick + dirty way to grab whether a first performance or repeat
+        idx === 0 ? ++seasons[season]["first"] : ++seasons[season]["repeat"];
+        
+        // sort compositions into season buckets
 				let bucket = Math.floor((perfYear-1842)/25); 
+
 				
 				//Here's where the bug is happening. UPDATE: Fixed
 				seasonsBuckets[bucket][workID] 
