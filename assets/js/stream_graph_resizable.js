@@ -75,8 +75,8 @@ let seasons = {},
     transitionLine, 
     transitionLineExit, 
     seasonsBuckets = Array.apply(null,Array(7)).map((_) => {
-		  return {}; 
-		});
+      return {};
+    });
 
 //generate seasons dynamically
 const ALL_SEASONS = generateSeasons(1842, 2016); 
@@ -98,7 +98,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	
   d.forEach( (composer, composerIdx) => {
     let works = composer.works, //[] of work objects
-		    birth = composer.birth, 
+        birth = composer.birth, 
         death = composer.death; 
 		
 		
@@ -216,64 +216,61 @@ d3.json('../../data/composers.json', (err, d) => {
     
   }); 
 	
-	percentagesOfRepeatsLiving = ALL_SEASONS.map(season => {
-		let {repeatAlive, repeat} = seasons[season]; 
-		
-		//prevent dividing by 0
-		repeat = repeat == 0 ? 1 : repeat; 
-		
-		return {
-			season: season, 
-			percentageOfRepeatsLiving: repeatAlive/repeat * 100 
-		}
-	}); 
+  percentagesOfRepeatsLiving = ALL_SEASONS.map(season => {
+    let {repeatAlive, repeat} = seasons[season]; 
+    
+    //prevent dividing by 0
+    repeat = repeat == 0 ? 1 : repeat; 
+    
+    return {
+      season: season, 
+      percentageOfRepeatsLiving: repeatAlive/repeat * 100 
+    }
+  }); 
+  
+  percentagesOfLivingRepeats = ALL_SEASONS.map(season => {
+    let {repeatAlive, alive} = seasons[season]; 
+    
+    return {
+      season: season, 
+      percentageOfRepeatsLiving: repeatAlive/alive 
+    }
+  }); 
+  
+  percentagesOfAllRepeatsLiving = ALL_SEASONS.map(season => {
+    let {repeatAlive, repeat, first} = seasons[season]; 
+    
+    total = repeat + first; 
+    
+    return {
+      season: season, 
+      percentageOfTotalRepeatsLiving: repeatAlive/total
+      //percentageOfTotalRepeatsLiving: repeatAlive/total * 100 
+    }
+  }); 
 	
-	percentagesOfLivingRepeats = ALL_SEASONS.map(season => {
-		let {repeatAlive, alive} = seasons[season]; 
-		
-		return {
-			season: season, 
-			percentageOfRepeatsLiving: repeatAlive/alive 
-		}
-	}); 
-	
-	percentagesOfAllRepeatsLiving = ALL_SEASONS.map(season => {
-		let {repeatAlive, repeat, first} = seasons[season]; 
-		
-		total = repeat + first; 
-		
-		return {
-			season: season, 
-			percentageOfTotalRepeatsLiving: repeatAlive/total
-			//percentageOfTotalRepeatsLiving: repeatAlive/total * 100 
-		}
-	}); 
-	
-	yAbs.domain([0, MAX_NUMBER_PER_SEASON]); 
+  yAbs.domain([0, MAX_NUMBER_PER_SEASON]); 
 
 	let stack = d3.stack()
-		.keys(["percentageAlive", "percentageDead"]); 	
+  .keys(["percentageAlive", "percentageDead"]); 	
 	
 	let stackA = d3.stack()
-		.keys(["percentageFirst", "percentageRepeat"]); 	
+  .keys(["percentageFirst", "percentageRepeat"]); 	
 	
 	let stackB = d3.stack()
-		.keys(["first", "repeat"]); 	
+  .keys(["first", "repeat"]); 	
 	
 
-	
 	let yAxisAbs = d3.axisLeft()
-										.scale(yAbs)
-										//.tickValues( d => d % 20 === 0)
-										.tickSize(0); 
+  .scale(yAbs)
+  .tickSize(0); 
 						 
-	
 	let yAxisPct = d3.axisLeft()
-										.scale(yPct)
-										.tickSize(0)
-										.tickFormat( d => {
-											return `${d*100}%`;  
-										}); 
+  .scale(yPct)
+  .tickSize(0)
+  .tickFormat( d => {
+    return `${d*100}%`;  
+  }); 
 	
 	let xAxisYear = d3.axisBottom()
 										.scale(x)
