@@ -292,27 +292,27 @@ d3.json('../../data/composers.json', (err, d) => {
   }]; 
 	
   SVG.append('g')
-  .attr('class', 'graph-content')
-  .selectAll(".path")
-  .data(stackB(totalWorksPerSeason))
-  .enter().append("path")
-  	//Can also consolidate this with the scale; 
-  .attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
+    .attr('class', 'graph-content')
+    .selectAll(".path")
+    .data(stackB(totalWorksPerSeason))
+    .enter().append("path")
+    //Can also consolidate this with the scale; 
+    .attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
     .attr("d", areaAbsolute)
-  .attr("fill", (d) => {
-  	if (d.key == "first") return "Tomato";
-  	if (d.key == "repeat") return "Steelblue";
-  }).each(function(data, i) {
-    annotations.push({
-      note: {
-        //title: "Hello performances"
-        title: ORG_TEXTS[i]
-      }, 
-      data: { i: 165, workCount: (data[174][1] - data[174][0])/2 + data[174][0] }, 
-      dy: -20,
-      dx: SVG_WIDTH * .12
-    }); 
-  });
+    .attr("fill", (d) => {
+      if (d.key == "first") return "Tomato";
+      if (d.key == "repeat") return "Steelblue";
+    }).each(function(data, i) {
+      annotations.push({
+        note: {
+          //title: "Hello performances"
+          title: ORG_TEXTS[i]
+        }, 
+        data: { i: 165, workCount: (data[174][1] - data[174][0])/2 + data[174][0] }, 
+        dy: -20,
+        dx: SVG_WIDTH * .12
+      }); 
+    });
 	
   //Add Y axis
   let yStreamAxis = SVG.append("g")
