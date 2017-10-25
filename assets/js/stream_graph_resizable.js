@@ -251,153 +251,153 @@ d3.json('../../data/composers.json', (err, d) => {
 	
   yAbs.domain([0, MAX_NUMBER_PER_SEASON]); 
 
-	let stack = d3.stack()
-  .keys(["percentageAlive", "percentageDead"]); 	
+  let stack = d3.stack().keys(["percentageAlive", "percentageDead"]); 	
 	
-	let stackA = d3.stack()
-  .keys(["percentageFirst", "percentageRepeat"]); 	
+  let stackA = d3.stack().keys(["percentageFirst", "percentageRepeat"]); 	
 	
-	let stackB = d3.stack()
-  .keys(["first", "repeat"]); 	
+  let stackB = d3.stack().keys(["first", "repeat"]); 	
 	
-
-	let yAxisAbs = d3.axisLeft()
+  let yAxisAbs = d3.axisLeft()
   .scale(yAbs)
-  .tickSize(0); 
-						 
-	let yAxisPct = d3.axisLeft()
+  .tickSize(0);
+  
+  let yAxisPct = d3.axisLeft()
   .scale(yPct)
   .tickSize(0)
   .tickFormat( d => {
     return `${d*100}%`;  
   }); 
 	
-	let xAxisYear = d3.axisBottom()
-										.scale(x)
-										.tickValues([8, 33, 58, 83, 108, 133, 158, 174])
-										.tickFormat( d => {
-											return ALL_SEASONS[d]; 
-										})
-										//.map( i => {
-										//	return ALL_SEASONS[i]; 
-										//})) 
-										.tickSize(10); 
+  let xAxisYear = d3.axisBottom()
+  .scale(x)
+  .tickValues([8, 33, 58, 83, 108, 133, 158, 174])
+  .tickFormat( d => {
+    return ALL_SEASONS[d]; 
+  })
+  .tickSize(10); 
 	
-	
-	const ORG_TEXTS = ['New York Phil first-time performance', 'Repeat performances']; 
+  const ORG_TEXTS = ['New York Phil first-time performance', 'Repeat performances']; 
 
 	//annotation experiment 
-	const annotations = [{
-  	note: {
-  	  title: "1909-10 Season", 
-			label: "Gustav Mahler's first season as music director was also marked by a 3X increase in the number of concerts, from 18 to 54",
-			wrap: 180
-  	},
-  	//can use x, y directly instead of data
-  	data: { i: 67, workCount: 105 },
-  	dy: -80,
-  	dx: -90, 
-	}]; 
-	
+  const annotations = [{
+    note: {
+      title: "1909-10 Season", 
+      label: "Gustav Mahler's first season as music director was also marked by a 3X increase in the number of concerts, from 18 to 54",
+      wrap: 180
+    },
+    //can use x, y directly instead of data
+    data: { i: 67, workCount: 105 },
+    dy: -80,
+    dx: -90, 
+  }]; 
 	
 	SVG.append('g')
-		.attr('class', 'graph-content')
-		.selectAll(".path")
-		.data(stackB(totalWorksPerSeason))
-  	.enter().append("path")
-			//Can also consolidate this with the scale; 
-		.attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
+  .attr('class', 'graph-content')
+  .selectAll(".path")
+  .data(stackB(totalWorksPerSeason))
+  .enter().append("path")
+  	//Can also consolidate this with the scale; 
+  .attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
     .attr("d", areaAbsolute)
-		.attr("fill", (d) => {
-			if (d.key == "first") return "Tomato";
-			if (d.key == "repeat") return "Steelblue";
-		}).each(function(data, i) {
-			annotations.push({
-				note: {
-					//title: "Hello performances"
-					title: ORG_TEXTS[i]
-				}, 
-				data: { i: 165, workCount: (data[174][1] - data[174][0])/2 + data[174][0] }, 
-				dy: -20,
-				dx: SVG_WIDTH * .12
-			}); 
-		});
+  .attr("fill", (d) => {
+  	if (d.key == "first") return "Tomato";
+  	if (d.key == "repeat") return "Steelblue";
+  }).each(function(data, i) {
+    annotations.push({
+      note: {
+        //title: "Hello performances"
+        title: ORG_TEXTS[i]
+      }, 
+      data: { i: 165, workCount: (data[174][1] - data[174][0])/2 + data[174][0] }, 
+      dy: -20,
+      dx: SVG_WIDTH * .12
+    }); 
+  });
 	
-	console.log(`SVG_WIDTH IS: ${SVG_WIDTH}, ${SVG_WIDTH*0.05}`); 
-	//Add Y axis
-	let yStreamAxis = SVG.append("g")
-			.attr("class", "yAxis axis stream-axis")
-			//FIX THIS; relative instead of absolute number
-			.attr("transform", "translate(50,0)")
-			.call(yAxisAbs); 
+  //Add Y axis
+  let yStreamAxis = SVG.append("g")
+  .attr("class", "yAxis axis stream-axis")
+  //FIX THIS; relative instead of absolute number
+  .attr("transform", "translate(50,0)")
+  .call(yAxisAbs); 
+  
+  d3.select(".yAxis").select(".domain").remove(); 
 	
-	d3.select(".yAxis").select(".domain").remove(); 
-	
-	yStreamAxis.append('text').attr('class', 'axis-label stream-label y-axis-label').text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON').attr("transform", "rotate(-90)").attr('dy', -SVG_WIDTH*0.038); 
+  yStreamAxis.append('text')
+    .attr('class', 'axis-label stream-label y-axis-label')
+    .text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON')
+    .attr("transform", "rotate(-90)")
+    .attr('dy', -SVG_WIDTH*0.038); 
 	
 	//Add X axis
-	let xStreamAxis = SVG.append("g")
-			.attr("class", "xAxis axis stream-axis")
-			.attr("transform", `translate(${0.05*SVG_WIDTH},${SVG_HEIGHT-3.9*PADDING})`)
-			.call(xAxisYear); 
+  let xStreamAxis = SVG.append("g")
+  .attr("class", "xAxis axis stream-axis")
+  .attr("transform", `translate(${0.05*SVG_WIDTH},${SVG_HEIGHT-3.9*PADDING})`)
+  .call(xAxisYear); 
 	
-	d3.select(".xAxis").select(".domain").remove(); 
+  d3.select(".xAxis")
+    .select(".domain")
+    .remove(); 
 
-	xStreamAxis.append('text').attr('class', 'axis-label x-axis-label stream-label')
-					.text('NEW YORK PHILHARMONIC SUBSCRIPTION SEASONS')
-					.attr('transform', `translate(${SVG_WIDTH*.95*.5},${1.6*PADDING})`); 
+  xStreamAxis
+    .append('text')
+    .attr('class', 'axis-label x-axis-label stream-label')
+    .text('NEW YORK PHILHARMONIC SUBSCRIPTION SEASONS')
+    .attr('transform', `translate(${SVG_WIDTH*.95*.5},${1.6*PADDING})`); 
 	
+  makeAnnotations.annotations(annotations); 
 	
-	makeAnnotations.annotations(annotations); 
+  SVG.append("g")
+    .attr("class", "annotation-group")
+    .attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
+    .call(makeAnnotations); 
 	
-	SVG.append("g")
-  	.attr("class", "annotation-group")
-		.attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
-  	.call(makeAnnotations); 
+  let line = d3.line()
+  .curve(d3.curveCardinal.tension(.1))
+  .x((d, i) => x(i))
+  .y(d => yPct(d.percentageOfTotalRepeatsLiving)); 
 	
-	let line = d3.line()
-							.curve(d3.curveCardinal.tension(.1))
-							.x((d, i) => x(i))
-							.y(d => yPct(d.percentageOfTotalRepeatsLiving)); 
+  let trendline = SVG.append('path').attr('class', 'trendline')
+  .attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
+  .datum(movingAverage(percentagesOfAllRepeatsLiving, ['percentageOfTotalRepeatsLiving'], 7))
+  //.enter()
+  .attr('fill', 'none')
+  .attr('stroke', 'rgb(218, 155, 103)')
+  .attr('stroke-dasharray', '7, 2')
+  .attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]))
+  .style('stroke-width', '2px'); 
 	
-	let trendline = SVG.append('path').attr('class', 'trendline')
-			.attr("transform", `translate(${0.05*SVG_WIDTH},0)`)
-			.datum(movingAverage(percentagesOfAllRepeatsLiving, ['percentageOfTotalRepeatsLiving'], 7))
-			//.enter()
-			.attr('fill', 'none')
-			.attr('stroke', 'rgb(218, 155, 103)')
-			.attr('stroke-dasharray', '7, 2')
-			.attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]))
-			.style('stroke-width', '2px'); 
-	
-	transitionOrg = function() {
-		currentGraph = "abs"; 
-		
-		let temp = SVG.selectAll("path")
-			.data(stackB(totalWorksPerSeason))
-			.transition().duration(1400)
-			.attr("d", areaAbsolute)
-			.attr("fill", (d) => {
-				if (d.key == "first") return "Tomato";
-				if (d.key == "repeat") return "Steelblue";
-			});
-	
-		
-		SVG.select(".yAxis")
-			.transition()
-			.duration(1400)
-			.call(yAxisAbs); 
-		
-		d3.select(".yAxis").select(".domain").remove(); 
-		
-		d3.select('.y-axis-label').transition().duration(1400).text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON');
-
-		makeAnnotations.accessors({
-  	  x: d => x(d.i),
-  	  y: d => yAbs(d.workCount)
-  	}).annotations(annotations);
-		
-	}; 
+  transitionOrg = function() {
+    currentGraph = "abs"; 
+    
+    let temp = SVG.selectAll("path")
+    .data(stackB(totalWorksPerSeason))
+    .transition().duration(1400)
+    .attr("d", areaAbsolute)
+    .attr("fill", (d) => {
+    	if (d.key == "first") return "Tomato";
+    	if (d.key == "repeat") return "Steelblue";
+    });
+  
+    
+    SVG.select(".yAxis")
+      .transition()
+      .duration(1400)
+      .call(yAxisAbs); 
+    
+    d3.select(".yAxis").select(".domain").remove(); 
+    
+    d3.select('.y-axis-label')
+      .transition()
+      .duration(1400)
+      .text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON'); 
+    
+    makeAnnotations.accessors({
+      x: d => x(d.i),
+      y: d => yAbs(d.workCount)
+    }).annotations(annotations);
+  	
+  }; 
 	
 	
 	transition = function() {
