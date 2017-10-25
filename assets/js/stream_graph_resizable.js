@@ -291,7 +291,7 @@ d3.json('../../data/composers.json', (err, d) => {
     dx: -90, 
   }]; 
 	
-	SVG.append('g')
+  SVG.append('g')
   .attr('class', 'graph-content')
   .selectAll(".path")
   .data(stackB(totalWorksPerSeason))
@@ -396,7 +396,7 @@ d3.json('../../data/composers.json', (err, d) => {
       x: d => x(d.i),
       y: d => yAbs(d.workCount)
     }).annotations(annotations);
-  	
+ s 	
   }; 
 	
 	
