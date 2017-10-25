@@ -18,3 +18,12 @@ function something() {
     return this; 
   }
 }
+
+asyncLib.ajax((req, res) => {
+  //Hello
+  
+  if (res) {
+    //DO SOMETHING
+    return res.map(item => console.log(item)); 
+  }
+});
