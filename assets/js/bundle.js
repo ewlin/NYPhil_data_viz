@@ -25,12 +25,12 @@ let SVG_WIDTH = $('.container').innerWidth();
 let animateLine; 
 
 const SVG = d3.select(".container")
-	.append("svg")
-	.attr("x", 0)
-	.attr("y", 0)
-	.attr("width", SVG_WIDTH)
-	.attr("height", SVG_HEIGHT)
-	.attr("transform", "translate(0,30)");
+.append("svg")
+.attr("x", 0)
+.attr("y", 0)
+.attr("width", SVG_WIDTH)
+.attr("height", SVG_HEIGHT)
+.attr("transform", "translate(0,30)");
 
 //let xScale = d3.scaleBand().domain(ALL_SEASONS).range([0,SVG_WIDTH]).padding("3px"); 
 //let yScale = d3.linearScale().domain([-1,1]).range([])
@@ -39,44 +39,44 @@ let yAbs = d3.scaleLinear().range([SVG_HEIGHT-4*PADDING, 10]);
 let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
 
 let areaAbsolute = d3.area()
-		.curve(d3.curveCardinal.tension(.1))
-		.x((d, i) => x(i) )
-		.y0(d => yAbs( d[0]) )
-		.y1(d => yAbs( d[1]) ); 
+.curve(d3.curveCardinal.tension(.1))
+.x((d, i) => x(i) )
+.y0(d => yAbs( d[0]) )
+.y1(d => yAbs( d[1]) ); 
 
 let areaPercentage = d3.area()
-		.curve(d3.curveCardinal.tension(.1))
-		.x((d, i) => x(i) )
-		.y0(d => yPct( d[0]) )
-		.y1(d => yPct( d[1]) ); 
+.curve(d3.curveCardinal.tension(.1))
+.x((d, i) => x(i) )
+.y0(d => yPct( d[0]) )
+.y1(d => yPct( d[1]) ); 
 
 let area = d3.area()
-		.curve(d3.curveCardinal.tension(.1))
-		.x((d, i) => x(i) )
-		.y0(d => yPct( d[0]) )
-		.y1(d => yPct( d[1]) ); 
+.curve(d3.curveCardinal.tension(.1))
+.x((d, i) => x(i) )
+.y0(d => yPct( d[0]) )
+.y1(d => yPct( d[1]) ); 
 
 let makeAnnotations = d3.annotation().type(d3.annotationLabel)
-		.accessors({
-  	  x: d => x(d.i),
-  	  y: d => yAbs(d.workCount)
-  	}); 
+  .accessors({
+    x: d => x(d.i),
+    y: d => yAbs(d.workCount)
+  }); 
 
 //data process to get # of works performed each season by living vs. deceased composers 
-let seasons = {}, 
-		percentagesLivingDead, 
-		percentagesFirstRepeat, 
-		percentagesOfRepeatsLiving, 
-		percentagesOfAllRepeatsLiving, 
-		totalWorksPerSeason, 
-		transition, 
-		transitionOrg, 
-		transition2, 
-		transition3,
-		transitionLine, 
-		transitionLineExit, 
-		seasonsBuckets = Array.apply(null,Array(7)).map((_) => {
-			return {}; 
+let seasons = {},
+    percentagesLivingDead, 
+    percentagesFirstRepeat, 
+    percentagesOfRepeatsLiving, 
+    percentagesOfAllRepeatsLiving, 
+    totalWorksPerSeason, 
+    transition, 
+    transitionOrg, 
+    transition2, 
+    transition3,
+    transitionLine, 
+    transitionLineExit, 
+    seasonsBuckets = Array.apply(null,Array(7)).map((_) => {
+		  return {}; 
 		});
 
 //generate seasons dynamically
@@ -87,8 +87,8 @@ const ALL_SEASONS = generateSeasons(1842, 2016);
 //Reuse when writing re-sizing code 
 
 $('.explain p').css('margin-bottom', function() {
-	console.log(this); 
-	return this.id !== 'last-explain' ? $(window).innerHeight() : 0; 
+  console.log(this); 
+  return this.id !== 'last-explain' ? $(window).innerHeight() : 0; 
 }); 
 
 //GITHUB pages bug 
@@ -97,132 +97,125 @@ $('.explain p').css('margin-bottom', function() {
 //DEV
 d3.json('../../data/composers.json', (err, d) => {
 	
-	d.forEach( (composer, composerIdx) => {
-		let works = composer.works, //[] of work objects
-				birth = composer.birth, 
-				death = composer.death; 
+  d.forEach( (composer, composerIdx) => {
+    let works = composer.works, //[] of work objects
+		    birth = composer.birth, 
+        death = composer.death; 
 		
 		
-		works.forEach((work, workIdx) => {
+    works.forEach((work, workIdx) => {
+      let workID = composerIdx + ":" + workIdx;
 			
-			//create custom composition ID number 
-			let workID = composerIdx + ":" + workIdx; 
-			
-			work.seasons.forEach( (season, idx) => {
-				//first time encountering season, should add object to object with season as key; 
-				
-				if (!seasons[season]) {
-					seasons[season] = {
-						repeat: 0, 
-						repeatAlive: 0, 
-						alive: 0, 
-						dead: 0, 
-						unknown: 0, 
-						first: 0, 
-						composers: {}
-					}
-				}
-				
-				//composer of work dead or alive during season (if composer died during season, consider alive)
-				let perfYear = parseInt(season); 
-				
-				if (birth == null && death == null) {
-					++seasons[season]["unknown"] 
-				} else if (death) {
-					perfYear > death 
-						? ++seasons[season]["dead"]
-						: (++seasons[season]["alive"], idx != 0 ? ++seasons[season]["repeatAlive"] : void 0); 
-				} else {
-					++seasons[season]["alive"];
-					idx != 0 ? ++seasons[season]["repeatAlive"] : void 0; 
-				}
-			
-				// quick + dirty way to grab whether a first performance or repeat
-				idx == 0 ? ++seasons[season]["first"] : ++seasons[season]["repeat"]
-				
-				// sort compositions into season buckets
-				
-				let bucket = Math.floor((perfYear-1842)/25); 
-				
-				//Here's where the bug is happening. UPDATE: Fixed
-				seasonsBuckets[bucket][workID] 
-					? ++seasonsBuckets[bucket][workID]["count"]
-					: seasonsBuckets[bucket][workID] = {title: work.title, composer: composer.composer, count: 1}; 
-				
-				
-				//Calculate either age of living composers, or how long ago the composer died 
-				
-				if (!seasons[season]["composers"][composerIdx]) {
-					//calculate age: Number. if alive (positive), if dead (negative)
-					let ageDuringSeason; 
-					
-					if (birth == null && death == null) {
-						ageDuringSeason = null; 
-					} else if (death != null || (death == null && birth)) {
-						ageDuringSeason = ((death == null && birth) || death >= perfYear) 
-							? perfYear - birth 
-							: death - perfYear; 
-					}
-					
-					seasons[season]["composers"][composerIdx] = {
-						composer: composer, 
-						ageDuringSeason: ageDuringSeason, 
-						numberOfPieces: 1
-					}
-				} else {
-					++seasons[season]["composers"][composerIdx]["numberOfPieces"]; 
-				}
+      work.seasons.forEach( (season, idx) => {
+        //first time encountering season, should add object to object with season as key; 
+        if (!seasons[season]) {
+           seasons[season] = {
+             repeat: 0,
+             repeatAlive: 0,
+             alive: 0,
+             dead: 0,
+             unknown: 0,
+             first: 0,
+             composers: {}
+           }
+        }
+        //composer of work dead or alive during season (if composer died during season, consider alive)
+        let perfYear = parseInt(season); 
+        
+        if (birth == null && death == null) {
+          ++seasons[season]["unknown"];
+        } else if (death) {
+          perfYear > death
+          ? ++seasons[season]["dead"]
+          : (++seasons[season]["alive"], idx != 0 ? ++seasons[season]["repeatAlive"] : void 0);
+        } else {
+          ++seasons[season]["alive"];
+          idx != 0 ? ++seasons[season]["repeatAlive"] : void 0; 
+        }
+        // quick + dirty way to grab whether a first performance or repeat
+        idx === 0 ? ++seasons[season]["first"] : ++seasons[season]["repeat"];
+        
+        //// sort compositions into season buckets
+				//let bucket = Math.floor((perfYear-1842)/25); 
+
+				//
+				////Here's where the bug is happening. UPDATE: Fixed
+				//seasonsBuckets[bucket][workID] 
+				//	? ++seasonsBuckets[bucket][workID]["count"]
+				//	: seasonsBuckets[bucket][workID] = {title: work.title, composer: composer.composer, count: 1}; 
+				//
+				//
+				////Calculate either age of living composers, or how long ago the composer died 
+				//
+				//if (!seasons[season]["composers"][composerIdx]) {
+				//	//calculate age: Number. if alive (positive), if dead (negative)
+				//	let ageDuringSeason; 
+				//	
+				//	if (birth == null && death == null) {
+				//		ageDuringSeason = null; 
+				//	} else if (death != null || (death == null && birth)) {
+				//		ageDuringSeason = ((death == null && birth) || death >= perfYear) 
+				//			? perfYear - birth 
+				//			: death - perfYear; 
+				//	}
+				//	
+				//	seasons[season]["composers"][composerIdx] = {
+				//		composer: composer, 
+				//		ageDuringSeason: ageDuringSeason, 
+				//		numberOfPieces: 1
+				//	}
+				//} else {
+				//	++seasons[season]["composers"][composerIdx]["numberOfPieces"]; 
+				//}
 				
 			}); 
 		}); 
 		
 	}); 
 	
-	//Debugging 
-	console.log(seasons); 
 	
-	totalWorksPerSeason = ALL_SEASONS.map(season => {
-		let {first, repeat} = seasons[season], 
-				total = first + repeat; 
-		
-		return {
-			season: season,
-			total: total, 
-			first: first, 
-			repeat: repeat
-		}
-	}); 
+  totalWorksPerSeason = ALL_SEASONS.map(season => {
+    let {first, repeat} = seasons[season], 
+        total = first + repeat; 
+    
+    return {
+      season: season,
+      total: total, 
+      first: first, 
+      repeat: repeat
+    }
+  }); 
 	
-	const MAX_NUMBER_PER_SEASON = totalWorksPerSeason.reduce( (best, current) => {
-		return best > current.total ? best : current.total; 
-	}, 0); 
+  const MAX_NUMBER_PER_SEASON = totalWorksPerSeason.reduce( (best, current) => {
+    return best > current.total ? best : current.total; 
+  }, 0); 
 	
 	console.log(MAX_NUMBER_PER_SEASON)
 	
-	percentagesLivingDead = ALL_SEASONS.map(season => {
-		let {unknown, alive, dead} = seasons[season], 
-				total = unknown + alive + dead; 
-		
-		return {
-			season: season, 
-			total: total, 
-			percentageAlive: alive/total, 
-			percentageDead: dead/total
-		}
-	}); 
+  percentagesLivingDead = ALL_SEASONS.map(season => {
+    let {unknown, alive, dead} = seasons[season], 
+        total = unknown + alive + dead; 
+    
+    return {
+      season: season, 
+      total: total, 
+      percentageAlive: alive/total, 
+      percentageDead: dead/total
+    }
+  }); 
 	
-	percentagesFirstRepeat = ALL_SEASONS.map(season => {
-		let {first, repeat} = seasons[season], 
-				total = first + repeat; 
-		
-		return {
-			season: season,
-			total: total, 
-			percentageFirst: first/total, 
-			percentageRepeat: repeat/total
-		}
-		
-	}); 
+  percentagesFirstRepeat = ALL_SEASONS.map(season => {
+    let {first, repeat} = seasons[season], 
+        total = first + repeat; 
+    
+    return {
+      season: season,
+      total: total, 
+      percentageFirst: first/total, 
+      percentageRepeat: repeat/total
+    }
+    
+  }); 
 	
 	percentagesOfRepeatsLiving = ALL_SEASONS.map(season => {
 		let {repeatAlive, repeat} = seasons[season]; 

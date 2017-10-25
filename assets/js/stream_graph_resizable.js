@@ -68,13 +68,13 @@ let seasons = {},
     percentagesOfRepeatsLiving, 
     percentagesOfAllRepeatsLiving, 
     totalWorksPerSeason, 
-		transition, 
-		transitionOrg, 
-		transition2, 
-		transition3,
-		transitionLine, 
-		transitionLineExit, 
-		seasonsBuckets = Array.apply(null,Array(7)).map((_) => {
+    transition, 
+    transitionOrg, 
+    transition2, 
+    transition3,
+    transitionLine, 
+    transitionLineExit, 
+    seasonsBuckets = Array.apply(null,Array(7)).map((_) => {
 		  return {}; 
 		});
 
@@ -98,8 +98,8 @@ d3.json('../../data/composers.json', (err, d) => {
 	
   d.forEach( (composer, composerIdx) => {
     let works = composer.works, //[] of work objects
-				birth = composer.birth, 
-				death = composer.death; 
+		    birth = composer.birth, 
+        death = composer.death; 
 		
 		
     works.forEach((work, workIdx) => {
@@ -134,89 +134,87 @@ d3.json('../../data/composers.json', (err, d) => {
         // quick + dirty way to grab whether a first performance or repeat
         idx === 0 ? ++seasons[season]["first"] : ++seasons[season]["repeat"];
         
-        // sort compositions into season buckets
-				let bucket = Math.floor((perfYear-1842)/25); 
+        //// sort compositions into season buckets
+				//let bucket = Math.floor((perfYear-1842)/25); 
 
-				
-				//Here's where the bug is happening. UPDATE: Fixed
-				seasonsBuckets[bucket][workID] 
-					? ++seasonsBuckets[bucket][workID]["count"]
-					: seasonsBuckets[bucket][workID] = {title: work.title, composer: composer.composer, count: 1}; 
-				
-				
-				//Calculate either age of living composers, or how long ago the composer died 
-				
-				if (!seasons[season]["composers"][composerIdx]) {
-					//calculate age: Number. if alive (positive), if dead (negative)
-					let ageDuringSeason; 
-					
-					if (birth == null && death == null) {
-						ageDuringSeason = null; 
-					} else if (death != null || (death == null && birth)) {
-						ageDuringSeason = ((death == null && birth) || death >= perfYear) 
-							? perfYear - birth 
-							: death - perfYear; 
-					}
-					
-					seasons[season]["composers"][composerIdx] = {
-						composer: composer, 
-						ageDuringSeason: ageDuringSeason, 
-						numberOfPieces: 1
-					}
-				} else {
-					++seasons[season]["composers"][composerIdx]["numberOfPieces"]; 
-				}
+				//
+				////Here's where the bug is happening. UPDATE: Fixed
+				//seasonsBuckets[bucket][workID] 
+				//	? ++seasonsBuckets[bucket][workID]["count"]
+				//	: seasonsBuckets[bucket][workID] = {title: work.title, composer: composer.composer, count: 1}; 
+				//
+				//
+				////Calculate either age of living composers, or how long ago the composer died 
+				//
+				//if (!seasons[season]["composers"][composerIdx]) {
+				//	//calculate age: Number. if alive (positive), if dead (negative)
+				//	let ageDuringSeason; 
+				//	
+				//	if (birth == null && death == null) {
+				//		ageDuringSeason = null; 
+				//	} else if (death != null || (death == null && birth)) {
+				//		ageDuringSeason = ((death == null && birth) || death >= perfYear) 
+				//			? perfYear - birth 
+				//			: death - perfYear; 
+				//	}
+				//	
+				//	seasons[season]["composers"][composerIdx] = {
+				//		composer: composer, 
+				//		ageDuringSeason: ageDuringSeason, 
+				//		numberOfPieces: 1
+				//	}
+				//} else {
+				//	++seasons[season]["composers"][composerIdx]["numberOfPieces"]; 
+				//}
 				
 			}); 
 		}); 
 		
 	}); 
 	
-	//Debugging 
-	console.log(seasons); 
 	
-	totalWorksPerSeason = ALL_SEASONS.map(season => {
-		let {first, repeat} = seasons[season], 
-				total = first + repeat; 
-		
-		return {
-			season: season,
-			total: total, 
-			first: first, 
-			repeat: repeat
-		}
-	}); 
+  totalWorksPerSeason = ALL_SEASONS.map(season => {
+    let {first, repeat} = seasons[season], 
+        total = first + repeat; 
+    
+    return {
+      season: season,
+      total: total, 
+      first: first, 
+      repeat: repeat
+    }
+  }); 
 	
-	const MAX_NUMBER_PER_SEASON = totalWorksPerSeason.reduce( (best, current) => {
-		return best > current.total ? best : current.total; 
-	}, 0); 
+  const MAX_NUMBER_PER_SEASON = totalWorksPerSeason.reduce( (best, current) => {
+    return best > current.total ? best : current.total; 
+  }, 0); 
 	
 	console.log(MAX_NUMBER_PER_SEASON)
 	
-	percentagesLivingDead = ALL_SEASONS.map(season => {
-		let {unknown, alive, dead} = seasons[season], 
-				total = unknown + alive + dead; 
-		
-		return {
-			season: season, 
-			total: total, 
-			percentageAlive: alive/total, 
-			percentageDead: dead/total
-		}
-	}); 
+  percentagesLivingDead = ALL_SEASONS.map(season => {
+    let {unknown, alive, dead} = seasons[season], 
+        total = unknown + alive + dead; 
+    
+    return {
+      season: season, 
+      total: total, 
+      percentageAlive: alive/total, 
+      percentageDead: dead/total
+    }
+  }); 
 	
-	percentagesFirstRepeat = ALL_SEASONS.map(season => {
-		let {first, repeat} = seasons[season], 
-				total = first + repeat; 
-		
-		return {
-			season: season,
-			total: total, 
-			percentageFirst: first/total, 
-			percentageRepeat: repeat/total
-		}
-		
-	}); 
+  percentagesFirstRepeat = ALL_SEASONS.map(season => {
+    let {first, repeat} = seasons[season], 
+        total = first + repeat; 
+    
+    return {
+      season: season,
+      total: total, 
+      percentageFirst: first/total, 
+      percentageRepeat: repeat/total
+    }
+    
+  }); 
 	
 	percentagesOfRepeatsLiving = ALL_SEASONS.map(season => {
 		let {repeatAlive, repeat} = seasons[season]; 
