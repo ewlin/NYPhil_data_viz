@@ -1,4 +1,4 @@
-function joy(hello, hello1) {
- let something; 
- return; 
+function g(hello) {
+  if (hello == 5) return 'test success'; 
+  return 'not sucess';
 }
