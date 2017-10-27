@@ -1,1 +1,1 @@
-watch "sh scripts/build.sh" assets/js --interval 60
+watch "sh scripts/build.sh" assets/js
