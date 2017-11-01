@@ -6,7 +6,6 @@
   
 //if desktop
 
-
 //Deps. 
 let generateSeasons = require('../../temp_utils/generate_seasons.js'); 
 let movingAverage = require('../../temp_utils/moving_averages.js'); 
@@ -87,12 +86,12 @@ const ALL_SEASONS = generateSeasons(1842, 2016);
 
 // Dynamic margins on...
 //Reuse when writing re-sizing code 
+$('#first-explain').css('margin-top', $(window).innerHeight()/2); 
 
 $('.explain p').css('margin-bottom', function() {
   return this.id !== 'last-explain' ? $(window).innerHeight() : 0; 
 }); 
 
-$('#first-explain').css('margin-top', $(window).innerHeight()/2); 
                     
 //GITHUB pages bug 
 //d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
@@ -664,11 +663,12 @@ d3.json('../../data/composers.json', (err, d) => {
     yAbs.range([SVG_HEIGHT-4*PADDING, 10]);
     yPct.range([SVG_HEIGHT-4*PADDING, 10]); 
 		
+    $('#first-explain').css('margin-top', $(window).innerHeight()/2); 
+
     $('.explain p').css('margin-bottom', function() {
       return this.id !== 'last-explain' ? $(window).innerHeight() : 0; 
     }); 
 
-    $('#first-explain').css('margin-top', $(window).innerHeight()/2); 
     
     scene.duration(document.querySelector('.outer-container').offsetHeight - window.innerHeight);
 
