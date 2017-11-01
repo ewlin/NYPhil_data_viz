@@ -190,7 +190,16 @@
 				border-radius: 3px; 
 				line-height: 1.7;
 				letter-spacing: 0; 
+        opacity: .4;
+        -webkit-transition: opacity 1.5s;
+        transition: opacity 1.5s;
 			}
+
+      .explain p.focus {
+        opacity: 1;
+        -webkit-transition: opacity 1.5s;
+        transition: opacity 1.5s;
+      }
       
 
       /* Centered chart and explainations
@@ -362,7 +371,7 @@
       
       @media screen and (max-width: 480px) {
         .axis text {
-				  /*font-size: .7em;*/
+				  font-size: .9em;
 			   }
         
         .inner-container .graphic-title {
@@ -419,7 +428,7 @@
 				<div class="inner-container">
 					<div class="container">
             <h2 class='graphic-title'>1st Movement: Trends of the New York Phil</h2>
-
+            
           </div>
 				</div>
 				<div class="explain">

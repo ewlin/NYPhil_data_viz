@@ -1,12 +1,12 @@
 # Data Visualization Project w/New York Philharmonic Historical Concert Data
 
-### _(Updated 10/31/2017)_
+### _(Updated 11/1/2017)_
 
 ### TODOs: 
 
 #### BUGS: 
 * Resizing issues [Mostly fixed, some scale issues, margins etc. remain]
-* X-Axis ticks sometimes not showing up in AREA graph
+* X-Axis ticks sometimes not showing up in AREA graph [COMPLETED; issue with shape-rendering property on axis, see: https://github.com/d3/d3/issues/2175]
 * Trendline annotation needs to be removed earlier when scrolling upwards [COMPLETED]
 
 #### TESTS: 
@@ -14,6 +14,12 @@
 * Utility library code should be tested 
 
 #### CODE: 
+
+##### Orchestra + Composers relative timeline
+* Design
+* Grab assets (orch logos)
+* Code
+* Mobile resizing
 
 ##### Mobile + Resizing
 * {PRIORITY} Mobile detection scaffold/outline
@@ -24,9 +30,10 @@
 
 ##### Streamgraph
 * *Add labeling to Stream/Area chart axes* [COMPLETED, fix x axis label positioning issue]
-* Annotations (A. on the side of chart + B. within chart) [MOSTLY COMPLETED, need to add mobile sizes/scale code] 
+* Annotations (A. on the side of chart + B. within chart) [MOSTLY COMPLETED, need to add mobile sizes/scale code] UPDATE (10/31/07, REMOVED ANNOTATIONS ON SIDE; make legend instead) 
 * Add annotations of when some composers were born (Stravinsky, Mahler, Ravel, Debussy, Shostakovich, Rach etc.)
 * Change y axis label on first chart to 'Number of UNIQUE compositions...' [COMPLETED]
+* Streamgraph vertical spacing (with graph title)
 
 ##### Dot Chart 
 * Legend (Orphan, NYPhil premiere, repeat performance) + Lifetime box
