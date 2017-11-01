@@ -21,9 +21,11 @@ let currentGraph = 'abs';
 let animateLine; 
 
 const PADDING = 25; 
-let SVG_HEIGHT = $(window).innerHeight() * .9; 
+let MARGINS = {}; 
+let SVG_WIDTH = $('.container').innerWidth();
+
+let SVG_HEIGHT = SVG_WIDTH > '480' ? $(window).innerHeight() * 0.9 : $(window).innerHeight() * 0.8; 
 //$('.container') is 80% of the width of div.outer-container (which is 100% of window), centered. 
-let SVG_WIDTH = $('.container').innerWidth(); 
 
 
 const SVG = d3.select('.container')
@@ -38,7 +40,7 @@ const SVG = d3.select('.container')
 //let xScale = d3.scaleBand().domain(ALL_SEASONS).range([0,SVG_WIDTH]).padding("3px"); 
 //let yScale = d3.linearScale().domain([-1,1]).range([])
 //SET UP SCALES
-let x = d3.scaleLinear().domain([0, 174]).range([0, .8*SVG_WIDTH]); //changed range to create space on right margin for annotation
+let x = d3.scaleLinear().domain([0, 174]).range([0, .92 * SVG_WIDTH]); //changed range to create space on right margin for annotation
 let yAbs = d3.scaleLinear().range([SVG_HEIGHT-4*PADDING, 10]);
 let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
 
@@ -73,10 +75,10 @@ let seasons = {},
     transition2, 
     transition3,
     transitionLine, 
-    transitionLineExit, 
-    seasonsBuckets = Array.apply(null,Array(7)).map((_) => {
-      return {};
-    });
+    transitionLineExit;
+    //seasonsBuckets = Array.apply(null,Array(7)).map((_) => {
+    //  return {};
+    //});
 
 //generate seasons dynamically
 const ALL_SEASONS = generateSeasons(1842, 2016); 
@@ -89,6 +91,8 @@ $('.explain p').css('margin-bottom', function() {
   return this.id !== 'last-explain' ? $(window).innerHeight() : 0; 
 }); 
 
+$('#first-explain').css('margin-top', $(window).innerHeight()/2); 
+                    
 //GITHUB pages bug 
 //d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 
@@ -234,13 +238,13 @@ d3.json('../../data/composers.json', (err, d) => {
 	
   let xAxisYear = d3.axisBottom()
     .scale(x)
-    .tickValues([8, 33, 58, 83, 108, 133, 158, 174])
+    .tickValues(SVG_WIDTH < '480' ? [8, 58, 108, 158] : [8, 33, 58, 83, 108, 133, 158, 174])
     .tickFormat( d => {
       return ALL_SEASONS[d]; 
     })
     .tickSize(10); 
 	
-  const ORG_TEXTS = ['New York Phil first-time performance', 'Repeat performances']; 
+  //const ORG_TEXTS = ['New York Phil first-time performance', 'Repeat performances']; 
 
   //annotation experiment 
   const annotations = [{
@@ -266,17 +270,18 @@ d3.json('../../data/composers.json', (err, d) => {
     .attr('fill', (d) => {
       if (d.key == 'first') return 'Tomato';
       if (d.key == 'repeat') return 'Steelblue';
-    }).each(function(data, i) {
-      annotations.push({
-        note: {
-          //title: "Hello performances"
-          title: ORG_TEXTS[i]
-        }, 
-        data: { i: 165, workCount: (data[174][1] - data[174][0])/2 + data[174][0] }, 
-        dy: -20,
-        dx: SVG_WIDTH * .12
-      }); 
     });
+    //.each(function(data, i) {
+    //  //annotations.push({
+    //  //  note: {
+    //  //    //title: "Hello performances"
+    //  //    title: ORG_TEXTS[i]
+    //  //  }, 
+    //  //  data: { i: 165, workCount: (data[174][1] - data[174][0])/2 + data[174][0] }, 
+    //  //  dy: -20,
+    //  //  dx: SVG_WIDTH * .12
+    //  //}); 
+    //});
 	
   //Add Y axis
   let yStreamAxis = SVG.append('g')
@@ -292,7 +297,8 @@ d3.json('../../data/composers.json', (err, d) => {
     .attr('class', 'axis-label stream-label y-axis-label')
     .text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON')
     .attr('transform', 'rotate(-90)')
-    .attr('dy', -SVG_WIDTH*0.038); 
+    .attr('dy', -SVG_WIDTH*0.04)
+    .attr('dx', '-15px');
 	
   //Add X axis
   let xStreamAxis = SVG.append('g')
@@ -308,7 +314,8 @@ d3.json('../../data/composers.json', (err, d) => {
     .append('text')
     .attr('class', 'axis-label x-axis-label stream-label')
     .text('NEW YORK PHILHARMONIC SUBSCRIPTION SEASONS')
-    .attr('transform', `translate(${SVG_WIDTH*.95*.5},${1.6*PADDING})`); 
+    .attr('x', `${SVG_WIDTH*.95*.5}`)
+    .attr('transform', `translate(0,${1.6*PADDING})`); 
 	
   makeAnnotations.annotations(annotations); 
 	
@@ -340,8 +347,8 @@ d3.json('../../data/composers.json', (err, d) => {
       .transition().duration(1400)
       .attr('d', areaAbsolute)
       .attr('fill', (d) => {
-    	if (d.key == 'first') return 'Tomato';
-    	if (d.key == 'repeat') return 'Steelblue';
+        if (d.key == 'first') return 'Tomato';
+        if (d.key == 'repeat') return 'Steelblue';
       });
   
     
@@ -368,9 +375,21 @@ d3.json('../../data/composers.json', (err, d) => {
   transition = function() {
     currentGraph = 'pct'; 
 
-    const TEXTS = ['Percentage of first-time performance', 'Percentage of repeat performances']; 
-    let newAnnotations = []; 
+    //const TEXTS = ['Percentage of first-time performance', 'Percentage of repeat performances']; 
+    let newAnnotations = [{
+      note: {
+        title: " "
+      },
+      data: { i: 0, perc: 0 }, 
+      dy: 0,
+      dx: 0
+    }]; 
 
+    makeAnnotations.accessors({
+      x: d => x(d.i),
+      y: d => yPct(d.perc)
+    }).annotations(newAnnotations); 
+    
     let stackData = stackA(percentagesFirstRepeat); 
     let newStuff = SVG.selectAll('path')
       .data(stackData); 
@@ -382,26 +401,27 @@ d3.json('../../data/composers.json', (err, d) => {
       .attr('fill', (d) => {
         if (d.key == 'percentageFirst') return 'Tomato';
         if (d.key == 'percentageRepeat') return 'Steelblue';
-      }).each(function(data, i) {
-
-        makeAnnotations.accessors({
-  							x: d => x(d.i),
-  							y: d => yPct(d.perc)
-        }); 
-			
-        newAnnotations.push({
-          note: {
-            //title: "Hello performances"
-            title: TEXTS[i]
-          }, 
-          data: { i: 165, perc: (data[174][1] - data[174][0])/2 + data[174][0] }, 
-          dy: -20,
-          dx: SVG_WIDTH * .12
-        }); 
-			
-        if (this == this.parentNode.lastChild) makeAnnotations.annotations(newAnnotations); 
-							
-      }); 
+      });
+      //.each(function(data, i) {
+//
+      //  //makeAnnotations.accessors({
+  		//	//	x: d => x(d.i),
+  		//	//	y: d => yPct(d.perc)
+      //  //}); 
+			////
+      //  //newAnnotations.push({
+      //  //  note: {
+      //  //    //title: "Hello performances"
+      //  //    title: TEXTS[i]
+      //  //  }, 
+      //  //  data: { i: 165, perc: (data[174][1] - data[174][0])/2 + data[174][0] }, 
+      //  //  dy: -20,
+      //  //  dx: SVG_WIDTH * .12
+      //  //}); 
+			//
+      //  if (this == this.parentNode.lastChild) makeAnnotations.annotations(newAnnotations); 
+			//				
+      //}); 
 
     SVG.select('.yAxis')
       .transition()
@@ -410,15 +430,22 @@ d3.json('../../data/composers.json', (err, d) => {
 		
     d3.select('.yAxis').select('.domain').remove(); 
 
-    d3.select('.y-axis-label').transition().duration(1400).text('PERCENTAGE OF PIECES PER SEASON');
+    d3.select('.y-axis-label').transition().duration(1400).text('PERCENTAGE OF UNIQUE PIECES PER SEASON');
 		
   }; 
 	
   transition2 = function() {
     currentGraph = 'pct'; 
 
-    const TEXTS = ['Percentage of first-time performance', 'Percentage of repeat performances']; 
-    let newAnnotations = []; 
+    //const TEXTS = ['Percentage of first-time performance', 'Percentage of repeat performances']; 
+    let newAnnotations = [{
+      note: {
+        title: " "
+      },
+      data: { i: 0, perc: 0 }, 
+      dy: 0,
+      dx: 0
+    }]; 
 
     let newStuff = SVG.selectAll('path')
       .data(stackA(movingAverage(percentagesFirstRepeat, ['percentageFirst', 'percentageRepeat'], 7))); 
@@ -430,24 +457,24 @@ d3.json('../../data/composers.json', (err, d) => {
         if (d.key == 'percentageFirst') return 'Tomato';
         if (d.key == 'percentageRepeat') return 'Steelblue';
       }).each(function(data, i) {
-
-        console.log(this); 
-        console.log(this.parentNode);
-        console.log(this == this.parentNode.lastChild); 
+        //fix this
+        //console.log(this); 
+        //console.log(this.parentNode);
+        //console.log(this == this.parentNode.lastChild); 
         makeAnnotations.accessors({
-  							x: d => x(d.i),
-  							y: d => yPct(d.perc)
+  				x: d => x(d.i),
+  				y: d => yPct(d.perc)
         }); 
 			
-        newAnnotations.push({
-          note: {
-            //title: "Hello performances"
-            title: TEXTS[i]
-          }, 
-          data: { i: 165, perc: (data[174][1] - data[174][0])/2 + data[174][0] }, 
-          dy: -20,
-          dx: SVG_WIDTH * .12
-        }); 
+        //newAnnotations.push({
+        //  note: {
+        //    //title: "Hello performances"
+        //    title: TEXTS[i]
+        //  }, 
+        //  data: { i: 165, perc: (data[174][1] - data[174][0])/2 + data[174][0] }, 
+        //  dy: -20,
+        //  dx: SVG_WIDTH * .12
+        //}); 
 			
         if (this == this.parentNode.lastChild) makeAnnotations.annotations(newAnnotations); 
 							
@@ -458,8 +485,16 @@ d3.json('../../data/composers.json', (err, d) => {
   transition3 = function () {
     currentGraph = 'pct'; 
 
-    const MORE_TEXTS = ['Percentage of pieces by living composers', 'Percentage of pieces by deceased composers']; 
-    let newAnnotations = []; 
+    //const MORE_TEXTS = ['Percentage of pieces by living composers', 'Percentage of pieces by deceased composers']; 
+    let newAnnotations = [{
+      note: {
+        title: " "
+      },
+      data: { i: 0, perc: 0 }, 
+      dy: 0,
+      dx: 0
+    }]; 
+    
     let newStuff = SVG.selectAll('path')
       //.data(stack(percentagesLivingDead)); 
       .data(stack(movingAverage(percentagesLivingDead, ['percentageAlive', 'percentageDead'], 7))); 
@@ -473,19 +508,19 @@ d3.json('../../data/composers.json', (err, d) => {
       }).each(function(data, i) {
 							
         makeAnnotations.accessors({
-  							x: d => x(d.i),
-  							y: d => yPct(d.perc)
+  				x: d => x(d.i),
+  				y: d => yPct(d.perc)
         }); 
 			
-        newAnnotations.push({
-          note: {
-            //title: "Hello performances"
-            title: MORE_TEXTS[i]
-          }, 
-          data: { i: 165, perc: (data[174][1] - data[174][0])/2 + data[174][0] }, 
-          dy: -20,
-          dx: SVG_WIDTH * .12
-        }); 
+        //newAnnotations.push({
+        //  note: {
+        //    //title: "Hello performances"
+        //    title: MORE_TEXTS[i]
+        //  }, 
+        //  data: { i: 165, perc: (data[174][1] - data[174][0])/2 + data[174][0] }, 
+        //  dy: -20,
+        //  dx: SVG_WIDTH * .12
+        //}); 
 			
         if (this == this.parentNode.lastChild) makeAnnotations.annotations(newAnnotations); 
 			
@@ -494,45 +529,32 @@ d3.json('../../data/composers.json', (err, d) => {
 	
   transitionLine = function () {
     currentGraph = 'line'; 
-    const MORE_TEXTS = ['Percentage of pieces by living composers', 'Percentage of pieces by deceased composers']; 
+    //const MORE_TEXTS = ['Percentage of pieces by living composers', 'Percentage of pieces by deceased composers']; 
     let startIndex = 0; 
-		
+		let newAnnotations = [{
+      note: {
+        //title: "Hello performances"
+        title: 'Percentage of pieces that are repeat performances of music by a living composer', 
+        wrap: 155
+      }, 
+      data: { i: 45, perc: percentagesOfAllRepeatsLiving[79].percentageOfTotalRepeatsLiving }, 
+      dy: -135,
+      dx: 105
+    }]; 
+
     animateLine = d3.timer(function() {
       if (startIndex >= 175) {
         animateLine.stop();
-        makeAnnotations.annotations(annotations3); 
+        makeAnnotations.annotations(newAnnotations); 
       } else {
         startIndex += 1;  
         trendline.attr('d', d => line(d.slice(0, startIndex)));
       }
     });
 		
-    let annotations3 = []; 
 		
     d3.select('.graph-content')
-      .selectAll('path')
-      .each(function(data, i) {
-        annotations3.push({
-          note: {
-            //title: "Hello performances"
-            title: MORE_TEXTS[i]
-          }, 
-          data: { i: 165, perc: (data[174][1] - data[174][0])/2 + data[174][0] }, 
-          dy: -20,
-          dx: SVG_WIDTH * .12
-        }); 
-      });
-		
-    annotations3.push({
-      note: {
-        //title: "Hello performances"
-        title: 'Percentage of pieces that are repeat performances of music by a living composer', 
-        wrap: 155
-      }, 
-      data: { i: 79, perc: percentagesOfAllRepeatsLiving[79].percentageOfTotalRepeatsLiving }, 
-      dy: -115,
-      dx: -65
-    }); 
+      .selectAll('path');
 					
   }; 
 	
@@ -541,7 +563,18 @@ d3.json('../../data/composers.json', (err, d) => {
     if (animateLine) animateLine.stop(); 
 		
     trendline.attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]));
-		
+    
+    let newAnnotations = [{
+      note: {
+        title: " "
+      },
+      data: { i: 0, perc: 0 }, 
+      dy: 0,
+      dx: 0
+    }]; 
+    
+    makeAnnotations.annotations(newAnnotations); 
+    
     //TODO Annotations to trendline is repainted/removed with a delay (concominant with transition3) and this is not good UX
   };
 	
@@ -620,50 +653,100 @@ d3.json('../../data/composers.json', (err, d) => {
 	
   function resize() {
     //update scales
+    let windowWidth = $(window).innerWidth(); 
+    let areaGen = {}; 
     SVG_HEIGHT = $(window).innerHeight() * .9; 
     SVG_WIDTH = $('.container').innerWidth(); 
     SVG.attr('width', SVG_WIDTH) 
       .attr('height', SVG_HEIGHT); 
-    x.range([0, .8*SVG_WIDTH]); 
+    x.range([0, .92 * SVG_WIDTH]);
     yAbs.range([SVG_HEIGHT-4*PADDING, 10]);
     yPct.range([SVG_HEIGHT-4*PADDING, 10]); 
 		
+    $('.explain p').css('margin-bottom', function() {
+      return this.id !== 'last-explain' ? $(window).innerHeight() : 0; 
+    }); 
+
+    $('#first-explain').css('margin-top', $(window).innerHeight()/2); 
+    
+    scene.duration(document.querySelector('.outer-container').offsetHeight - window.innerHeight);
+
+    //let yAxisAbs = d3.axisLeft()
+    //  .scale(yAbs)
+    //  .tickSize(0);
+  //
+    //let yAxisPct = d3.axisLeft()
+    //  .scale(yPct)
+    //  .tickSize(0)
+    //  .tickFormat( d => {
+    //    return `${d*100}%`;  
+    //  }); 
+	
+    xAxisYear = d3.axisBottom()
+      .scale(x)
+      .tickValues(windowWidth < 500 ? [8, 58, 108, 158] : [8, 33, 58, 83, 108, 133, 158, 174])
+      .tickFormat( d => {
+        return ALL_SEASONS[d]; 
+      })
+      .tickSize(10); 
+    
     SVG.select('.xAxis')
+      .transition()
+      .duration(500)
       .attr('transform', `translate(${0.05*SVG_WIDTH},${SVG_HEIGHT-3.9*PADDING})`)
       .call(xAxisYear); 
     SVG.select('.xAxis').select('.domain').remove(); 
+    SVG.select('.x-axis-label').attr('x', `${SVG_WIDTH*.95*.5}`);
 
+    //xStreamAxis
+    //.append('text')
+    //.attr('class', 'axis-label x-axis-label stream-label')
+    //.text('NEW YORK PHILHARMONIC SUBSCRIPTION SEASONS')
+    //.attr('x', `${SVG_WIDTH*.95*.5}`);
+    
     if (currentGraph === 'abs') {
-      SVG.select('.graph-content').selectAll('path').attr('d', areaAbsolute); 
-      SVG.select('.yAxis').call(yAxisAbs); 
+      areaGen.area = areaAbsolute; 
+      areaGen.axis = yAxisAbs; 
     } else {
-      SVG.select('.graph-content').selectAll('path').attr('d', areaPercentage); 
-      SVG.select('.yAxis').call(yAxisPct); 
+      areaGen.area = areaPercentage; 
+      areaGen.axis = yAxisPct; 
     }
+    
+    SVG.select('.graph-content')
+      .selectAll('path')
+      .transition()
+      .duration(500)
+      .attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
+      .attr('d', areaGen.area)
+      .on('end', () => {
+        if (currentGraph === 'line') {
+          let startIndex = 0; 
+          if (animateLine) animateLine.stop(); 
+          animateLine = d3.timer(function() {
+            if (startIndex >= 175) {
+              animateLine.stop();
+              //makeAnnotations.annotations(annotations3); 
+            } else {
+              startIndex += 1;  
+              d3.select('.trendline')
+                .attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
+                .attr('d', d => line(d.slice(0, startIndex)));
+            }
+          });
+        } else {
+          SVG.select('.trendline').attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]));
+        }
+      }); 
+    SVG.select('.yAxis')
+      .attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
+      .call(areaGen.axis); 
 		
     SVG.select('.yAxis').select('.domain').remove(); 
-		
-    if (currentGraph === 'line') {
-      let startIndex = 0; 
-      if (animateLine) animateLine.stop(); 
-      animateLine = d3.timer(function() {
-        if (startIndex >= 175) {
-          animateLine.stop();
-          //makeAnnotations.annotations(annotations3); 
-        } else {
-          startIndex += 1;  
-          d3.select('.trendline')
-            .attr('d', d => line(d.slice(0, startIndex)));
-        }
-      });
-    } else {
-      SVG.select('.trendline').attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]));
-    }
 		
     //console.log('resized'); 
     SVG.select('g.annotation-group').call(makeAnnotations); 
     makeAnnotations.updatedAccessors(); 
-    //makeAnnotations.annotations(annotations); 
+
   }
 
   window.addEventListener('resize', debounce(resize, 200)); 

@@ -3,6 +3,8 @@
 <html> 
 	<head>
 		<title>Pulsecheck: Trends from 175 seasons at the New York Philharmonic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
 		<link rel="icon" 
       type="image/png" 
       href="new-graph.png">
@@ -113,14 +115,14 @@
 			}
 			
 			.prose {
-				width: 40rem; 
+				max-width: 40rem; 
 				margin: auto;
 				line-height: 1.7; 
 				margin-top: 60px;
 			}
 			
 			.prose .epigraph { 
-				width: 30rem; 
+				max-width: 30rem; 
 				margin: auto; 
 				padding-bottom: 20px; 
 			}
@@ -130,8 +132,6 @@
 				padding-top: 10px;
 			}
 				
-			
-			
 			
 			
 			.outer-container {
@@ -145,41 +145,6 @@
 				font-style: normal; 
 				letter-spacing: 1px;
 				overflow: visible;  
-			}
-			
-			table {
-  			border-collapse: collapse;
-			}
-			
-			.table {
-				font-size: 15px; 
-				color: white; 
-				max-width: 60%; 
-				margin: auto; 
-				/*background-color: steelblue; */
-				padding-bottom: 3px;
-				margin: auto; 
-
-			}
-			
-			.table thead {
-				border-bottom: 2px solid steelblue;
-
-			}
-			
-			.table tr {
-				width: 100%; 
-				border-bottom: 1px solid steelblue;
-				
-			}
-			
-			td, th {
-				padding: 8px; 
-				text-align: left;
-			} 
-			
-			th {
-				font-weight: 700; 
 			}
 		
 			.titles {
@@ -200,17 +165,7 @@
 			}
 			
 			
-			.explain p {
-				/*margin-bottom: 500px;*/
-				max-width: 400px; 
-				margin: auto;
-				padding: 6px 12px;
-				background-color: rgb(24, 209, 209); 
-				box-shadow: 1px 5px 5px 1px #19A3A3;
-				border-radius: 3px; 
-				line-height: 1.7;
-				letter-spacing: 0; 
-			}
+			
 			
 			
 			.inner-container {
@@ -219,13 +174,45 @@
 				width: 100%; 
 				/*margin-left: 20rem;*/
 			}
+      
+      .container {
+				position: relative; 
+				margin-left: 33%; 
+				width: 66%;
+			}
 			
+      .explain p {
+				max-width: 28%; 
+				margin: 0 1.5%;
+				padding: 6px 12px;
+				background-color: rgb(24, 209, 209); 
+				box-shadow: 1px 5px 5px 1px #19A3A3;
+				border-radius: 3px; 
+				line-height: 1.7;
+				letter-spacing: 0; 
+			}
+      
+
+      /* Centered chart and explainations
+
 			.container {
 				position: relative; 
 				margin: auto; 
-				width: 80%;
+				width: 75%;
 			}
-			
+      
+      .explain p {
+				max-width: 33em; 
+				margin: auto;
+				padding: 6px 12px;
+				background-color: rgb(24, 209, 209); 
+				box-shadow: 1px 5px 5px 1px #19A3A3;
+				border-radius: 3px; 
+				line-height: 1.7;
+				letter-spacing: 0; 
+			}
+		  */
+
 			.at-bottom.inner-container {
 				bottom: 0; 
 				top: auto; 
@@ -264,7 +251,7 @@
 				/*font-family: 'Titillium Web', sans-serif;*/
 			}
 			
-			h3.graphic-title {
+			h2.graphic-title {
 				font-family: 'Playfair Display'; 
 				font-weight: 700; 
 				font-size: 24px; 
@@ -299,19 +286,27 @@
 				padding-top: 18px;
 				/*background-color: blue; */ 
 			}
-			.axis {
+			
+      .axis {
 				font-family: 'Lato'; 
 				stroke: rgba(133, 233, 90, 1);
+        fill: rgba(133, 233, 90, 1);
 				font-weight: 300; 
 				letter-spacing: 2px;
 			}
-			
-			.axis text {
-				font-size: 10px;
-			}
+		  
+      
+      @media screen and (max-width: 10000px) {
+        .axis text {
+          font-size: 1em;
+        }
+      }
+      
+      
 			
 			.stream-axis {
-				stroke: rgb(59, 22, 22); 
+				stroke: rgba(59, 22, 22, 1); 
+        fill: rgba(59, 22, 22, 1); 
 			}
 			
 			.tick line {
@@ -364,6 +359,34 @@
 				line-height: 14px; 
 			}
 			
+      
+      @media screen and (max-width: 480px) {
+        .axis text {
+				  /*font-size: .7em;*/
+			   }
+        
+        .inner-container .graphic-title {
+          display: none; 
+        }
+        
+        .container {
+				  position: relative; 
+				  margin: auto; 
+				  width: 90%;
+			   }
+        
+        .explain p {
+          max-width: 90%; 
+          margin: auto;
+          padding: 6px 12px;
+          background-color: rgb(24, 209, 209); 
+          box-shadow: 1px 5px 5px 1px #19A3A3;
+          border-radius: 3px; 
+          line-height: 1.7;
+          letter-spacing: 0; 
+        }
+        
+      }
 			
 		</style>
 
@@ -394,11 +417,13 @@
 		
 			<div class="outer-container streamgraph-section">
 				<div class="inner-container">
-					<h3 class='graphic-title'>1st Movement: Is the Concert Hall More MoMA or MET?</h3>
-					<div class="container"></div>
+					<div class="container">
+            <h2 class='graphic-title'>1st Movement: Trends of the New York Phil</h2>
+
+          </div>
 				</div>
 				<div class="explain">
-					<p class="explain1">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about? More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+					<p id="first-explain" class="explain1">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about? More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
 					<br />
 					<p class="explain2">The data is complicated by the dramatic spike in the total number of pieces played per season, starting in the 1909-10 season, when the orchestra <a target='_blank' href='http://www.nytimes.com/1982/03/07/arts/the-philharmonic-on-disk-the-maestro-is-the-message.html?pagewanted=2'>increased the number of concerts it performed each season from 18 to 54</a>. Furthermore, the absolute number of compositions performed each season actually varies quite a bit even with a fixed number of concerts. To account for this, I normalized the data, and re-graphed the first performances and repeat performances as a percentage of total pieces performed each season. But even as a percentage, the season-to-season fluctuation of first time-to-repeat performances is still quite noisy.</p>
 					<br />
@@ -416,7 +441,7 @@
 		
 		
 			<div class="dot-chart">
-				<h3 class='graphic-title'>Top 60 Composers By Number of Times Pieces Programmed</h3>
+				<h2 class='graphic-title'>Top 60 Composers By Number of Times Pieces Programmed</h2>
 				<select class="select-value"><option value="">Choose a composer:</option></select>
 				<div class="composer-face-container"></div>
 				
@@ -440,7 +465,6 @@
 		</script>
 		<script src="d3-v4.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.0.0/d3-annotation.js"></script>
-		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 		
 		<!--<script src="assets/js/season_age_range.js"></script>-->
 		<script src="bundle.js"></script>

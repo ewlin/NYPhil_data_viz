@@ -485,6 +485,25 @@ d3.json('../../data/complete_latest_july_2017.json', d => {
 
 });
 
+
+d3.json('../../data/new_top60.json', composers => {
+  let before1881 = []; 
+  let before1900 = []; 
+  let _1900AndAfter = []; 
+
+  composers.forEach( composer => {
+    let comp = {composer: composer.composer, birth: composer.birth}; 
+    if (composer.birth < 1881 && composer.birth >= 1842) before1881.push(comp); 
+    if (composer.birth < 1900 && composer.birth >= 1881) before1900.push(comp); 
+    if (composer.birth >= 1900) _1900AndAfter.push(comp); 
+  }); 
+  
+  console.log(before1881); 
+  console.log(before1900);
+  console.log(_1900AndAfter);
+});
+
+
 function find(objArr, searchProp, searchValue) {
 	let found = null;
 	objArr.forEach((item, idx) => {
