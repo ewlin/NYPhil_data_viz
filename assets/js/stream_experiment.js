@@ -44,7 +44,7 @@ const SVG = d3.select('.container')
 //let xScale = d3.scaleBand().domain(ALL_SEASONS).range([0,SVG_WIDTH]).padding("3px"); 
 //let yScale = d3.linearScale().domain([-1,1]).range([])
 //SET UP SCALES
-let x = d3.scaleLinear().domain([0, 174]).range([0, .92 * SVG_WIDTH]); //changed range to create space on right margin for annotation
+let x = d3.scaleLinear().domain([0, 174]).range([0, SVG_WIDTH - 92]); //changed range to create space on right margin for annotation
 let yAbs = d3.scaleLinear().range([SVG_HEIGHT-4*PADDING, 10]);
 let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
 
@@ -74,15 +74,6 @@ let seasons = {},
     percentagesOfRepeatsLiving, 
     percentagesOfAllRepeatsLiving, 
     totalWorksPerSeason; 
-    //transition, 
-    //transitionOrg, 
-    //transition2, 
-    //transition3,
-    //transitionLine, 
-    //transitionLineExit;
-    //seasonsBuckets = Array.apply(null,Array(7)).map((_) => {
-    //  return {};
-    //});
 
 //generate seasons dynamically
 const ALL_SEASONS = generateSeasons(1842, 2016); 
@@ -242,7 +233,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	
   let xAxisYear = d3.axisBottom()
     .scale(x)
-    .tickValues(SVG_WIDTH < '480' ? [8, 58, 108, 158] : [8, 33, 58, 83, 108, 133, 158, 174])
+    .tickValues(window.innerWidth <= '1024' ? [8, 58, 108, 158] : [8, 33, 58, 83, 108, 133, 158, 174])
     .tickFormat( d => {
       return ALL_SEASONS[d]; 
     })
@@ -255,7 +246,7 @@ d3.json('../../data/composers.json', (err, d) => {
     note: {
       title: '1909-10 Season', 
       label: 'Gustav Mahler\'s first season as music director was also marked by a 3X increase in the number of concerts, from 18 to 54',
-      wrap: 180
+      wrap: window.innerWidth <= 1024 ? 130 : 180
     },
     //can use x, y directly instead of data
     data: { i: 67, workCount: 105 },
@@ -269,7 +260,8 @@ d3.json('../../data/composers.json', (err, d) => {
     .data(stackB(totalWorksPerSeason))
     .enter().append('path')
     //Can also consolidate this with the scale; 
-    .attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
+    //.attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
+    .attr('transform', `translate(67,0)`)
     .attr('d', areaAbsolute)
     .attr('fill', (d) => {
       if (d.key == 'first') return 'Tomato';
@@ -292,7 +284,8 @@ d3.json('../../data/composers.json', (err, d) => {
     .attr('class', 'yAxis axis stream-axis')
     //FIX THIS; relative instead of absolute number
     //.attr('transform', 'translate(10,0)') // a bit short to the left
-    .attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
+    //.attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
+    .attr('transform', `translate(67,0)`)
     .call(yAxisAbs); 
   
   d3.select('.yAxis').select('.domain').remove(); 
@@ -300,16 +293,19 @@ d3.json('../../data/composers.json', (err, d) => {
   yStreamAxis.append('text')
     .attr('class', 'axis-label stream-label y-axis-label')
     .text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON')
+    .attr('x', 0)
+    .attr('y', 0)
     .attr('transform', 'rotate(-90)')
-    //.attr('x', 0)
-    //.attr('y', 0)
-    .attr('dy', -SVG_WIDTH*0.04)
-    .attr('dx', '-15px');
+    //.attr('dy', -SVG_WIDTH*0.04)
+    .attr('dy', -35)
+    //.attr('dx', '-15px');
 	
   //Add X axis
   let xStreamAxis = SVG.append('g')
     .attr('class', 'xAxis axis stream-axis')
-    .attr('transform', `translate(${0.05*SVG_WIDTH},${SVG_HEIGHT-3.9*PADDING})`)
+    //.attr('transform', `translate(${0.05*SVG_WIDTH},${SVG_HEIGHT-3.9*PADDING})`)
+    .attr('transform', `translate(67,${SVG_HEIGHT-3.9*PADDING})`)
+
     .attr('shape-rendering', 'geometricPrecision')
     .call(xAxisYear); 
 	
@@ -328,7 +324,8 @@ d3.json('../../data/composers.json', (err, d) => {
 	
   SVG.append('g')
     .attr('class', 'annotation-group')
-    .attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
+    //.attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
+    .attr('transform', `translate(67,0)`)
     .call(makeAnnotations); 
 	
   let line = d3.line()
@@ -337,7 +334,8 @@ d3.json('../../data/composers.json', (err, d) => {
     .y(d => yPct(d.percentageOfTotalRepeatsLiving)); 
 	
   let trendline = SVG.append('path').attr('class', 'trendline')
-    .attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
+    //.attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
+    .attr('transform', `translate(67,0)`)
     .datum(movingAverage(percentagesOfAllRepeatsLiving, ['percentageOfTotalRepeatsLiving'], 7))
     //.enter()
     .attr('fill', 'none')
@@ -346,7 +344,7 @@ d3.json('../../data/composers.json', (err, d) => {
     .attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]))
     .style('stroke-width', '2px'); 
 	
-  transition1 = function() {
+  let transition1 = function() {
     currentGraph = 'abs'; 
     
     let temp = SVG.selectAll('path')
@@ -379,7 +377,7 @@ d3.json('../../data/composers.json', (err, d) => {
   }; 
 	
 	
-  transition2 = function() {
+  let transition2 = function() {
     currentGraph = 'pct'; 
 
     //const TEXTS = ['Percentage of first-time performance', 'Percentage of repeat performances']; 
@@ -401,7 +399,6 @@ d3.json('../../data/composers.json', (err, d) => {
     let newStuff = SVG.selectAll('path')
       .data(stackData); 
 				
-		
     newStuff.transition()
       .duration(1400)
       .attr('d', areaPercentage)
@@ -409,26 +406,6 @@ d3.json('../../data/composers.json', (err, d) => {
         if (d.key == 'percentageFirst') return 'Tomato';
         if (d.key == 'percentageRepeat') return 'Steelblue';
       });
-      //.each(function(data, i) {
-//
-      //  //makeAnnotations.accessors({
-  		//	//	x: d => x(d.i),
-  		//	//	y: d => yPct(d.perc)
-      //  //}); 
-			////
-      //  //newAnnotations.push({
-      //  //  note: {
-      //  //    //title: "Hello performances"
-      //  //    title: TEXTS[i]
-      //  //  }, 
-      //  //  data: { i: 165, perc: (data[174][1] - data[174][0])/2 + data[174][0] }, 
-      //  //  dy: -20,
-      //  //  dx: SVG_WIDTH * .12
-      //  //}); 
-			//
-      //  if (this == this.parentNode.lastChild) makeAnnotations.annotations(newAnnotations); 
-			//				
-      //}); 
 
     SVG.select('.yAxis')
       .transition()
@@ -441,7 +418,7 @@ d3.json('../../data/composers.json', (err, d) => {
 		
   }; 
 	
-  transition3 = function() {
+  let transition3 = function() {
     currentGraph = 'pct'; 
 
     //const TEXTS = ['Percentage of first-time performance', 'Percentage of repeat performances']; 
@@ -469,33 +446,10 @@ d3.json('../../data/composers.json', (err, d) => {
         if (d.key == 'percentageFirst') return 'Tomato';
         if (d.key == 'percentageRepeat') return 'Steelblue';
       });
-      //.each(function(data, i) {
-      //  //fix this
-      //  //console.log(this); 
-      //  //console.log(this.parentNode);
-      //  //console.log(this == this.parentNode.lastChild); 
-      //  makeAnnotations.accessors({
-  		//		x: d => x(d.i),
-  		//		y: d => yPct(d.perc)
-      //  }); 
-			//
-      //  //newAnnotations.push({
-      //  //  note: {
-      //  //    //title: "Hello performances"
-      //  //    title: TEXTS[i]
-      //  //  }, 
-      //  //  data: { i: 165, perc: (data[174][1] - data[174][0])/2 + data[174][0] }, 
-      //  //  dy: -20,
-      //  //  dx: SVG_WIDTH * .12
-      //  //}); 
-			//
-      //  if (this == this.parentNode.lastChild) makeAnnotations.annotations(newAnnotations); 
-			//				
-      //}); 
 
   }; 
 	
-  transition4 = function () {
+  let transition4 = function () {
     currentGraph = 'pct'; 
 
     //const MORE_TEXTS = ['Percentage of pieces by living composers', 'Percentage of pieces by deceased composers']; 
@@ -514,7 +468,6 @@ d3.json('../../data/composers.json', (err, d) => {
     }).annotations(newAnnotations); 
     
     let newStuff = SVG.selectAll('path')
-      //.data(stack(percentagesLivingDead)); 
       .data(stack(movingAverage(percentagesLivingDead, ['percentageAlive', 'percentageDead'], 7))); 
 				
     newStuff.transition()
@@ -523,32 +476,11 @@ d3.json('../../data/composers.json', (err, d) => {
       .attr('fill', (d) => {
         if (d.key == 'percentageAlive') return '#ff645f';
         if (d.key == 'percentageDead') return '#7776bd';
-      });
-      //.each(function(data, i) {
-			//				
-      //  makeAnnotations.accessors({
-  		//		x: d => x(d.i),
-  		//		y: d => yPct(d.perc)
-      //  }); 
-			//
-      //  //newAnnotations.push({
-      //  //  note: {
-      //  //    //title: "Hello performances"
-      //  //    title: MORE_TEXTS[i]
-      //  //  }, 
-      //  //  data: { i: 165, perc: (data[174][1] - data[174][0])/2 + data[174][0] }, 
-      //  //  dy: -20,
-      //  //  dx: SVG_WIDTH * .12
-      //  //}); 
-			//
-      //  if (this == this.parentNode.lastChild) makeAnnotations.annotations(newAnnotations); 
-			//
-      //}); 
+      }); 
   }; 
 	
-  transitionLine = function () {
+  let transitionLine = function () {
     currentGraph = 'line'; 
-    //const MORE_TEXTS = ['Percentage of pieces by living composers', 'Percentage of pieces by deceased composers']; 
     let startIndex = 0; 
 		let newAnnotations = [{
       note: {
@@ -577,7 +509,7 @@ d3.json('../../data/composers.json', (err, d) => {
 					
   }; 
 	
-  transitionLineExit = function () {
+  let transitionLineExit = function () {
 		
     if (animateLine) animateLine.stop(); 
 		
@@ -632,7 +564,6 @@ d3.json('../../data/composers.json', (err, d) => {
   }); 
   
   SMScenes.prose1.on('leave', () => {
-    //console.log("first"); 
     $('.explain1').removeClass('focus');
   }); 
 
@@ -672,57 +603,6 @@ d3.json('../../data/composers.json', (err, d) => {
     $('.explain5').removeClass('focus');
     if (e.scrollDirection === 'REVERSE') transitionLineExit(); 	
   }); 
-
-  
-  
-  
-  
-	
-  //prose0.on('enter', () => {
-  //  //console.log("first"); 
-  //  $('.explain1').addClass('focus');
-  //  transitionOrg(); 
-  //}); 
-  //
-  //prose0.on('leave', () => {
-  //  //console.log("first"); 
-  //  $('.explain1').removeClass('focus');
-  //}); 
-//
-  //prose1.on('enter', () => {
-  //  $('.explain2').addClass('focus');
-  //  transition(); 
-  //}); 
-  //
-  //prose1.on('leave', () => {
-  //  //console.log("first"); 
-  //  $('.explain2').removeClass('focus');
-  //}); 
-	//
-  //prose2.on('enter', () => {
-  //  //console.log("third"); 
-  //  transition2(); 
-  //}); 
-	//
-  //prose3.on('enter', () => {
-  //  //console.log("fourth"); 
-  //  transition3(); 
-  //}); 
-	//
-  //prose3.on('leave', (e) => {
-  //  //console.log("fourth"); 
-  //  if (e.scrollDirection === 'REVERSE') transition2(); 
-  //}); 
-	//
-  //prose4.on('enter', (e) => {
-  //  console.log('LAST'); 
-  //  if (e.scrollDirection === 'FORWARD') transitionLine(); 
-  //}); 
-	//
-  //prose4.on('leave', (e) => {
-  //  if (e.scrollDirection === 'REVERSE') transitionLineExit(); 	
-  //}); 
-
 	
   function resize() {
     //update scales
@@ -732,7 +612,7 @@ d3.json('../../data/composers.json', (err, d) => {
     SVG_WIDTH = $('.container').innerWidth(); 
     SVG.attr('width', SVG_WIDTH) 
       .attr('height', SVG_HEIGHT); 
-    x.range([0, .92 * SVG_WIDTH]);
+    x.range([0, SVG_WIDTH - 92]);
     yAbs.range([SVG_HEIGHT-4*PADDING, 10]);
     yPct.range([SVG_HEIGHT-4*PADDING, 10]); 
 		
@@ -742,7 +622,7 @@ d3.json('../../data/composers.json', (err, d) => {
       return this.id !== 'last-explain' ? $(window).innerHeight() : 0; 
     }); 
 
-    
+    //RE-Calculate the scene duration based on resize 
     scene.duration(document.querySelector('.outer-container').offsetHeight - window.innerHeight);
 
     //let yAxisAbs = d3.axisLeft()
@@ -758,7 +638,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	
     xAxisYear = d3.axisBottom()
       .scale(x)
-      .tickValues(windowWidth < 500 ? [8, 58, 108, 158] : [8, 33, 58, 83, 108, 133, 158, 174])
+      .tickValues(windowWidth <= 1024 ? [8, 58, 108, 158] : [8, 33, 58, 83, 108, 133, 158, 174])
       .tickFormat( d => {
         return ALL_SEASONS[d]; 
       })
@@ -767,11 +647,12 @@ d3.json('../../data/composers.json', (err, d) => {
     SVG.select('.xAxis')
       .transition()
       .duration(500)
-      .attr('transform', `translate(${0.05*SVG_WIDTH},${SVG_HEIGHT-3.9*PADDING})`)
+      .attr('transform', `translate(67,${SVG_HEIGHT-3.9*PADDING})`)
       .call(xAxisYear); 
     SVG.select('.xAxis').select('.domain').remove(); 
     SVG.select('.x-axis-label').attr('x', `${SVG_WIDTH*.95*.5}`);
 
+    //SVG.select('.yAxis').attr('dy', -SVG_WIDTH*0.04)
     //xStreamAxis
     //.append('text')
     //.attr('class', 'axis-label x-axis-label stream-label')
@@ -786,11 +667,21 @@ d3.json('../../data/composers.json', (err, d) => {
       areaGen.axis = yAxisPct; 
     }
     
+    SVG.select('.yAxis')
+      .attr('transform', `translate(67,0)`)
+      .call(areaGen.axis); 
+		
+    SVG.select('.yAxis').select('.domain').remove(); 
+		//SVG.select('.y-axis-label').attr('dy', -SVG_WIDTH*0.04);
+
+
+
+    
     SVG.select('.graph-content')
       .selectAll('path')
       .transition()
       .duration(500)
-      .attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
+      //.attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
       .attr('d', areaGen.area)
       .on('end', () => {
         if (currentGraph === 'line') {
@@ -803,7 +694,7 @@ d3.json('../../data/composers.json', (err, d) => {
             } else {
               startIndex += 1;  
               d3.select('.trendline')
-                .attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
+                //.attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
                 .attr('d', d => line(d.slice(0, startIndex)));
             }
           });
@@ -811,12 +702,7 @@ d3.json('../../data/composers.json', (err, d) => {
           SVG.select('.trendline').attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]));
         }
       }); 
-    SVG.select('.yAxis')
-      .attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
-      .call(areaGen.axis); 
-		
-    SVG.select('.yAxis').select('.domain').remove(); 
-		
+    
     //console.log('resized'); 
     SVG.select('g.annotation-group').call(makeAnnotations); 
     makeAnnotations.updatedAccessors(); 
@@ -838,12 +724,12 @@ let scene = new ScrollMagic.Scene({
 }).addTo(controller);
 
 scene.on('enter', () => {
-  console.log('fixed'); 
+  //console.log('fixed'); 
   $('.inner-container').addClass('fixed'); 
 });  
 	
 scene.on('leave', (e) => {
-  console.log('exit scene'); 
+  //console.log('exit scene'); 
   $('.inner-container').removeClass('fixed'); 
   if (e.scrollDirection === 'FORWARD') {
     $('.inner-container').addClass('at-bottom'); 
@@ -851,63 +737,3 @@ scene.on('leave', (e) => {
     $('.inner-container').removeClass('at-bottom'); 
   }
 }); 
-
-//let controller = new ScrollMagic.Controller();
-//let containerScroll = document.querySelector('.outer-container'); 
-//
-//let scene = new ScrollMagic.Scene({
-//																	 triggerElement: ".outer-container", 
-//																	 duration: containerScroll.offsetHeight - window.innerHeight, 
-//																	 triggerHook: 0
-//																	})
-//					.addTo(controller);
-//
-//let prose0 = new ScrollMagic.Scene({
-//																	 triggerElement: ".explain1", 
-//																	 //duration: 500, 
-//																	 triggerHook: .5
-//																	})
-//						.addTo(controller);
-//
-//let prose1 = new ScrollMagic.Scene({
-//																	 triggerElement: ".explain2", 
-//																	 //duration: 500, 
-//																	 triggerHook: .5
-//																	})
-//						.addTo(controller);
-//
-//let prose2 = new ScrollMagic.Scene({
-//																	 triggerElement: ".explain3", 
-//																	 //duration: 500, 
-//																	 triggerHook: .5
-//																	})
-//						.addTo(controller);
-//
-//let prose3 = new ScrollMagic.Scene({
-//																	 triggerElement: ".explain4", 
-//																	 duration: 500, 
-//																	 triggerHook: .5
-//																	})
-//						.addTo(controller);
-//
-//let prose4 = new ScrollMagic.Scene({
-//																	 triggerElement: ".explain5", 
-//																	 duration: 500, 
-//																	 triggerHook: .5
-//																	})
-//						.addTo(controller);
-//
-//scene.on('enter', () => {
-//	console.log("fixed"); 
-//	$('.inner-container').addClass("fixed"); 
-//});  
-//
-//scene.on('leave', (e) => {
-//	console.log('exit scene'); 
-//	$('.inner-container').removeClass("fixed"); 
-//	if (e.scrollDirection === 'FORWARD') {
-//		$('.inner-container').addClass('at-bottom'); 
-//	} else {
-//		$('.inner-container').removeClass('at-bottom'); 
-//	}
-//}); 
