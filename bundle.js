@@ -74,13 +74,13 @@ let seasons = {},
     percentagesFirstRepeat, 
     percentagesOfRepeatsLiving, 
     percentagesOfAllRepeatsLiving, 
-    totalWorksPerSeason, 
-    transition, 
-    transitionOrg, 
-    transition2, 
-    transition3,
-    transitionLine, 
-    transitionLineExit;
+    totalWorksPerSeason; 
+    //transition, 
+    //transitionOrg, 
+    //transition2, 
+    //transition3,
+    //transitionLine, 
+    //transitionLineExit;
     //seasonsBuckets = Array.apply(null,Array(7)).map((_) => {
     //  return {};
     //});
@@ -302,6 +302,8 @@ d3.json('../../data/composers.json', (err, d) => {
     .attr('class', 'axis-label stream-label y-axis-label')
     .text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON')
     .attr('transform', 'rotate(-90)')
+    //.attr('x', 0)
+    //.attr('y', 0)
     .attr('dy', -SVG_WIDTH*0.04)
     .attr('dx', '-15px');
 	
@@ -345,7 +347,7 @@ d3.json('../../data/composers.json', (err, d) => {
     .attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]))
     .style('stroke-width', '2px'); 
 	
-  transitionOrg = function() {
+  transition1 = function() {
     currentGraph = 'abs'; 
     
     let temp = SVG.selectAll('path')
@@ -378,7 +380,7 @@ d3.json('../../data/composers.json', (err, d) => {
   }; 
 	
 	
-  transition = function() {
+  transition2 = function() {
     currentGraph = 'pct'; 
 
     //const TEXTS = ['Percentage of first-time performance', 'Percentage of repeat performances']; 
@@ -440,7 +442,7 @@ d3.json('../../data/composers.json', (err, d) => {
 		
   }; 
 	
-  transition2 = function() {
+  transition3 = function() {
     currentGraph = 'pct'; 
 
     //const TEXTS = ['Percentage of first-time performance', 'Percentage of repeat performances']; 
@@ -494,7 +496,7 @@ d3.json('../../data/composers.json', (err, d) => {
 
   }; 
 	
-  transition3 = function () {
+  transition4 = function () {
     currentGraph = 'pct'; 
 
     //const MORE_TEXTS = ['Percentage of pieces by living composers', 'Percentage of pieces by deceased composers']; 
@@ -596,88 +598,131 @@ d3.json('../../data/composers.json', (err, d) => {
     //TODO Annotations to trendline is repainted/removed with a delay (concominant with transition3) and this is not good UX
   };
 	
+  let SMScenes = {}; 
+  let explainations = Array.prototype.slice.call(document.querySelector('.explain').children)
+    .filter(elem => elem.className)
+    .map(elem => elem.className); 
+  
+  explainations.forEach( elemClass => {
+    let step = elemClass.match(/[0-9]+/)[0]; 
+    SMScenes['prose' + step] = new ScrollMagic.Scene({
+      //triggerElement: '.explain1', 
+      triggerElement: `.${elemClass}`,
+      duration: 500, 
+      triggerHook: .5
+    }).addTo(controller); 
+    
+    //if (step == '5') {
+    //  SMScenes[`prose${step}`].on('enter', () => {
+    //    $(`.${elemClass}`).addClass('focus'); 
+    //    if (e.scrollDirection === 'FORWARD') transitionLine(); 
+    //  }); 
+    //} else {
+    //  SMScenes[`prose${step}`].on('enter', () => {
+    //    $(`.${elemClass}`).addClass('focus'); 
+    //    if (e.scrollDirection === 'FORWARD') transitionLine(); 
+    //  }); 
+    //}
+    
+  }); 
 	
-
-  let prose0 = new ScrollMagic.Scene({
-    triggerElement: '.explain1', 
-    duration: 500, 
-    triggerHook: .5
-  })
-    .addTo(controller);
-	
-  let prose1 = new ScrollMagic.Scene({
-    triggerElement: '.explain2', 
-    duration: 500, 
-    triggerHook: .5
-  })
-    .addTo(controller);
-	
-  let prose2 = new ScrollMagic.Scene({
-    triggerElement: '.explain3', 
-    //duration: 500, 
-    triggerHook: .5
-  })
-    .addTo(controller);
-	
-  let prose3 = new ScrollMagic.Scene({
-    triggerElement: '.explain4', 
-    duration: 500, 
-    triggerHook: .5
-  })
-    .addTo(controller);
-	
-  let prose4 = new ScrollMagic.Scene({
-    triggerElement: '.explain5', 
-    duration: 500, 
-    triggerHook: .5
-  })
-    .addTo(controller);
-
-	
-  prose0.on('enter', () => {
-    //console.log("first"); 
+  
+  SMScenes.prose1.on('enter', () => {
     $('.explain1').addClass('focus');
-    transitionOrg(); 
+    transition1(); 
   }); 
   
-  prose0.on('leave', () => {
+  SMScenes.prose1.on('leave', () => {
     //console.log("first"); 
     $('.explain1').removeClass('focus');
   }); 
 
-  prose1.on('enter', () => {
+  SMScenes.prose2.on('enter', () => {
     $('.explain2').addClass('focus');
-    transition(); 
+    transition2(); 
   }); 
   
-  prose1.on('leave', () => {
-    //console.log("first"); 
+  SMScenes.prose2.on('leave', () => {
     $('.explain2').removeClass('focus');
   }); 
 	
-  prose2.on('enter', () => {
-    //console.log("third"); 
-    transition2(); 
-  }); 
-	
-  prose3.on('enter', () => {
-    //console.log("fourth"); 
+  SMScenes.prose3.on('enter', () => {
+    $('.explain3').addClass('focus');
     transition3(); 
   }); 
-	
-  prose3.on('leave', (e) => {
-    //console.log("fourth"); 
-    if (e.scrollDirection === 'REVERSE') transition2(); 
+  
+  SMScenes.prose3.on('leave', () => {
+    $('.explain3').removeClass('focus');
   }); 
-	
-  prose4.on('enter', (e) => {
-    console.log('LAST'); 
+
+  SMScenes.prose4.on('enter', () => {
+    $('.explain4').addClass('focus');
+    transition4(); 
+  }); 
+		
+  SMScenes.prose4.on('leave', () => {
+    $('.explain4').removeClass('focus');
+  }); 
+  
+  SMScenes.prose5.on('enter', (e) => {
+    $('.explain5').addClass('focus');
     if (e.scrollDirection === 'FORWARD') transitionLine(); 
   }); 
 	
-  prose4.on('leave', (e) => {
+  SMScenes.prose5.on('leave', (e) => {
+    $('.explain5').removeClass('focus');
     if (e.scrollDirection === 'REVERSE') transitionLineExit(); 	
   }); 
+
+  
+  
+  
+  
+	
+  //prose0.on('enter', () => {
+  //  //console.log("first"); 
+  //  $('.explain1').addClass('focus');
+  //  transitionOrg(); 
+  //}); 
+  //
+  //prose0.on('leave', () => {
+  //  //console.log("first"); 
+  //  $('.explain1').removeClass('focus');
+  //}); 
+//
+  //prose1.on('enter', () => {
+  //  $('.explain2').addClass('focus');
+  //  transition(); 
+  //}); 
+  //
+  //prose1.on('leave', () => {
+  //  //console.log("first"); 
+  //  $('.explain2').removeClass('focus');
+  //}); 
+	//
+  //prose2.on('enter', () => {
+  //  //console.log("third"); 
+  //  transition2(); 
+  //}); 
+	//
+  //prose3.on('enter', () => {
+  //  //console.log("fourth"); 
+  //  transition3(); 
+  //}); 
+	//
+  //prose3.on('leave', (e) => {
+  //  //console.log("fourth"); 
+  //  if (e.scrollDirection === 'REVERSE') transition2(); 
+  //}); 
+	//
+  //prose4.on('enter', (e) => {
+  //  console.log('LAST'); 
+  //  if (e.scrollDirection === 'FORWARD') transitionLine(); 
+  //}); 
+	//
+  //prose4.on('leave', (e) => {
+  //  if (e.scrollDirection === 'REVERSE') transitionLineExit(); 	
+  //}); 
 
 	
   function resize() {
