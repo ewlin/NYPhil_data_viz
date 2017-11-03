@@ -486,6 +486,7 @@ d3.json('../../data/complete_latest_july_2017.json', d => {
 });
 
 
+
 d3.json('../../data/new_top60.json', composers => {
   let before1881 = []; 
   let before1900 = []; 
@@ -542,8 +543,9 @@ function composersByFrequency () {
 	let comps = [];
 	for (let composer in composers) {
 		let count = composers[composer].works.reduce( (count, work) => {
-			return count + work.seasons.length;
+			return count + work.seasonCount;
 		}, 0);
+    console.log(count); 
 
 		comps.push({composer: composer, total: count, workTotal: composers[composer].works.length});
 	}
@@ -553,6 +555,9 @@ function composersByFrequency () {
 	});
 
 }
+
+console.log(composersByFrequency()); 
+
 
 function composersByUniqueWorks () {
 	let comps = [];

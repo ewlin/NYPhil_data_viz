@@ -247,7 +247,7 @@
 			
 			
 			
-			div.dot-chart {
+			section.dot-chart {
 				/*background-color: white;*/
 				background-color: #343434;
 				font-family: 'Lato', sans-serif;
@@ -258,6 +258,11 @@
 				/*font-family: 'IM Fell Great Primer', serif;
 				/*font-family: 'Arimo', sans-serif;
 				/*font-family: 'Titillium Web', sans-serif;*/
+			}
+      
+      section.dot-chart .tick line {
+				opacity: .25; 
+				stroke-width: 2; 
 			}
 			
 			h2.graphic-title {
@@ -296,7 +301,7 @@
       }
 			
 			.main-container {
-				width: 90%; 
+				width: 100%; 
 				margin: auto; 
 				padding-top: 18px;
 				/*background-color: blue; */ 
@@ -324,10 +329,7 @@
         fill: rgba(59, 22, 22, 1); 
 			}
 			
-			.tick line {
-				opacity: .25; 
-				stroke-width: 2; 
-			}
+			
 			
 			text.axis-label {
 				font-weight: 300; 
@@ -448,7 +450,6 @@
 				<div class="inner-container">
 					<div class="container">
             <h2 class='graphic-title'>1st Movement: Trends of the New York Phil</h2>
-            
           </div>
 				</div>
 				<div class="stream-explain explain">
@@ -470,13 +471,17 @@
 		
 		
 		
-			<div class="dot-chart">
-				<h2 class='graphic-title'>Top 60 Composers By Number of Times Pieces Programmed</h2>
-				<select class="select-value"><option value="">Choose a composer:</option></select>
-				<div class="composer-face-container"></div>
+			<section class="dot-chart">
+        <h2 class='graphic-title'>Top 60 Composers By Number of Times Pieces Programmed</h2>
+        <div>
+          <div class="dot-chart-heading-middle">
+				    <select class="select-value"><option value="">Choose a composer:</option></select>
+				    <div class="composer-face-container"></div>
+          </div>
+        </div>
 				
 				<div class="main-container"></div>
-			</div>
+			</section>
 			
 			<div class="methodology">
 				<hr>

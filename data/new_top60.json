@@ -26956,5 +26956,157 @@
     "composer": "Dukas,  Paul",
     "birth": "1865",
     "death": "1935"
+  }, 
+  {
+    "works": [
+      {
+        "title": "E MI LASCI COSÌ? ... TU M'ABBANDONI, INGRATO, OP. 71",
+        "performanceCount": 1,
+        "seasonCount": 1,
+        "seasons": [
+          "1842-43"
+        ]
+      },
+      {
+        "title": "SYMPHONY NO. 2, D MINOR, OP. 49",
+        "performanceCount": 1,
+        "seasonCount": 1,
+        "seasons": [
+          "1843-44"
+        ]
+      },
+      {
+        "title": "JESSONDA",
+        "performanceCount": 12,
+        "seasonCount": 11,
+        "seasons": [
+          "1844-45",
+          "1846-47",
+          "1847-48",
+          "1849-50",
+          "1852-53",
+          "1853-54",
+          "1854-55",
+          "1858-59",
+          "1867-68",
+          "1889-90",
+          "1915-16"
+        ]
+      },
+      {
+        "title": "SYMPHONY NO. 4, OP. 86 (DIE WEIHE DER TONE)",
+        "performanceCount": 10,
+        "seasonCount": 10,
+        "seasons": [
+          "1846-47",
+          "1847-48",
+          "1849-50",
+          "1851-52",
+          "1853-54",
+          "1857-58",
+          "1859-60",
+          "1869-70",
+          "1875-76",
+          "1890-91"
+        ]
+      },
+      {
+        "title": "CONCERTO, VIOLIN, NO. 12, A MAJOR, OP. 79 (CONCERTINO NO. 1)",
+        "performanceCount": 1,
+        "seasonCount": 1,
+        "seasons": [
+          "1846-47"
+        ]
+      },
+      {
+        "title": "SYMPHONY NO. 1, E FLAT MAJOR, OP. 20",
+        "performanceCount": 1,
+        "seasonCount": 1,
+        "seasons": [
+          "1847-48"
+        ]
+      },
+      {
+        "title": "SYMPHONY NO. 7, OP. 121 FOR TWO ORCHESTRAS",
+        "performanceCount": 1,
+        "seasonCount": 1,
+        "seasons": [
+          "1848-49"
+        ]
+      },
+      {
+        "title": "SYMPHONY NO. 9, D MAJOR, OP. 143 (THE SEASONS)",
+        "performanceCount": 1,
+        "seasonCount": 1,
+        "seasons": [
+          "1853-54"
+        ]
+      },
+      {
+        "title": "CONCERTO, VIOLIN, NO. 14, OP. 110 (CONCERTINO NO. 3)",
+        "performanceCount": 1,
+        "seasonCount": 1,
+        "seasons": [
+          "1853-54"
+        ]
+      },
+      {
+        "title": "FAUST",
+        "performanceCount": 3,
+        "seasonCount": 3,
+        "seasons": [
+          "1853-54",
+          "1875-76",
+          "1888-89"
+        ]
+      },
+      {
+        "title": "CONCERTO, VIOLIN, NO.  8, A MINOR, OP. 47",
+        "performanceCount": 3,
+        "seasonCount": 3,
+        "seasons": [
+          "1857-58",
+          "1872-73",
+          "1888-89"
+        ]
+      },
+      {
+        "title": "QUARTET CONCERTO, OP. 131",
+        "performanceCount": 1,
+        "seasonCount": 1,
+        "seasons": [
+          "1858-59"
+        ]
+      },
+      {
+        "title": "CONCERTO, VIOLIN, NO.  9, D MINOR, OP. 55",
+        "performanceCount": 6,
+        "seasonCount": 3,
+        "seasons": [
+          "1873-74",
+          "1914-15",
+          "1940-41"
+        ]
+      },
+      {
+        "title": "SYMPHONY NO. 3, C MINOR, OP. 78",
+        "performanceCount": 1,
+        "seasonCount": 1,
+        "seasons": [
+          "1874-75"
+        ]
+      },
+      {
+        "title": "CONCERTO, VIOLIN, NO.  7, E MINOR, OP. 38",
+        "performanceCount": 2,
+        "seasonCount": 1,
+        "seasons": [
+          "1898-99"
+        ]
+      }
+    ],
+    "composer": "Spohr,  Louis",
+    "birth": "1784",
+    "death": "1859"
   }
 ]

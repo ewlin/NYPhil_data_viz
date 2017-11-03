@@ -49,6 +49,11 @@ let x = d3.scaleLinear().domain([0, 174]).range([0, SVG_WIDTH - 92]); //changed 
 let yAbs = d3.scaleLinear().range([SVG_HEIGHT-4*PADDING, 10]);
 let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
 
+//TODO: Set up for legend on top- 
+//let yAbs = d3.scaleLinear().range([SVG_HEIGHT-4*PADDING, 50]);
+//let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 50]);
+
+
 let areaAbsolute = d3.area()
   .curve(d3.curveCardinal.tension(.1))
   .x((d, i) => x(i) )
@@ -321,6 +326,12 @@ d3.json('../../data/composers.json', (err, d) => {
     .attr('x', `${SVG_WIDTH*.95*.5}`)
     .attr('transform', `translate(0,${1.6*PADDING})`); 
 	
+  xStreamAxis
+    .selectAll(".tick")
+    .select("line")				
+    .attr("stroke", "rgba(40, 60, 70, 1)")
+    .attr("stroke-dasharray", "2,2"); 
+
   makeAnnotations.annotations(annotations); 
 	
   SVG.append('g')
@@ -652,7 +663,13 @@ d3.json('../../data/composers.json', (err, d) => {
       .call(xAxisYear); 
     SVG.select('.xAxis').select('.domain').remove(); 
     SVG.select('.x-axis-label').attr('x', `${SVG_WIDTH*.95*.5}`);
-
+    
+    SVG.select('.xAxis')
+      .selectAll(".tick")
+      .select("line")				
+      .attr("stroke", "rgba(40, 60, 70, 1)")
+      .attr("stroke-dasharray", "2,2"); 
+    
     //SVG.select('.yAxis').attr('dy', -SVG_WIDTH*0.04)
     //xStreamAxis
     //.append('text')
