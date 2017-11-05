@@ -26,7 +26,7 @@ let animateLine;
 const PADDING = 25; 
 let MARGINS = {}; 
 let SVG_WIDTH = $('.container').innerWidth();
-let SVG_HEIGHT = $(window).innerHeight() * 0.9; 
+let SVG_HEIGHT = $(window).innerHeight() * 0.89; 
 
 //let SVG_HEIGHT = SVG_WIDTH > '550' ? $(window).innerHeight() * 0.9 : $(window).innerHeight() * 0.8; 
 //$('.container') is 80% of the width of div.outer-container (which is 100% of window), centered. 
@@ -39,18 +39,18 @@ const SVG = d3.select('.container')
   .attr('width', SVG_WIDTH)
   .attr('height', SVG_HEIGHT)
   //essentially a padding between chart + the graphic title
-  .attr('transform', 'translate(0,30)');
+  //.attr('transform', 'translate(0,30)');
 
 //let xScale = d3.scaleBand().domain(ALL_SEASONS).range([0,SVG_WIDTH]).padding("3px"); 
 //let yScale = d3.linearScale().domain([-1,1]).range([])
 //SET UP SCALES
 let x = d3.scaleLinear().domain([0, 174]).range([0, SVG_WIDTH - 92]); //changed range to create space on right margin for annotation
-let yAbs = d3.scaleLinear().range([SVG_HEIGHT-4*PADDING, 10]);
-let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
+//let yAbs = d3.scaleLinear().range([SVG_HEIGHT-4*PADDING, 10]);
+//let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
 
-//TODO: Set up for legend on top- 
-//let yAbs = d3.scaleLinear().range([SVG_HEIGHT-4*PADDING, 50]);
-//let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 50]);
+//TODO: Set up for legend on top-  range (more padding on top of graph content)
+let yAbs = d3.scaleLinear().range([SVG_HEIGHT-4*PADDING, 50]);
+let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 50]);
 
 
 let areaAbsolute = d3.area()
@@ -250,15 +250,65 @@ d3.json('../../data/composers.json', (err, d) => {
   const annotations = [{
     note: {
       title: '1909-10 Season', 
-      label: 'Gustav Mahler\'s first season as music director was also marked by a 3X increase in the number of concerts, from 18 to 54',
-      wrap: window.innerWidth <= 1024 ? 130 : 180
+      label: 'Gustav Mahler\'s first season as music director was also a milestone season for the NYP: the orchestra 3X\'ed their concert offerings (from 18 to 54 concerts), and nearly tripled the # of uniques pieces they performed (31 to 85).',
+      wrap: window.innerWidth <= 1024 ? 130 : 165
+    },
+    connector: {
+      end: "arrow"
     },
     //can use x, y directly instead of data
-    data: { i: 67, workCount: 105 },
-    dy: -80,
-    dx: -90, 
+    data: { i: 67, workCount: 85 },
+    dy: -65,
+    dx: -95 
   }]; 
 	
+  
+  /** legend trial
+  let legend = SVG.append('g')
+    .attr('class', 'graph-legend')
+    .append('rect')
+    .attr('x', 0)
+    .attr('y', 0)
+    .attr('transform', `translate(67,0)`)
+    .attr('width', SVG_WIDTH - 92)
+    .attr('height', 45)
+    .attr('fill', 'grey');  
+  **/
+  const legendDataA = [{text: "Pieces receiving 1st NYP performance", color: 'Tomato'}, {text: "Repeat NYP performances", color: 'Steelblue'}]; 
+
+  //domain([0,legendDataLength])
+  let legendScaleX = d3.scaleLinear().domain([0,2]).range([0 + 50, SVG_WIDTH - 92 - 50]); 
+  
+  let legend = SVG.append('g')
+    .attr('class', 'graph-legend'); 
+  
+  //Absolute Graph text
+  
+  let legendKey = legend.selectAll('.legend-key')
+    .data(legendDataA)
+    .enter()
+    .append('g')
+    .attr('transform', `translate(67,0)`); 
+
+  
+  legendKey.append('rect')
+    .attr('x', (d, i) => legendScaleX(i))
+    .attr('y', 2)
+    .attr('width', 45)
+    .attr('height', 20)
+    .attr('fill', d => d.color)
+    .attr('fill-opacity', .65)
+    .attr('stroke', d => d.color)
+    .attr('stroke-width', 3);
+
+  
+  legendKey.append('text')
+    .attr('x', (d, i) => legendScaleX(i) + 60)
+    .attr('y', 0)
+    .attr("transform", "translate(0,14)")
+    .text(d => d.text);
+
+  
   SVG.append('g')
     .attr('class', 'graph-content')
     .selectAll('.path')
@@ -303,7 +353,7 @@ d3.json('../../data/composers.json', (err, d) => {
     .attr('transform', 'rotate(-90)')
     //.attr('dy', -SVG_WIDTH*0.04)
     .attr('dy', -35)
-    //.attr('dx', '-15px');
+    .attr('dx', -50);
 	
   //Add X axis
   let xStreamAxis = SVG.append('g')
@@ -367,6 +417,7 @@ d3.json('../../data/composers.json', (err, d) => {
         if (d.key == 'repeat') return 'Steelblue';
       });
   
+    console.log(totalWorksPerSeason);
     
     SVG.select('.yAxis')
       .transition()
@@ -401,10 +452,11 @@ d3.json('../../data/composers.json', (err, d) => {
       dx: 0
     }]; 
 
-    makeAnnotations.accessors({
-      x: d => x(d.i),
-      y: d => yPct(d.perc)
-    }).annotations(newAnnotations); 
+    makeAnnotations.type(d3.annotationLabel)
+      .accessors({
+        x: d => x(d.i),
+        y: d => yPct(d.perc)
+      }).annotations(newAnnotations); 
     
     let stackData = stackA(percentagesFirstRepeat); 
     let newStuff = SVG.selectAll('path')
@@ -426,13 +478,12 @@ d3.json('../../data/composers.json', (err, d) => {
     d3.select('.yAxis').select('.domain').remove(); 
 
     d3.select('.y-axis-label').transition().duration(1400).text('PERCENTAGE OF UNIQUE PIECES PER SEASON');
-		
+		    
   }; 
 	
   let transition3 = function() {
     currentGraph = 'pct'; 
 
-    //const TEXTS = ['Percentage of first-time performance', 'Percentage of repeat performances']; 
     let newAnnotations = [{
       note: {
         title: " "
@@ -447,6 +498,7 @@ d3.json('../../data/composers.json', (err, d) => {
       y: d => yPct(d.perc)
     }).annotations(newAnnotations); 
     
+    console.log(movingAverage(percentagesFirstRepeat, ['percentageFirst', 'percentageRepeat'], 7));
     let newStuff = SVG.selectAll('path')
       .data(stackA(movingAverage(percentagesFirstRepeat, ['percentageFirst', 'percentageRepeat'], 7))); 
 		
@@ -457,6 +509,14 @@ d3.json('../../data/composers.json', (err, d) => {
         if (d.key == 'percentageFirst') return 'Tomato';
         if (d.key == 'percentageRepeat') return 'Steelblue';
       });
+
+    //const legendDataA = [{text: 'Pieces by living composers', color: '#ff645f'}, {text: 'Pieces by deceased composers', color: '#7776bd'}]; 
+
+    let legendGroup = legend.selectAll('g').data(legendDataA); 
+    
+    legendGroup.select('rect').transition().duration(1400).attr('fill', d => d.color).attr('stroke', d => d.color);
+    
+    legendGroup.select('text').transition().duration(1400).text(d => d.text);
 
   }; 
 	
@@ -473,14 +533,19 @@ d3.json('../../data/composers.json', (err, d) => {
       dx: 0
     }]; 
     
-    makeAnnotations.accessors({
+    makeAnnotations
+      .accessors({
       x: d => x(d.i),
       y: d => yPct(d.perc)
     }).annotations(newAnnotations); 
     
     let newStuff = SVG.selectAll('path')
       .data(stack(movingAverage(percentagesLivingDead, ['percentageAlive', 'percentageDead'], 7))); 
-				
+		
+    //without moving average
+    //let newStuff = SVG.selectAll('path')
+    //  .data(stack(percentagesLivingDead));
+    
     newStuff.transition()
       .duration(1400)
       .attr('d', areaPercentage)
@@ -488,6 +553,14 @@ d3.json('../../data/composers.json', (err, d) => {
         if (d.key == 'percentageAlive') return '#ff645f';
         if (d.key == 'percentageDead') return '#7776bd';
       }); 
+    
+    const legendDataB = [{text: 'Pieces by living composers', color: '#ff645f'}, {text: 'Pieces by deceased composers', color: '#7776bd'}]; 
+
+    let legendGroup = legend.selectAll('g').data(legendDataB); 
+    
+    legendGroup.select('rect').transition().duration(1400).attr('fill', d => d.color).attr('stroke', d => d.color);
+    
+    legendGroup.select('text').transition().duration(1400).text(d => d.text);
   }; 
 	
   let transitionLine = function () {
@@ -619,13 +692,13 @@ d3.json('../../data/composers.json', (err, d) => {
     //update scales
     let windowWidth = $(window).innerWidth(); 
     let areaGen = {}; 
-    SVG_HEIGHT = $(window).innerHeight() * .9; 
+    SVG_HEIGHT = $(window).innerHeight() * .89; 
     SVG_WIDTH = $('.container').innerWidth(); 
     SVG.attr('width', SVG_WIDTH) 
       .attr('height', SVG_HEIGHT); 
     x.range([0, SVG_WIDTH - 92]);
-    yAbs.range([SVG_HEIGHT-4*PADDING, 10]);
-    yPct.range([SVG_HEIGHT-4*PADDING, 10]); 
+    yAbs.range([SVG_HEIGHT-4*PADDING, 50]);
+    yPct.range([SVG_HEIGHT-4*PADDING, 50]); 
 		
     $('#first-explain').css('margin-top', $(window).innerHeight()/2); 
 

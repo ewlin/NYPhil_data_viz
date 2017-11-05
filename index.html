@@ -9,12 +9,47 @@
       type="image/png" 
       href="new-graph.png">
 		
+    <!--<link rel="stylesheet" type="text/css" href="assets/css/global.css">-->
 		<style>
 			
+      
+      
+      
+      
+      
+      
 			:root {
 				--main-background: #DFE6E6; 
 				--links-color: #302B2B; 
 			}
+      
+      html, body {
+        margin: 0px;
+        padding: 0px;
+        border: 0px;
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        margin: 0;
+        padding: 0;
+        font-weight: normal;
+        /*font-family: Arial, Helvetica, sans-serif;*/
+      }
+      
+      p, th, td, li, dd, dt, ul, ol, blockquote, q, acronym, abbr, a, input, select, textarea {
+        margin: 0;
+        padding: 0;
+        /*font: normal normal normal 1em/1.25 Arial, Helvetica, sans-serif;*/
+      }
+      
+      a, a:link, a:visited, a:active, a:hover {
+        text-decoration: underline;
+      }
+      
+      img {
+        border: none;
+      }
+      
 			body {
 				background-color: var(--main-background);  
 				font-family: 'Lato', sans-serif;
@@ -69,6 +104,11 @@
 			.annotation-connector path.connector {
 				stroke: #302B2B;
 			}
+      
+      .annotation-connector path.connector-arrow {
+        stroke: #302B2B;
+        fill: #302B2B;
+      }
 			
 			.title {
 				padding-top: 25px; 
@@ -115,7 +155,8 @@
 			}
 			
 			.prose {
-				max-width: 40rem; 
+        font-family: 'Open Sans';
+				max-width: 35rem; 
 				margin: auto;
 				line-height: 1.7; 
 				margin-top: 60px;
@@ -183,7 +224,7 @@
 			
       .explain p {
 				max-width: 28%; 
-				margin: 0 1.5%;
+				margin: 0 2%;
 				padding: 6px 12px;
 				background-color: rgb(24, 209, 209); 
 				box-shadow: 1px 5px 5px 1px #19A3A3;
@@ -265,13 +306,16 @@
 				stroke-width: 2; 
 			}
 			
+      
 			h2.graphic-title {
 				font-family: 'Playfair Display';
 				font-weight: 700; 
 				font-size: 24px; 
 				color: #A6ADB3; 
 				text-align: center;
+        margin: 15px 0 30px 0;
 			}
+      
 			
 			.composer-face-container {
 				width: 68px; 
@@ -346,6 +390,10 @@
 			text.axis-label.x-axis-label {
 				letter-spacing: 2px;
 			}
+      
+      g.graph-legend text {
+        font-size: 13px;
+      }
 			
 			.piece {
 				cursor: pointer; 
@@ -440,7 +488,9 @@
 			<div class="prose">
 				<p class='epigraph'><em>When people hear "classical," they think "dead." The music is described in terms of its distance from the present, its resistance to the mass-what it is not[...] But the same story could have been written ten years ago or twenty. If this be death, the record is skipping. A complete version of the Death of Classical Music Archive would go back to the fourteenth century, when the sensuous melodies of ars nova were thought to signal the end of civilization.</em><span>-Alex Ross, <a target='_blank' href='https://www.newyorker.com/magazine/2004/02/16/listen-to-this'>"Listen to This"</a>, <em>The New Yorker</em> (2004)</span></p>
 				<p>Throughout the history of Classical Music, the perception that the genre's on its deathbed has always been a recurring motif. But how accurate are these anecdotal impressions? Can we move beyond anecdotes and back it up with some data?</p>
+        <br>
 				<p>There are more than a few ways to assess the health of any particular artform. You can look at audience demographics and see who's engaging with the art. Are more or less people consuming the artform year-to-year? Decade-by-decade? Based on these metrics, Classical Music is undoubtedly in trouble. In 2012, the National Endowment for the Arts (NEA) <a target='_blank' href='https://www.arts.gov/sites/default/files/2012-sppa-jan2015-rev.pdf'>released a report</a> documenting the changes and trends of national participation in the arts between 2002 to 2012. While the percentage of adults engaging in activities like reading and moviegoing stayed relatively stable during the decade (small drops among the US adult population from 56.6% to 54.2% for reading, and from 60.0% to 59.4% for movie-going), Classical Music participation went from an already low 10.8% to 8.1%., a 25% drop.</p>
+        <br>
 				<p>While the situation seems dire when looking at the consumer-side of the equation, we can also measure the health of the art form from the producer/creator-side as well. For example, during the decades-long decline of traditional television consumption, daring and ambitious writers and showrunners took their ideas to alternative platforms, jumpstarting what we now call a modern TV Renaissance, with the number of original tv programming hitting a high of 455 in 2016 (compared to 182 shows in 2002). Clearly, great and breakthrough content can have some impact on consumer habits and trends.</p>
 				<p>So how can we measure the state of 'content' in Classical Music today? Qualities like changes in aesthetics and styles and 'innovation' can be hard to measure objectively. Luckily, we can use some other measures as proxies. To make sense of the state of Classical Music today, we'll need to compare it to some comparable 'benchmark' moments in history. These 'benchmark' moments need to A) have quantifiable, reliable, recorded metrics that we can use to compare with data today, and B) be periods of time that a general observer might see as the heyday of Classical Music, from periods when well-known composers of the genre were composing their major compositions.</p>
 			</div>
@@ -507,7 +557,7 @@
 		<script src="assets/js/temp.js"></script>
 		<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>-->
 		<!--<script src="assets/js/app.js"></script>-->
-		<script src="assets/js/dot_chart.js"></script>
+		<script src="assets/js/dot_chart_new.js"></script>
 
 	</body>
 

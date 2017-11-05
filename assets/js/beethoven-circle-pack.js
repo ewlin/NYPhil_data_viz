@@ -55,7 +55,7 @@ d3.json('beethoven.json', d => {
 		}); 
 	
 	console.log(g.selectAll("circle")); 
-	
+  
 	let legend = svg.append("g")
 		.attr("transform", "translate(" + (svgHeight + margin.left) + ",100)")
 		.attr("class", "graphLegend")
