@@ -16,7 +16,6 @@
 #### CODE: 
 
 ##### Mobile + Resizing
-<<<<<<< HEAD
 * Mobile detection scaffold/outline
 * Mobile render code for Streamgraph (partially done)
 * Window resize code (partially done)
@@ -31,7 +30,6 @@
 ##### Dot Chart 
 * Legend (Orphan, NYPhil premiere, repeat performance)
 * Fixed tooltip data for transitions [COMPLETED]
-=======
 * {PRIORITY} Mobile detection scaffold/outline
 * Mobile render code for Streamgraph
 * Window resize code [Some done; streamgraph paths completed, still need to fix relative margins]
@@ -47,7 +45,6 @@
 ##### Dot Chart 
 * Legend (Orphan, NYPhil premiere, repeat performance) + Lifetime box
 * Fixed tooltip data for transitions 
->>>>>>> resizing
 * Annotations? 
 * Optimize dot annotation rendering (cache some calculations?)
 
