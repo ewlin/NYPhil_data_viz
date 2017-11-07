@@ -802,7 +802,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 
   }
 
-  if (isMobile().any()) {
+  if (!isMobile().any()) {
     window.addEventListener('resize', debounce(resize, 200)); 
   }
 	
