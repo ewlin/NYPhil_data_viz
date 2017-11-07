@@ -93,7 +93,7 @@ $('.explain p').css('margin-bottom', function() {
 d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 
 //DEV
-d3.json('../../data/composers.json', (err, d) => {
+//d3.json('../../data/composers.json', (err, d) => {
 	
   d.forEach( (composer, composerIdx) => {  //[] of work objects
     let works = composer.works,
