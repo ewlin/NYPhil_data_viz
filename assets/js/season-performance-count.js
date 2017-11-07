@@ -505,6 +505,50 @@ d3.json('../../data/new_top60.json', composers => {
 });
 
 
+d3.json('../../data/composers.json', composers => {
+  let totalComposersSeasonWorkCount = composers.map(composer => {
+    let works = composer.works; 
+    let totalSeasonWorkCount = works.reduce((sum, work) => {
+      return sum + work.seasonCount; 
+    }, 0); 
+    return {composer: composer.composer, total: totalSeasonWorkCount}; 
+  }).sort((a,b) => {
+    return b.total - a.total; 
+  }); 
+  
+  console.log(totalComposersSeasonWorkCount); 
+  
+  //console.log(totalComposersSeasonWorkCount.reduce((sum, composer) => {
+  //  return sum + composer.total; 
+  //}, 0)); 
+  //
+  //console.log(totalComposersSeasonWorkCount.slice(0,62).reduce((sum, composer) => {
+  //  return sum + composer.total; 
+  //}, 0)); 
+  //
+  //console.log(totalComposersSeasonWorkCount.slice(833,1040).reduce((sum, composer) => {
+  //  return sum + composer.total; 
+  //}, 0)); 
+  
+  let SVG = d3.select('.main-container').append('svg').attr('width', 1100).attr('height', 600); 
+  
+  console.log(totalComposersSeasonWorkCount[0].total);
+  let logScaleY = d3.scaleLog().domain([totalComposersSeasonWorkCount[0].total, 1]).range([0, 550]);
+  let xScale = d3.scaleLinear().domain([0,1040]).range([0,1100]); 
+  console.log(logScaleY(1000)); 
+  console.log(logScaleY(1)); 
+  
+  SVG.selectAll('circle')
+    .data(totalComposersSeasonWorkCount)
+    .enter()
+    .append('circle')
+    .attr('cy', (d, i) => logScaleY(d.total))
+    .attr('cx', (d, i) => xScale(i))
+    .attr('r', 1)
+    .attr('stroke', 'rgba(0,0,5,1)');
+  
+});
+
 function find(objArr, searchProp, searchValue) {
 	let found = null;
 	objArr.forEach((item, idx) => {

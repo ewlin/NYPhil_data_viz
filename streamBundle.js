@@ -259,22 +259,10 @@ d3.json('../../data/composers.json', (err, d) => {
     dx: -95 
   }]; 
 	
-  
-  /** legend trial
-  let legend = SVG.append('g')
-    .attr('class', 'graph-legend')
-    .append('rect')
-    .attr('x', 0)
-    .attr('y', 0)
-    .attr('transform', `translate(67,0)`)
-    .attr('width', SVG_WIDTH - 92)
-    .attr('height', 45)
-    .attr('fill', 'grey');  
-  **/
-  const legendDataA = [{text: "Pieces receiving 1st NYP performance", color: 'Tomato'}, {text: "Repeat NYP performances", color: 'Steelblue'}]; 
+  const legendDataA = [{text: "1st-time NYP performance", color: 'Tomato'}, {text: "Repeat NYP performances", color: 'Steelblue'}]; 
 
   //domain([0,legendDataLength])
-  let legendScaleX = d3.scaleLinear().domain([0,2]).range([0 + 50, SVG_WIDTH - 92 - 50]); 
+  let legendScaleX = d3.scaleLinear().domain([0,2]).range([0, SVG_WIDTH - 92]); 
   
   let legend = SVG.append('g')
     .attr('class', 'graph-legend'); 
@@ -285,7 +273,8 @@ d3.json('../../data/composers.json', (err, d) => {
     .data(legendDataA)
     .enter()
     .append('g')
-    .attr('transform', `translate(67,0)`); 
+    .attr('class', 'legend-key')
+    .attr('transform', 'translate(67,0)'); 
 
   
   legendKey.append('rect')
@@ -302,7 +291,7 @@ d3.json('../../data/composers.json', (err, d) => {
   legendKey.append('text')
     .attr('x', (d, i) => legendScaleX(i) + 60)
     .attr('y', 0)
-    .attr("transform", "translate(0,14)")
+    .attr('transform', 'translate(0,14)')
     .text(d => d.text);
 
   
@@ -369,7 +358,8 @@ d3.json('../../data/composers.json', (err, d) => {
     .append('text')
     .attr('class', 'axis-label x-axis-label stream-label')
     .text('NEW YORK PHILHARMONIC SUBSCRIPTION SEASONS')
-    .attr('x', `${SVG_WIDTH*.95*.5}`)
+    .attr('x', `${(SVG_WIDTH - 92) * 0.5}`)
+    .attr('text-anchor', 'center')
     .attr('transform', `translate(0,${1.6*PADDING})`); 
 	
   xStreamAxis
@@ -697,6 +687,33 @@ d3.json('../../data/composers.json', (err, d) => {
     yAbs.range([SVG_HEIGHT-4*PADDING, 50]);
     yPct.range([SVG_HEIGHT-4*PADDING, 50]); 
 		
+    if (windowWidth > 1024) {
+      legendScaleX.range([0, SVG_WIDTH - 92]);
+      
+      legendKey.select('rect').transition().duration(500)
+        .attr('x', (d, i) => legendScaleX(i))
+        .attr('y', 2)
+        .attr('width', 45)
+        .attr('height', 20); 
+      
+      legendKey.select('text').transition().duration(500)
+        .attr('x', (d, i) => legendScaleX(i) + 60)
+        .attr('y', 0); 
+    } else if (windowWidth <= 1024) {
+      
+      legendKey.select('rect').transition().duration(500)
+        .attr('width', 35)
+        .attr('height', 15)
+        .attr('x', 0)
+        .attr('y', (d, i) => i == 0 ? 0 : 25); 
+      
+      legendKey.select('text').transition().duration(500)
+        .attr('x', 40)
+        .attr('y', (d, i) => i == 0 ? 0 : 25); 
+    }
+    
+
+    
     $('#first-explain').css('margin-top', $(window).innerHeight()/2); 
 
     $('.explain p').css('margin-bottom', function() {
@@ -731,21 +748,14 @@ d3.json('../../data/composers.json', (err, d) => {
       .attr('transform', `translate(67,${SVG_HEIGHT-3.9*PADDING})`)
       .call(xAxisYear); 
     SVG.select('.xAxis').select('.domain').remove(); 
-    SVG.select('.x-axis-label').attr('x', `${SVG_WIDTH*.95*.5}`);
+    SVG.select('.x-axis-label').attr('x', `${(SVG_WIDTH - 92) * 0.5}`);
     
     SVG.select('.xAxis')
       .selectAll(".tick")
       .select("line")				
       .attr("stroke", "rgba(40, 60, 70, 1)")
       .attr("stroke-dasharray", "2,2"); 
-    
-    //SVG.select('.yAxis').attr('dy', -SVG_WIDTH*0.04)
-    //xStreamAxis
-    //.append('text')
-    //.attr('class', 'axis-label x-axis-label stream-label')
-    //.text('NEW YORK PHILHARMONIC SUBSCRIPTION SEASONS')
-    //.attr('x', `${SVG_WIDTH*.95*.5}`);
-    
+        
     if (currentGraph === 'abs') {
       areaGen.area = areaAbsolute; 
       areaGen.axis = yAxisAbs; 
@@ -761,9 +771,6 @@ d3.json('../../data/composers.json', (err, d) => {
     SVG.select('.yAxis').select('.domain').remove(); 
 		//SVG.select('.y-axis-label').attr('dy', -SVG_WIDTH*0.04);
 
-
-
-    
     SVG.select('.graph-content')
       .selectAll('path')
       .transition()

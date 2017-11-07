@@ -53,7 +53,7 @@
 			body {
 				background-color: var(--main-background);  
 				font-family: 'Lato', sans-serif;
-				margin: 0; 
+				margin: 0 auto 40px; 
 				/*font-family: 'IM Fell Great Primer', serif;
 				/*font-family: 'Arimo', sans-serif;
 				/*font-family: 'Titillium Web', sans-serif;*/
@@ -64,8 +64,7 @@
 			}
     
 			
-			
-			header {
+		  header {
 				margin: auto; 
 				font-family: 'Spectral'; 
 				text-align: center; 
@@ -77,7 +76,7 @@
 				vertical-align: middle;
 			}
 			
-			header span {
+			header a span {
 				padding-left: 12px;
 				font-size: 1.3em; 
 				font-weight: 400; 
@@ -114,9 +113,9 @@
 				padding-top: 25px; 
 				font-size: 58px;
 				max-width: 45rem; 
-				margin: auto; 
+				margin: 0 auto 25px;
 				text-align: center; 
-				font-weight: 400; 
+				font-weight: 700; 
 				font-family: 'Playfair Display', serif; 
 				line-height: 60px; 
 				color: #463D3D; 
@@ -130,23 +129,35 @@
 			}
 			
 			.byline {
+        font-family: 'Lato';
+        font-weight: 400;
 				padding-top: 20px;
 				margin: auto; 
 				text-align: center;
 			}
 			
-			.byline .name {
+			.byline span.name {
 				font-weight: 700; 
-			}
+      }
 			
+      .titles img {
+				width: 55px; 
+				height: 55px; 
+        margin-left: 10px;
+        border-radius: 50%;
+        border: solid 2px #ff645f;
+      }
+      
 			.methodology {
 				width: 40rem; 
 				margin: auto;
 			}
 			
-			.methodology h4 {
+			.methodology h3 {
 				font-family: 'Open Sans'; 
-				font-size: 15px;
+				font-size: 16px;
+        margin-bottom: 10px;
+        
 			}
 			
 			.methodology p {
@@ -160,6 +171,7 @@
 				margin: auto;
 				line-height: 1.7; 
 				margin-top: 60px;
+        margin-bottom: 20px;
 			}
 			
 			.prose .epigraph { 
@@ -172,7 +184,10 @@
 				display: block;
 				padding-top: 10px;
 			}
-				
+      
+      .prose p {
+        margin-bottom: 10px;
+      }
 			
 			
 			.outer-container {
@@ -311,10 +326,17 @@
 				font-family: 'Playfair Display';
 				font-weight: 700; 
 				font-size: 24px; 
-				color: #A6ADB3; 
+				/*color: #A6ADB3;*/
+        color: #302B2B;
 				text-align: center;
         margin: 15px 0 30px 0;
 			}
+      
+      .dot-chart h2.graphic-title {
+        color: #A6ADB3;
+      }
+      
+      
       
 			
 			.composer-face-container {
@@ -325,6 +347,7 @@
 			.composer-face {
 				width: 68px; 
 				height: 68px; 
+        border: solid 2px #ff645f;
 				border-radius: 50%; 
 			}
 			
@@ -332,13 +355,17 @@
 				width: 400px; 
 				height: 38px; 
 				border: 5px solid Steelblue; 
-        background-color: rgba(1,1,1,0);
+        background-color: rgba(52,52,52,0);
 				font-family: 'Alegreya Sans';
 				font-size: 15px;
 				margin: 15px auto; 
 				display: block;
         color: aliceblue;
 			}
+      
+      select option {
+        color: black; 
+      }
       
       select:focus {
         outline: none;
@@ -392,7 +419,7 @@
 			}
       
       g.graph-legend text {
-        font-size: 13px;
+        font-size: 12px;
       }
 			
 			.piece {
@@ -425,7 +452,7 @@
 			}
 			
       
-      @media screen and (max-width: 480px) {
+      @media screen and (max-width: 800px) {
         .axis text {
 				  font-size: .9em;
 			   }
@@ -469,23 +496,29 @@
 			
 		</style>
 
-		<link href="https://fonts.googleapis.com/css?family=IM+Fell+Great+Primer|Inconsolata|Oswald|Lato:300,400,700|Titillium+Web|Lora:400,400i,700,700i|Alegreya+Sans|Open+Sans:300,400,400i|Playfair+Display:400,700,900|Spectral:400,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="assets/css/select2.min.css">
+		<link href="https://fonts.googleapis.com/css?family=Sumana:400,700|Lato:300,400,700|Rozha+One|Lora:400,400i,700,700i|Alegreya+Sans|Open+Sans:300,400,400i|Playfair+Display:400,700,900|Spectral:400,700" rel="stylesheet">
 
 		
 	</head>
 	
 	<body> 
 		
-		<header><a href="/"><img src='new-graph.png' /><span>I'M YOUR DATA HOMER</span></a></header>		
-		
-		<main>
-			<div>
+		<header>
+      <a href="/"><img src='new-graph.png' /><span>I'M YOUR DATA HOMER</span></a>
+      <div class='titles'>
 				<h1 class="title">Pulsecheck: Is Classical Music Still a Living Art Form?</h1>
 				<p class="subtitle">Extrapolating trends from 175 seasons at the New York Philharmonic</p>
-				<p class="byline">By <span class="name">Eric William Lin</span></p>
+				<p class="byline">By <span class="name">Eric William Lin</span><img src='author.png'/>
+</p>
 			</div>
+    </header>		
+		
+		<main>
+			
 			
 			<div class="prose">
+
 				<p class='epigraph'><em>When people hear "classical," they think "dead." The music is described in terms of its distance from the present, its resistance to the mass-what it is not[...] But the same story could have been written ten years ago or twenty. If this be death, the record is skipping. A complete version of the Death of Classical Music Archive would go back to the fourteenth century, when the sensuous melodies of ars nova were thought to signal the end of civilization.</em><span>-Alex Ross, <a target='_blank' href='https://www.newyorker.com/magazine/2004/02/16/listen-to-this'>"Listen to This"</a>, <em>The New Yorker</em> (2004)</span></p>
 				<p>Throughout the history of Classical Music, the perception that the genre's on its deathbed has always been a recurring motif. But how accurate are these anecdotal impressions? Can we move beyond anecdotes and back it up with some data?</p>
         <br>
@@ -522,7 +555,7 @@
 		
 		
 			<section class="dot-chart">
-        <h2 class='graphic-title'>Top 60 Composers By Number of Times Pieces Programmed</h2>
+        <h2 class='graphic-title'>Top 60 Composers By Number of Times Pieces Programmed*</h2>
         <div>
           <div class="dot-chart-heading-middle">
 				    <select class="select-value"><option value="">Choose a composer:</option></select>
@@ -532,12 +565,18 @@
 				
 				<div class="main-container"></div>
 			</section>
+      
+      <section class="dot-chart-explain prose">
+        <p>Throughout the history of Classical Music, the perception that the genre's on its deathbed has always been a recurring motif. But how accurate are these anecdotal impressions? Can we move beyond anecdotes and back it up with some data?</p>
+      </section>
 			
 			<div class="methodology">
 				<hr>
-				<h4>Methodology</h4>
+				<h3>Methodology</h3>
 				<p>The performance and concert data of the New York Philharmonic is publicly available through the orchestra's Github page. Throughout the NYP's 175+ year history, they've presented a concerts under a variety of different categories. This analysis focuses on the Subscription Series concerts, the core of the NYP's performances. We've noticed occasional miscategorization of concerts in the data, and we've flagged and corrected any of such data that affected the analysis around subscription series concerts. However, since the data is quite voluminous, we can't be sure that all mistakes are fully accounted for. Noise-reduction in the data was accomplished through a simple moving average algorithm, and both the code for that, as well as the datasets that resulted from the analysis of the raw concert data, can be found in the Github repository for this project.</p>
+        <br>
 				<p>Exclusion of pieces....rationale</p>
+        <br>
 				<p>Composer metadata, specifically birth and death years, was collected primarily from Wikipedia, via a script that leveraged the MediaWiki API. A small percentage of composers had no Wiki entries, and the birth and death years for these composers, if available, were collected manually, from a variety of sources found primarily through Google.</p>
 			</div>
 		
@@ -548,16 +587,18 @@
   		integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   		crossorigin="anonymous">
 		</script>
+    <script src="select2.full.min.js"></script>
 		<script src="d3-v4.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.0.0/d3-annotation.js"></script>
 		
 		<!--<script src="assets/js/season_age_range.js"></script>-->
-		<script src="bundle.js"></script>
+		<script src="streamBundle.js"></script>
+    <script src="composerBundle.js"></script>
 
 		<script src="assets/js/temp.js"></script>
 		<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>-->
 		<!--<script src="assets/js/app.js"></script>-->
-		<script src="assets/js/dot_chart_new.js"></script>
+		<!--<script src="assets/js/dot_chart_new.js"></script>-->
 
 	</body>
 
