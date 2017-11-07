@@ -8,7 +8,8 @@
 * Resizing issues [Mostly fixed, some scale issues, margins etc. remain]
 * X-Axis ticks sometimes not showing up in AREA graph [COMPLETED; issue with shape-rendering property on axis, see: https://github.com/d3/d3/issues/2175]
 * Trendline annotation needs to be removed earlier when scrolling upwards [COMPLETED]
-* [Issue A] Streamgraph/area graph height needs to be calculated a bit better to make it mostly 100% height when fixed. including graphic title; otherwise weird bug when height overflows to bottom since graphic title is not calculated using a percentage of innerHeight. (11/5 bug)
+* [Issue A] Streamgraph/area graph height needs to be calculated a bit better to make it mostly 100% height when fixed. including graphic title; otherwise weird bug when height overflows to bottom since graphic title is not calculated using a percentage of innerHeight. (11/5 bug) WEIRD FLASHING ISSUE with mobile; flicker
+* IDEA: calculate container (the fixed thing's height using window.innerHeight() ) 
 
 #### TESTS: 
 * Data processing/transforms code should be tested 
