@@ -802,7 +802,12 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 
   }
 
-  window.addEventListener('resize', debounce(resize, 200)); 
+  window.addEventListener('resize', function () {
+    if (!isMobile().any()) {
+      console.log('not mobile');
+      debounce(resize, 200); 
+    }
+  }); 
 	
 }); 
 
