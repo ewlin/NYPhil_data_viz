@@ -1,5 +1,3 @@
-babel js/source -d js/build
-
-browserify assets/js/season_age_range.js -o assets/js/bundle.js
-
+browserify assets/js/stream_experiment.js -o streamBundle.js
+browserify assets/js/dot_chart_new.js -o composerBundle.js
 date; echo; 

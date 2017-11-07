@@ -234,8 +234,7 @@ d3.json('../../data/complete_latest_july_2017.json', d => {
 
 	3) Might be interesting to write shorter functions and code to clean and merge some data chunks first. Find a best practices that's robust to all the variations in the data
 	*/
-
-
+  
 	let subscriptionConcerts = PROGRAMS.filter( p => {
 		return p.orchestra === "New York Philharmonic" //|| p.orchestra === "New York Symphony";
 	}).filter( p => {

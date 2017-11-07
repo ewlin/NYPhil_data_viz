@@ -3,20 +3,57 @@
 <html> 
 	<head>
 		<title>Pulsecheck: Trends from 175 seasons at the New York Philharmonic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
 		<link rel="icon" 
       type="image/png" 
       href="new-graph.png">
 		
+    <!--<link rel="stylesheet" type="text/css" href="assets/css/global.css">-->
 		<style>
 			
+      
+      
+      
+      
+      
+      
 			:root {
 				--main-background: #DFE6E6; 
 				--links-color: #302B2B; 
 			}
+      
+      html, body {
+        margin: 0px;
+        padding: 0px;
+        border: 0px;
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        margin: 0;
+        padding: 0;
+        font-weight: normal;
+        /*font-family: Arial, Helvetica, sans-serif;*/
+      }
+      
+      p, th, td, li, dd, dt, ul, ol, blockquote, q, acronym, abbr, a, input, select, textarea {
+        margin: 0;
+        padding: 0;
+        /*font: normal normal normal 1em/1.25 Arial, Helvetica, sans-serif;*/
+      }
+      
+      a, a:link, a:visited, a:active, a:hover {
+        text-decoration: underline;
+      }
+      
+      img {
+        border: none;
+      }
+      
 			body {
 				background-color: var(--main-background);  
 				font-family: 'Lato', sans-serif;
-				margin: 0; 
+				margin: 0 auto 40px; 
 				/*font-family: 'IM Fell Great Primer', serif;
 				/*font-family: 'Arimo', sans-serif;
 				/*font-family: 'Titillium Web', sans-serif;*/
@@ -25,9 +62,9 @@
 			a {
 				color: var(--links-color); 
 			}
+    
 			
-			
-			header {
+		  header {
 				margin: auto; 
 				font-family: 'Spectral'; 
 				text-align: center; 
@@ -39,7 +76,7 @@
 				vertical-align: middle;
 			}
 			
-			header span {
+			header a span {
 				padding-left: 12px;
 				font-size: 1.3em; 
 				font-weight: 400; 
@@ -66,14 +103,19 @@
 			.annotation-connector path.connector {
 				stroke: #302B2B;
 			}
+      
+      .annotation-connector path.connector-arrow {
+        stroke: #302B2B;
+        fill: #302B2B;
+      }
 			
 			.title {
 				padding-top: 25px; 
 				font-size: 58px;
 				max-width: 45rem; 
-				margin: auto; 
+				margin: 0 auto 25px;
 				text-align: center; 
-				font-weight: 400; 
+				font-weight: 700; 
 				font-family: 'Playfair Display', serif; 
 				line-height: 60px; 
 				color: #463D3D; 
@@ -87,23 +129,35 @@
 			}
 			
 			.byline {
+        font-family: 'Lato';
+        font-weight: 400;
 				padding-top: 20px;
 				margin: auto; 
 				text-align: center;
 			}
 			
-			.byline .name {
+			.byline span.name {
 				font-weight: 700; 
-			}
+      }
 			
+      .titles img {
+				width: 55px; 
+				height: 55px; 
+        margin-left: 10px;
+        border-radius: 50%;
+        border: solid 2px #ff645f;
+      }
+      
 			.methodology {
 				width: 40rem; 
 				margin: auto;
 			}
 			
-			.methodology h4 {
+			.methodology h3 {
 				font-family: 'Open Sans'; 
-				font-size: 15px;
+				font-size: 16px;
+        margin-bottom: 10px;
+        
 			}
 			
 			.methodology p {
@@ -112,14 +166,16 @@
 			}
 			
 			.prose {
-				width: 40rem; 
+        font-family: 'Open Sans';
+				max-width: 35rem; 
 				margin: auto;
 				line-height: 1.7; 
 				margin-top: 60px;
+        margin-bottom: 20px;
 			}
 			
 			.prose .epigraph { 
-				width: 30rem; 
+				max-width: 30rem; 
 				margin: auto; 
 				padding-bottom: 20px; 
 			}
@@ -128,9 +184,10 @@
 				display: block;
 				padding-top: 10px;
 			}
-				
-			
-			
+      
+      .prose p {
+        margin-bottom: 10px;
+      }
 			
 			
 			.outer-container {
@@ -144,41 +201,6 @@
 				font-style: normal; 
 				letter-spacing: 1px;
 				overflow: visible;  
-			}
-			
-			table {
-  			border-collapse: collapse;
-			}
-			
-			.table {
-				font-size: 15px; 
-				color: white; 
-				max-width: 60%; 
-				margin: auto; 
-				/*background-color: steelblue; */
-				padding-bottom: 3px;
-				margin: auto; 
-
-			}
-			
-			.table thead {
-				border-bottom: 2px solid steelblue;
-
-			}
-			
-			.table tr {
-				width: 100%; 
-				border-bottom: 1px solid steelblue;
-				
-			}
-			
-			td, th {
-				padding: 8px; 
-				text-align: left;
-			} 
-			
-			th {
-				font-weight: 700; 
 			}
 		
 			.titles {
@@ -199,17 +221,7 @@
 			}
 			
 			
-			.explain p {
-				/*margin-bottom: 500px;*/
-				max-width: 400px; 
-				margin: auto;
-				padding: 6px 12px;
-				background-color: rgb(24, 209, 209); 
-				box-shadow: 1px 5px 5px 1px #19A3A3;
-				border-radius: 3px; 
-				line-height: 1.7;
-				letter-spacing: 0; 
-			}
+			
 			
 			
 			.inner-container {
@@ -218,13 +230,54 @@
 				width: 100%; 
 				/*margin-left: 20rem;*/
 			}
+      
+      .container {
+				position: relative; 
+				margin-left: 33%; 
+				width: 66%;
+			}
 			
+      .explain p {
+				max-width: 28%; 
+				margin: 0 2%;
+				padding: 6px 12px;
+				background-color: rgb(24, 209, 209); 
+				box-shadow: 1px 5px 5px 1px #19A3A3;
+				border-radius: 3px; 
+				line-height: 1.7;
+				letter-spacing: 0; 
+        opacity: .3;
+        -webkit-transition: opacity 1.5s;
+        transition: opacity 1.5s;
+			}
+
+      .explain p.focus {
+        opacity: 1;
+        -webkit-transition: opacity 1.5s;
+        transition: opacity 1.5s;
+      }
+      
+
+      /* Centered chart and explainations
+
 			.container {
 				position: relative; 
 				margin: auto; 
-				width: 80%;
+				width: 75%;
 			}
-			
+      
+      .explain p {
+				max-width: 33em; 
+				margin: auto;
+				padding: 6px 12px;
+				background-color: rgb(24, 209, 209); 
+				box-shadow: 1px 5px 5px 1px #19A3A3;
+				border-radius: 3px; 
+				line-height: 1.7;
+				letter-spacing: 0; 
+			}
+		  */
+
 			.at-bottom.inner-container {
 				bottom: 0; 
 				top: auto; 
@@ -250,7 +303,7 @@
 			
 			
 			
-			div.dot-chart {
+			section.dot-chart {
 				/*background-color: white;*/
 				background-color: #343434;
 				font-family: 'Lato', sans-serif;
@@ -262,14 +315,29 @@
 				/*font-family: 'Arimo', sans-serif;
 				/*font-family: 'Titillium Web', sans-serif;*/
 			}
+      
+      section.dot-chart .tick line {
+				opacity: .25; 
+				stroke-width: 2; 
+			}
 			
-			h3.graphic-title {
-				font-family: 'Playfair Display'; 
+      
+			h2.graphic-title {
+				font-family: 'Playfair Display';
 				font-weight: 700; 
 				font-size: 24px; 
-				color: #A6ADB3; 
+				/*color: #A6ADB3;*/
+        color: #302B2B;
 				text-align: center;
+        margin: 15px 0 30px 0;
 			}
+      
+      .dot-chart h2.graphic-title {
+        color: #A6ADB3;
+      }
+      
+      
+      
 			
 			.composer-face-container {
 				width: 68px; 
@@ -279,44 +347,60 @@
 			.composer-face {
 				width: 68px; 
 				height: 68px; 
+        border: solid 2px #ff645f;
 				border-radius: 50%; 
 			}
 			
 			select {
 				width: 400px; 
-				height: 35px; 
+				height: 38px; 
 				border: 5px solid Steelblue; 
+        background-color: rgba(52,52,52,0);
 				font-family: 'Alegreya Sans';
 				font-size: 15px;
 				margin: 15px auto; 
 				display: block;
+        color: aliceblue;
 			}
+      
+      select option {
+        color: black; 
+      }
+      
+      select:focus {
+        outline: none;
+      }
 			
 			.main-container {
-				width: 90%; 
+				width: 100%; 
 				margin: auto; 
 				padding-top: 18px;
 				/*background-color: blue; */ 
 			}
-			.axis {
+			
+      .axis {
 				font-family: 'Lato'; 
 				stroke: rgba(133, 233, 90, 1);
+        fill: rgba(133, 233, 90, 1);
 				font-weight: 300; 
 				letter-spacing: 2px;
 			}
-			
-			.axis text {
-				font-size: 10px;
-			}
+		  
+      
+      @media screen and (max-width: 10000px) {
+        .axis text {
+          font-size: 1em;
+        }
+      }
+      
+      
 			
 			.stream-axis {
-				stroke: rgb(59, 22, 22); 
+				stroke: rgba(59, 22, 22, 1); 
+        fill: rgba(59, 22, 22, 1); 
 			}
 			
-			.tick line {
-				opacity: .25; 
-				stroke-width: 2; 
-			}
+			
 			
 			text.axis-label {
 				font-weight: 300; 
@@ -333,6 +417,10 @@
 			text.axis-label.x-axis-label {
 				letter-spacing: 2px;
 			}
+      
+      g.graph-legend text {
+        font-size: 12px;
+      }
 			
 			.piece {
 				cursor: pointer; 
@@ -363,29 +451,79 @@
 				line-height: 14px; 
 			}
 			
+      
+      @media screen and (max-width: 800px) {
+        .axis text {
+				  font-size: .9em;
+			   }
+        
+        .inner-container .graphic-title {
+          display: none; 
+        }
+        
+        .container {
+				  position: relative; 
+				  margin: auto; 
+				  width: 90%;
+			   }
+        
+        .explain p {
+          max-width: 90%; 
+          margin: auto;
+          padding: 6px 12px;
+          background-color: rgb(24, 209, 209); 
+          box-shadow: 1px 5px 5px 1px #19A3A3;
+          border-radius: 3px; 
+          line-height: 1.7;
+          letter-spacing: 0; 
+        }
+        
+      }
+      
+      @media screen and (max-width: 1024px) {
+        .annotation-note-title {
+				  font-size: 11px;
+        }
+			
+        .annotation-note-label {
+          font-size: 10px;
+        }
+        
+      }
+
+      
+      
 			
 		</style>
 
-		<link href="https://fonts.googleapis.com/css?family=IM+Fell+Great+Primer|Inconsolata|Oswald|Lato:300,400,700|Titillium+Web|Lora:400,400i,700,700i|Alegreya+Sans|Open+Sans:300,400,400i|Playfair+Display:400,700,900|Spectral:400,700" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="assets/css/select2.min.css">
+		<link href="https://fonts.googleapis.com/css?family=Sumana:400,700|Lato:300,400,700|Rozha+One|Lora:400,400i,700,700i|Alegreya+Sans|Open+Sans:300,400,400i|Playfair+Display:400,700,900|Spectral:400,700" rel="stylesheet">
 
 		
 	</head>
 	
 	<body> 
 		
-		<header><a href="/"><img src='new-graph.png' /><span>I'M YOUR DATA HOMER</span></a></header>		
-		
-		<main>
-			<div>
+		<header>
+      <a href="/"><img src='new-graph.png' /><span>I'M YOUR DATA HOMER</span></a>
+      <div class='titles'>
 				<h1 class="title">Pulsecheck: Is Classical Music Still a Living Art Form?</h1>
 				<p class="subtitle">Extrapolating trends from 175 seasons at the New York Philharmonic</p>
-				<p class="byline">By <span class="name">Eric William Lin</span></p>
+				<p class="byline">By <span class="name">Eric William Lin</span><img src='author.png'/>
+</p>
 			</div>
+    </header>		
+		
+		<main>
+			
 			
 			<div class="prose">
+
 				<p class='epigraph'><em>When people hear "classical," they think "dead." The music is described in terms of its distance from the present, its resistance to the mass-what it is not[...] But the same story could have been written ten years ago or twenty. If this be death, the record is skipping. A complete version of the Death of Classical Music Archive would go back to the fourteenth century, when the sensuous melodies of ars nova were thought to signal the end of civilization.</em><span>-Alex Ross, <a target='_blank' href='https://www.newyorker.com/magazine/2004/02/16/listen-to-this'>"Listen to This"</a>, <em>The New Yorker</em> (2004)</span></p>
 				<p>Throughout the history of Classical Music, the perception that the genre's on its deathbed has always been a recurring motif. But how accurate are these anecdotal impressions? Can we move beyond anecdotes and back it up with some data?</p>
+        <br>
 				<p>There are more than a few ways to assess the health of any particular artform. You can look at audience demographics and see who's engaging with the art. Are more or less people consuming the artform year-to-year? Decade-by-decade? Based on these metrics, Classical Music is undoubtedly in trouble. In 2012, the National Endowment for the Arts (NEA) <a target='_blank' href='https://www.arts.gov/sites/default/files/2012-sppa-jan2015-rev.pdf'>released a report</a> documenting the changes and trends of national participation in the arts between 2002 to 2012. While the percentage of adults engaging in activities like reading and moviegoing stayed relatively stable during the decade (small drops among the US adult population from 56.6% to 54.2% for reading, and from 60.0% to 59.4% for movie-going), Classical Music participation went from an already low 10.8% to 8.1%., a 25% drop.</p>
+        <br>
 				<p>While the situation seems dire when looking at the consumer-side of the equation, we can also measure the health of the art form from the producer/creator-side as well. For example, during the decades-long decline of traditional television consumption, daring and ambitious writers and showrunners took their ideas to alternative platforms, jumpstarting what we now call a modern TV Renaissance, with the number of original tv programming hitting a high of 455 in 2016 (compared to 182 shows in 2002). Clearly, great and breakthrough content can have some impact on consumer habits and trends.</p>
 				<p>So how can we measure the state of 'content' in Classical Music today? Qualities like changes in aesthetics and styles and 'innovation' can be hard to measure objectively. Luckily, we can use some other measures as proxies. To make sense of the state of Classical Music today, we'll need to compare it to some comparable 'benchmark' moments in history. These 'benchmark' moments need to A) have quantifiable, reliable, recorded metrics that we can use to compare with data today, and B) be periods of time that a general observer might see as the heyday of Classical Music, from periods when well-known composers of the genre were composing their major compositions.</p>
 			</div>
@@ -393,19 +531,21 @@
 		
 			<div class="outer-container streamgraph-section">
 				<div class="inner-container">
-					<h3 class='graphic-title'>1st Movement: Is the Concert Hall More MoMA or MET?</h3>
-					<div class="container"></div>
+					<div class="container">
+            <h2 class='graphic-title'>1st Movement: Trends of the New York Phil</h2>
+          </div>
 				</div>
-				<div class="explain">
-					<p class="explain1">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about? More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+				<div class="stream-explain explain">
+					<p id="first-explain" class="explain1" data-graph='1'>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about? More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
 					<br />
-					<p class="explain2">The data is complicated by the dramatic spike in the total number of pieces played per season, starting in the 1909-10 season, when the orchestra <a target='_blank' href='http://www.nytimes.com/1982/03/07/arts/the-philharmonic-on-disk-the-maestro-is-the-message.html?pagewanted=2'>increased the number of concerts it performed each season from 18 to 54</a>. Furthermore, the absolute number of compositions performed each season actually varies quite a bit even with a fixed number of concerts. To account for this, I normalized the data, and re-graphed the first performances and repeat performances as a percentage of total pieces performed each season. But even as a percentage, the season-to-season fluctuation of first time-to-repeat performances is still quite noisy.</p>
+					<p class="explain2" data-graph='2'>The data is complicated by the dramatic spike in the total number of pieces played per season, starting in the 1909-10 season, when the orchestra <a target='_blank' href='http://www.nytimes.com/1982/03/07/arts/the-philharmonic-on-disk-the-maestro-is-the-message.html?pagewanted=2'>increased the number of concerts it performed each season from 18 to 54</a>. Furthermore, the absolute number of compositions performed each season actually varies quite a bit even with a fixed number of concerts. To account for this, I normalized the data, and re-graphed the first performances and repeat performances as a percentage of total pieces performed each season. But even as a percentage, the season-to-season fluctuation of first time-to-repeat performances is still quite noisy.</p>
 					<br />
-					<p class="explain3">To get a better sense of the overall trend across time, I applied a rolling average on the dataset to smooth out the noise.** By the sixth season, the average percentage of repeat performances each season is already over 40%. By the 1859-60 season, the average percentage of first-time performances each season drops below 50%. Repeat performances would be the norm from this point on in the Phil's history. Essentially, within two decades of the Philharmonic's founding, it had already turned into a 'Greatest Hits' band. This is actually a rather remarkable fact, since at this point in history, some of the most performed orchestral music today had yet to be composed; Johannes Brahms' First Symphony was completed in 1876, nearly two decades after the 1859-60 season. In fact, some of the most familiar composers like Mahler, Debussy, Ravel, Stravinsky, and Shostakovich were yet to be born.</p>
+					<p class="explain3" data-graph='3'>To get a better sense of the overall trend across time, I applied a rolling average on the dataset to smooth out the noise.** By the sixth season, the average percentage of repeat performances each season is already over 40%. By the 1859-60 season, the average percentage of first-time performances each season drops below 50%. Repeat performances would be the norm from this point on in the Phil's history. Essentially, within two decades of the Philharmonic's founding, it had already turned into a 'Greatest Hits' band. This is actually a rather remarkable fact, since at this point in history, some of the most performed orchestral music today had yet to be composed; Johannes Brahms' First Symphony was completed in 1876, nearly two decades after the 1859-60 season. In fact, some of the most familiar composers like Mahler, Debussy, Ravel, Stravinsky, and Shostakovich were yet to be born.</p>
 					<br />
-					<p class="explain4">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+					<p class="explain4" data-graph='4'>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
 					<br />
-					<p class="explain5">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+					<p class="explain5" data-graph='5'>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+          <br />
 					<p id="last-explain">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
 				</div>
 			</div>
@@ -414,19 +554,29 @@
 		
 		
 		
-			<div class="dot-chart">
-				<h3 class='graphic-title'>Top 60 Composers By Number of Times Pieces Programmed</h3>
-				<select class="select-value"><option value="">Choose a composer:</option></select>
-				<div class="composer-face-container"></div>
+			<section class="dot-chart">
+        <h2 class='graphic-title'>Top 60 Composers By Number of Times Pieces Programmed*</h2>
+        <div>
+          <div class="dot-chart-heading-middle">
+				    <select class="select-value"><option value="">Choose a composer:</option></select>
+				    <div class="composer-face-container"></div>
+          </div>
+        </div>
 				
 				<div class="main-container"></div>
-			</div>
+			</section>
+      
+      <section class="dot-chart-explain prose">
+        <p>Throughout the history of Classical Music, the perception that the genre's on its deathbed has always been a recurring motif. But how accurate are these anecdotal impressions? Can we move beyond anecdotes and back it up with some data?</p>
+      </section>
 			
 			<div class="methodology">
 				<hr>
-				<h4>Methodology</h4>
+				<h3>Methodology</h3>
 				<p>The performance and concert data of the New York Philharmonic is publicly available through the orchestra's Github page. Throughout the NYP's 175+ year history, they've presented a concerts under a variety of different categories. This analysis focuses on the Subscription Series concerts, the core of the NYP's performances. We've noticed occasional miscategorization of concerts in the data, and we've flagged and corrected any of such data that affected the analysis around subscription series concerts. However, since the data is quite voluminous, we can't be sure that all mistakes are fully accounted for. Noise-reduction in the data was accomplished through a simple moving average algorithm, and both the code for that, as well as the datasets that resulted from the analysis of the raw concert data, can be found in the Github repository for this project.</p>
+        <br>
 				<p>Exclusion of pieces....rationale</p>
+        <br>
 				<p>Composer metadata, specifically birth and death years, was collected primarily from Wikipedia, via a script that leveraged the MediaWiki API. A small percentage of composers had no Wiki entries, and the birth and death years for these composers, if available, were collected manually, from a variety of sources found primarily through Google.</p>
 			</div>
 		
@@ -437,17 +587,18 @@
   		integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   		crossorigin="anonymous">
 		</script>
+    <script src="select2.full.min.js"></script>
 		<script src="d3-v4.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.0.0/d3-annotation.js"></script>
-		<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 		
 		<!--<script src="assets/js/season_age_range.js"></script>-->
-		<script src="assets/js/bundle.js"></script>
+		<script src="streamBundle.js"></script>
+    <script src="composerBundle.js"></script>
 
 		<!--<script src="assets/js/temp.js"></script>-->
 		<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>-->
 		<!--<script src="assets/js/app.js"></script>-->
-		<script src="assets/js/dot_chart.js"></script>
+		<!--<script src="assets/js/dot_chart_new.js"></script>-->
 
 	</body>
 

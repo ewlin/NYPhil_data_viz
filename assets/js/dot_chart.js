@@ -34,9 +34,9 @@ let beethovenWorks = [];
 let svgDimensions; 
 
 //Github pages bug
-d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
+//d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
 //DEV
-//d3.json('../../data/new_top60.json', composers => {
+d3.json('../../data/new_top60.json', composers => {
 	
 	const SVG_WIDTH = $('.main-container').innerWidth(); 
 	const SVG_HEIGHT = $(window).innerHeight()*.75; 
@@ -175,6 +175,9 @@ d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
 		//		return seasonsScale(birthSeason) ? seasonsScale(birthSeason) : -100; 
 		//.attr('y', 0)
 		.attr('width', rectWidth); 
+    
+    d3.select('.lifetime-box').select('line').transition().duration(1400).attr('x1', rectX)
+    .attr('x2', rectX + rectWidth); 
 		
 		//		let birthSeason = d.birth + "-" + (+d.birth.substr(2) + 1); 
 		//		let deathSeason = d.death + "-" + (+d.death.substr(2) + 1); 
@@ -284,7 +287,9 @@ d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
 		rectWidth = seasonsScale(deathSeason) - rectX; 
 	}
 	
-	svg.append('g').attr('class', 'lifetime-box').append('rect').attr('x', rectX)
+  let lifetime = svg.append('g').attr('class', 'lifetime-box'); 
+  
+  lifetime.append('rect').attr('x', rectX)
 		//		let birthSeason = d.birth + "-" + (+d.birth.substr(2) + 1); 
 		//		return seasonsScale(birthSeason) ? seasonsScale(birthSeason) : -100; 
 		.attr('y', 0)
@@ -295,6 +300,15 @@ d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
 		.attr('height', SVG_HEIGHT*.92)
 		.attr('opacity', .3).attr('fill', 'grey'); 
 	
+  //LINE ABOVE LIFETIME BOX
+  lifetime.append('line')
+    .attr('x1', rectX)
+    .attr('x2', rectX + rectWidth)
+    .attr('y1', 0)
+    .attr('y2', 0)
+    .attr('stroke', '#ff645f')
+    .attr('stroke-width', '10');
+  
 	
 	ALL_SEASONS.forEach( (season, season_idx) => {
 		let works = beethoven.works; 
@@ -390,10 +404,14 @@ d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
 										.attr('class', 'tooltip')
 										.style('opacity', 0); 
 
-	d3.select("body").selectAll(".tick").select("line")
-							.attr("stroke", "White")
-							.attr("stroke-dasharray", "2,2"); 
+	//d3.select("body").selectAll(".tick").select("line")
+	//						.attr("stroke", "White")
+	//						.attr("stroke-dasharray", "2,2"); 
 
+  
+  dotFreqAxis.selectAll(".tick").select("line")
+						.attr("stroke", "White")
+						.attr("stroke-dasharray", "2,2"); 
 	/**
 	//TODO some redundant code here. Clean up 
 	composers.forEach( composer => {

@@ -1,13 +1,14 @@
 let composers = []; 
 d3.json('../../data/compositions.json', (d) => {
-	console.log(d);
+ console.log(d);
 	d.forEach(composer => {
-		let composer_name = composer.composer.split(',').reverse().join(' ').trim(); 
+ let composer_name = composer.composer.split(',').reverse().join(' ').trim(); 
 	
 		let composer_object = Object.assign(composer, {
 			birth: null, 
 			death: null,
-		}); 
+		});
+ 
 				
 		$.ajax({
   		url: '//en.wikipedia.org/w/api.php',
