@@ -163,6 +163,8 @@
 			.methodology p {
 				font-family: 'Open Sans'; 
 				font-size: 12px;
+        line-height: 1.7; 
+        margin-bottom: 1.7em;
 			}
 			
 			.prose {
@@ -186,7 +188,7 @@
 			}
       
       .prose p {
-        margin-bottom: 10px;
+        margin-bottom: 1.7em;
       }
 			
 			
@@ -224,12 +226,7 @@
 			
 			
 			
-			.inner-container {
-				position: absolute; 
-				top: 0; 
-				width: 100%; 
-				/*margin-left: 20rem;*/
-			}
+
       
       .container {
 				position: relative; 
@@ -278,16 +275,26 @@
 			}
 		  */
 
+      .inner-container {
+				position: absolute; 
+				top: 0; 
+				width: 100%; 
+        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+			}
+      
+      .fixed {
+				position: fixed; 
+				/*left: auto; */
+				/*top: 0; */
+			}
+      
 			.at-bottom.inner-container {
 				bottom: 0; 
 				top: auto; 
 			}
 			
-			.fixed {
-				position: fixed; 
-				/*left: auto; */
-				/*top: 0; */
-			}
+			
 			
 			.heat-container {
 				width: 100%; 
@@ -336,31 +343,36 @@
         color: #A6ADB3;
       }
       
-      
+      .dot-chart-heading-middle {
+        margin: auto;
+        text-align: center;
+      }
       
 			
 			.composer-face-container {
 				width: 68px; 
 				height: 68px; 
-				margin: auto; 
-			}
+				margin-right: 20px;
+        display: inline-block;
+        vertical-align: middle;
+      }
 			.composer-face {
 				width: 68px; 
 				height: 68px; 
         border: solid 2px #ff645f;
 				border-radius: 50%; 
+        text-align: center;
 			}
 			
 			select {
-        min-width: 300px;
-				max-width: 400px; 
+        min-width: 325px;
 				height: 38px; 
 				border: 5px solid Steelblue; 
         background-color: rgba(52,52,52,0);
 				font-family: 'Alegreya Sans';
 				font-size: 15px;
 				margin: 15px auto; 
-				display: block;
+				display: inline-block;
         color: aliceblue;
 			}
       
@@ -518,9 +530,7 @@
 
 				<p class='epigraph'><em>When people hear "classical," they think "dead." The music is described in terms of its distance from the present, its resistance to the mass-what it is not[...] But the same story could have been written ten years ago or twenty. If this be death, the record is skipping. A complete version of the Death of Classical Music Archive would go back to the fourteenth century, when the sensuous melodies of ars nova were thought to signal the end of civilization.</em><span>-Alex Ross, <a target='_blank' href='https://www.newyorker.com/magazine/2004/02/16/listen-to-this'>"Listen to This"</a>, <em>The New Yorker</em> (2004)</span></p>
 				<p>Throughout the history of Classical Music, the perception that the genre's on its deathbed has always been a recurring motif. But how accurate are these anecdotal impressions? Can we move beyond anecdotes and back it up with some data?</p>
-        <br>
 				<p>There are more than a few ways to assess the health of any particular artform. You can look at audience demographics and see who's engaging with the art. Are more or less people consuming the artform year-to-year? Decade-by-decade? Based on these metrics, Classical Music is undoubtedly in trouble. In 2012, the National Endowment for the Arts (NEA) <a target='_blank' href='https://www.arts.gov/sites/default/files/2012-sppa-jan2015-rev.pdf'>released a report</a> documenting the changes and trends of national participation in the arts between 2002 to 2012. While the percentage of adults engaging in activities like reading and moviegoing stayed relatively stable during the decade (small drops among the US adult population from 56.6% to 54.2% for reading, and from 60.0% to 59.4% for movie-going), Classical Music participation went from an already low 10.8% to 8.1%., a 25% drop.</p>
-        <br>
 				<p>While the situation seems dire when looking at the consumer-side of the equation, we can also measure the health of the art form from the producer/creator-side as well. For example, during the decades-long decline of traditional television consumption, daring and ambitious writers and showrunners took their ideas to alternative platforms, jumpstarting what we now call a modern TV Renaissance, with the number of original tv programming hitting a high of 455 in 2016 (compared to 182 shows in 2002). Clearly, great and breakthrough content can have some impact on consumer habits and trends.</p>
 				<p>So how can we measure the state of 'content' in Classical Music today? Qualities like changes in aesthetics and styles and 'innovation' can be hard to measure objectively. Luckily, we can use some other measures as proxies. To make sense of the state of Classical Music today, we'll need to compare it to some comparable 'benchmark' moments in history. These 'benchmark' moments need to A) have quantifiable, reliable, recorded metrics that we can use to compare with data today, and B) be periods of time that a general observer might see as the heyday of Classical Music, from periods when well-known composers of the genre were composing their major compositions.</p>
 			</div>
@@ -555,11 +565,10 @@
         <h2 class='graphic-title'>Top 60 Composers By Number of Times Pieces Programmed*</h2>
         <div>
           <div class="dot-chart-heading-middle">
+            <div class="composer-face-container"></div>
 				    <select class="select-value"><option value="">Choose a composer:</option></select>
-				    <div class="composer-face-container"></div>
           </div>
-        </div>
-				
+        </div>    
 				<div class="main-container"></div>
 			</section>
       
@@ -571,9 +580,7 @@
 				<hr>
 				<h3>Methodology</h3>
 				<p>The performance and concert data of the New York Philharmonic is publicly available through the orchestra's Github page. Throughout the NYP's 175+ year history, they've presented a concerts under a variety of different categories. This analysis focuses on the Subscription Series concerts, the core of the NYP's performances. We've noticed occasional miscategorization of concerts in the data, and we've flagged and corrected any of such data that affected the analysis around subscription series concerts. However, since the data is quite voluminous, we can't be sure that all mistakes are fully accounted for. Noise-reduction in the data was accomplished through a simple moving average algorithm, and both the code for that, as well as the datasets that resulted from the analysis of the raw concert data, can be found in the Github repository for this project.</p>
-        <br>
-				<p>Exclusion of pieces....rationale</p>
-        <br>
+				<p>Exclusion of pieces....rationale. ata, specifically birth and death years, was collected primarily from Wikipedia, via a script that leveraged the ata, specifically birth and death years, was collected primarily from Wikipedia, via a script that leveraged the</p>
 				<p>Composer metadata, specifically birth and death years, was collected primarily from Wikipedia, via a script that leveraged the MediaWiki API. A small percentage of composers had no Wiki entries, and the birth and death years for these composers, if available, were collected manually, from a variety of sources found primarily through Google.</p>
 			</div>
 		

@@ -34,7 +34,12 @@ d3.json('../../data/new_top60.json', composers => {
 
   composers.forEach(composer => {
     if (composer.death > 1842) {
-      if (!any(composer.works, (work) => parseInt(work.seasons[0]) < composer.death)) console.log(composer.composer); 
+      if (!any(composer.works, (work) => parseInt(work.seasons[0]) < composer.death)) {
+        console.log('after death: ' + composer.composer); 
+      } else {
+        console.log('before death: ' + composer.composer);
+      }
+      
     }
   });
   const SVG_WIDTH = $('.main-container').innerWidth(); 
@@ -42,13 +47,15 @@ d3.json('../../data/new_top60.json', composers => {
 	console.log(SVG_WIDTH);
 	console.log(SVG_HEIGHT); 
 	
+  //scales for DOT CHART
 	let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([SVG_WIDTH*.05,SVG_WIDTH*.95]); 
 	let yScale = d3.scaleLinear().domain([0,31]).range([SVG_HEIGHT*.92, 0]);
-	let svg = d3.select('.main-container').append('svg').attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
-	/*
-	svg.append('rect').attr('x', 0).attr('y', 0)
-	.attr('width', 80).attr('height', SVG_HEIGHT*.92).attr('opacity', .3).attr('fill', 'grey'); 
-	*/
+	
+  let svg = d3.select('.main-container').append('svg')
+  
+  svg.attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
+	
+  
 	
 	//Axes logic and display 
 	svgDimensions = document.getElementsByTagName('svg')[0].getBoundingClientRect(); 
@@ -258,9 +265,9 @@ d3.json('../../data/new_top60.json', composers => {
 			.attr('cx', d => seasonsScale(d.season))
 			.attr('cy', d => yScale(d.seasonWorkCount))
 			.attr('fill', d => {
-				if (d.orphanWork) return 'none'; 
+				if (d.orphanWork) return '#343434'; 
 				if (d.firstPerf) return 'Tomato'; 
-				else return '#3f74a1'; 
+				else return '#3f74a1';
 			})
 			.attr('stroke', d => {
 				if (d.orphanWork) return 'gray'; 

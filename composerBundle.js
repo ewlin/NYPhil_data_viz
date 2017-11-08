@@ -35,7 +35,12 @@ d3.json('../../data/new_top60.json', composers => {
 
   composers.forEach(composer => {
     if (composer.death > 1842) {
-      if (!any(composer.works, (work) => parseInt(work.seasons[0]) < composer.death)) console.log(composer.composer); 
+      if (!any(composer.works, (work) => parseInt(work.seasons[0]) < composer.death)) {
+        console.log('after death: ' + composer.composer); 
+      } else {
+        console.log('before death: ' + composer.composer);
+      }
+      
     }
   });
   const SVG_WIDTH = $('.main-container').innerWidth(); 
@@ -259,9 +264,9 @@ d3.json('../../data/new_top60.json', composers => {
 			.attr('cx', d => seasonsScale(d.season))
 			.attr('cy', d => yScale(d.seasonWorkCount))
 			.attr('fill', d => {
-				if (d.orphanWork) return 'none'; 
+				if (d.orphanWork) return '#343434'; 
 				if (d.firstPerf) return 'Tomato'; 
-				else return '#3f74a1'; 
+				else return '#3f74a1';
 			})
 			.attr('stroke', d => {
 				if (d.orphanWork) return 'gray'; 
