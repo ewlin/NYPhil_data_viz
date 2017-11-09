@@ -35,7 +35,7 @@
 *   Add labeling to Stream/Area chart axes* [COMPLETED, fix x axis label positioning issue]
 *   Annotations (A. on the side of chart + B. within chart) [MOSTLY COMPLETED, need to add mobile sizes/scale code]     UPDATE (10/31/07, REMOVED ANNOTATIONS ON SIDE; make legend instead; LEGEND COMPLETED; consider some design         changes?) 
 *   Add annotations of when some composers were born (Stravinsky, Mahler, Ravel, Debussy, Shostakovich, Rach etc.)
-*   Change y axis label on first chart to 'Number of UNIQUE compositions...' [COMPLETED]
+*       Change y axis label on first chart to 'Number of UNIQUE compositions...' [COMPLETED]
 *   Streamgraph vertical spacing (with graph title) [see bug issue A]
 
 ##### Dot Chart 

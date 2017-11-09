@@ -187,11 +187,39 @@
 				padding-top: 10px;
 			}
       
-      .prose p {
+      .prose p, .prose ul {
         margin-bottom: 1.7em;
       }
+      
+      
 			
 			
+     span.composer-trigger {
+        display: inline-block;
+        line-height: 1.4em;
+        padding: .15em .4em;
+        border-radius: .4em;
+        color: aliceblue;
+        font-size: .89em;
+        cursor: pointer;
+      }
+      
+      li.living-success span.composer-trigger {
+        background-color: Tomato;
+      }
+      
+      li.one-hit span.composer-trigger {
+        background-color: #801380;
+      }
+      
+      li.after-death span.composer-trigger {
+        background-color: #345E87; 
+      }
+      
+
+
+      
+      
 			.outer-container {
 				width: 100%;
 				position: relative; 
@@ -506,7 +534,7 @@
 		</style>
 
     <link rel="stylesheet" type="text/css" href="assets/css/select2.min.css">
-		<link href="https://fonts.googleapis.com/css?family=Sumana:400,700|Lato:300,400,700|Rozha+One|Lora:400,400i,700,700i|Alegreya+Sans|Open+Sans:300,400,400i|Playfair+Display:400,700,900|Spectral:400,700" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Sumana:400,700|Lato:300,400,700|Rozha+One|Lora:400,400i,700,700i|Alegreya+Sans|Open+Sans:300,400,400i,700|Playfair+Display:400,700,900|Spectral:400,700" rel="stylesheet">
 
 		
 	</head>
@@ -558,10 +586,21 @@
 			</div>
 		
 		
+		  <section class="dot-chart-explain prose dot-chart-prelude">
+        <p>Now that's we've looked at the data at a high level, let's zoom into a more granular level and look closely at what composers and music is actually being played.</p>
+        <p>It turns out that the success of composers seems to follow a classic 'long-tail' distribution: a small subset of composers receive a disproportionate number of performances. The top-59 most performed composers (actually 61, with 3 composers sharing 59th place) represent over 75% of all pieces programmed while accounting for just under 5.8% of all composers ever performed on a subscription concert (61 out of 1039). [Might want a static chart here]</p>
+        <p>You can explore which works of these 61 composers were programmed by the New York Philharmonic each season <a href='/#dot-chart'>below</a>. Each dot represents a unique composition programmed in a particular season. <strong>Hover</strong> over the dots to see some metadata about each composition; <strong>click</strong> to highlight all appearances of the piece across the NYP's history. [Insert legend explaining dot colors]</p>
+        <p>Some particularly interesting composer trends/patterns include:</p>
+        <ul>
+          <li>52 of the 61 most performed composers were alive for at least some portion of the NYP's history.</li>
+          <li>Of those 52, X were born after the NYP was founded.</li>
+          <li class="living-success">Despite the common belief that great artists are often not appreicated during their lifetimes, quite a number of composers in this elite group were performed a lot during their lifetimes, including <span class="composer-trigger" data-index="5">Richard Strauss</span>, <span data-index="13" class="composer-trigger">Stravinsky</span>, <span data-index="21" class="composer-trigger">Rachmaninoff</span>, <span class="composer-trigger" data-index="40">Hindemith</span>, and <span data-index="25" class="composer-trigger">Shostakovich</span> among others.</li>
+          <li class="one-hit">While composers like Beethoven, Brahms, and Ravel seem to have a pretty balanced output, with a number of compositions performed multiple times by the NYP, other composers in the top 59 are clearly One-Hit Wonders. Almost all performances of <span class="composer-trigger" data-index="59">Paul Dukas</span> are of his <em>The Sorcerer's Apprentice</em>.</li>
+        </ul>
+        <p>The more hollow red dots indicate that, the fewer solid red dots....one hit</p>
+      </section>
 		
-		
-		
-			<section class="dot-chart">
+			<section id="dot-chart" class="dot-chart">
         <h2 class='graphic-title'>Top 60 Composers By Number of Times Pieces Programmed*</h2>
         <div>
           <div class="dot-chart-heading-middle">
