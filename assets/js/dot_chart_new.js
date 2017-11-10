@@ -259,17 +259,17 @@ d3.json('../../data/new_top60.json', composers => {
   //renderRandomHeatMaps(); 
   //renderHeatMap(); 
   
-  /**
-  let samples = [[27, 243, 6, 128, 94, 52], [89, 248, 15, 182, 15, 7], [94, 207, 34, 195, 175, 46], [89, 207, 15, 195, 15, 46]]; 
-  //samples.forEach(sample => renderHeatMap.call(null, beethoven, ...sample));
-  renderHeatMap.call(null, calculateComposerSeasonData(composers[12], 12), ...samples[3]);
-  renderHeatMap.call(null, calculateComposerSeasonData(composers[13], 13), ...samples[3]);
-  renderHeatMap.call(null, calculateComposerSeasonData(composers[1], 1), ...samples[3]);
-  renderHeatMap.call(null, calculateComposerSeasonData(composers[0], 0), ...samples[3]);
-  renderHeatMap.call(null, calculateComposerSeasonData(composers[59], 59), ...samples[3]);
-  renderHeatMap.call(null, calculateComposerSeasonData(composers[60], 60), ...samples[3]);
-  renderHeatMap.call(null, calculateComposerSeasonData(composers[5], 5), ...samples[3]);
-  **/
+  
+  //let samples = [[27, 243, 6, 128, 94, 52], [89, 248, 15, 182, 15, 7], [94, 207, 34, 195, 175, 46], [89, 207, 15, 195, 15, 46]]; 
+  ////samples.forEach(sample => renderHeatMap.call(null, beethoven, ...sample));
+  //renderHeatMap.call(null, calculateComposerSeasonData(composers[12], 12), ...samples[3]);
+  //renderHeatMap.call(null, calculateComposerSeasonData(composers[13], 13), ...samples[3]);
+  //renderHeatMap.call(null, calculateComposerSeasonData(composers[1], 1), ...samples[3]);
+  //renderHeatMap.call(null, calculateComposerSeasonData(composers[0], 0), ...samples[3]);
+  //renderHeatMap.call(null, calculateComposerSeasonData(composers[59], 59), ...samples[3]);
+  //renderHeatMap.call(null, calculateComposerSeasonData(composers[60], 60), ...samples[3]);
+  //renderHeatMap.call(null, calculateComposerSeasonData(composers[5], 5), ...samples[3]);
+  
 
   /* END HEAT MAP */
   

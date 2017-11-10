@@ -5,11 +5,13 @@
 ### TODOs: 
 
 #### BUGS: 
-* Resizing issues [Mostly fixed, some scale issues, margins etc. remain]
-* X-Axis ticks sometimes not showing up in AREA graph [COMPLETED; issue with shape-rendering property on axis, see: https://github.com/d3/d3/issues/2175]
+* Resizing issues [Mostly fixed, some scale issues, margins etc. remain--COMPLETED on STREAMGRAPH]
+* X-Axis ticks sometimes not showing up in AREA graph [COMPLETED]
 * Trendline annotation needs to be removed earlier when scrolling upwards [COMPLETED]
-* [Issue A] Streamgraph/area graph height needs to be calculated a bit better to make it mostly 100% height when fixed. including graphic title; otherwise weird bug when height overflows to bottom since graphic title is not calculated using a percentage of innerHeight. (11/5 bug) WEIRD FLASHING ISSUE with mobile; flicker
-* IDEA: calculate container (the fixed thing's height using window.innerHeight() ) 
+* [Issue A] Streamgraph/area graph height needs to be calculated a bit better to make it mostly 100% height when fixed. including graphic title; otherwise weird bug when height overflows to bottom since graphic title is not calculated using a percentage of innerHeight. (11/5 bug) WEIRD FLASHING ISSUE with mobile; flicker [FIXED BOTH; see https://stanko.github.io/ios-safari-scoll-position-fixed/]
+* IDEA: calculate container (the fixed thing's height using window.innerHeight() ) [COMPLETED]
+
+* FIX d3 annotation bug when refreshing from lower in the document; arrowhead appears as an artifact [Completed, scraped arrow]
 
 #### TESTS: 
 * Data processing/transforms code should be tested 
@@ -37,7 +39,7 @@
 *   Annotations (A. on the side of chart + B. within chart) [MOSTLY COMPLETED, need to add mobile sizes/scale code]     UPDATE (10/31/07, REMOVED ANNOTATIONS ON SIDE; make legend instead; LEGEND COMPLETED; consider some design         changes?) MOSTLY DONE
 *   Add annotations of when some composers were born (Stravinsky, Mahler, Ravel, Debussy, Shostakovich, Rach etc.) (MOVE THIS TO ORCHESTRA TIMELINE aka other orchs)
 *   Change y axis label on first chart to 'Number of UNIQUE compositions...' [COMPLETED]
-*   Streamgraph vertical spacing (with graph title) [see bug issue A]
+*   Streamgraph vertical spacing (with graph title) [see bug issue A-COMPLETED]
 
 ##### Dot Chart 
 * Legend (Orphan, NYPhil premiere, repeat performance) + Lifetime box

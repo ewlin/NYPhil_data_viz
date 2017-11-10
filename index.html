@@ -170,17 +170,17 @@
 			.prose {
         font-family: 'Open Sans';
 				max-width: 35rem; 
-				margin: auto;
+				margin: 1em auto;
         padding: 0 1em;
 				line-height: 1.7; 
-				margin-top: 60px;
-        margin-bottom: 20px;
 			}
 			
 			.prose .epigraph { 
 				max-width: 30rem; 
 				margin: auto; 
         padding: 0 1em 2em; 
+        font-size: 1em;
+        line-height: 1.5em;
 			}
 			
 			.prose .epigraph span {
@@ -280,6 +280,7 @@
 			}
 			
       .explain p {
+        font-size: 1.05em;
 				max-width: 28%; 
 				margin: 0 2%;
 				padding: 6px 12px;
@@ -299,6 +300,13 @@
         transition: opacity 1.5s;
       }
       
+      span.area-first {
+        color: tomato; 
+      }
+      
+      span.area-repeat {
+        color: steelblue;
+      }
 
       /* Centered chart and explainations
 
@@ -577,7 +585,7 @@
 			
 			<div class="prose">
 
-				<p class='epigraph'><em>When people hear "classical," they think "dead." The music is described in terms of its distance from the present, its resistance to the mass-what it is not[...] But the same story could have been written ten years ago or twenty. If this be death, the record is skipping. A complete version of the Death of Classical Music Archive would go back to the fourteenth century, when the sensuous melodies of ars nova were thought to signal the end of civilization.</em><span>-Alex Ross, <a target='_blank' href='https://www.newyorker.com/magazine/2004/02/16/listen-to-this'>"Listen to This"</a>, <em>The New Yorker</em> (2004)</span></p>
+				<p class='epigraph'><em>When people hear "classical," they think "dead." The music is described in terms of its distance from the present, its resistance to the mass-what it is not[...] But the same story could have been written ten years ago or twenty. If this be death, the record is skipping. A complete version of the Death of Classical Music Archive would go back to the fourteenth century...</em><span>-Alex Ross, <a target='_blank' href='https://www.newyorker.com/magazine/2004/02/16/listen-to-this'>"Listen to This"</a>, <em>The New Yorker</em> (2004)</span></p>
 				<p>Throughout the history of Classical Music, the perception that the genre's on its deathbed has always been a recurring motif. But how accurate are these anecdotal impressions? Can we move beyond anecdotes and back it up with some data?</p>
 				<p>There are more than a few ways to assess the health of any particular artform. You can look at audience demographics and see who's engaging with the art. Are more or less people consuming the artform year-to-year? Decade-by-decade? Based on these metrics, Classical Music is undoubtedly in trouble. In 2012, the National Endowment for the Arts (NEA) <a target='_blank' href='https://www.arts.gov/sites/default/files/2012-sppa-jan2015-rev.pdf'>released a report</a> documenting the changes and trends of national participation in the arts between 2002 to 2012. While the percentage of adults engaging in activities like reading and moviegoing stayed relatively stable during the decade (small drops among the US adult population from 56.6% to 54.2% for reading, and from 60.0% to 59.4% for movie-going), Classical Music participation went from an already low 10.8% to 8.1%., a 25% drop.</p>
 				<p>While the situation seems dire when looking at the consumer-side of the equation, we can also measure the health of the art form from the producer/creator-side as well. For example, during the decades-long decline of traditional television consumption, daring and ambitious writers and showrunners took their ideas to alternative platforms, jumpstarting what we now call a modern TV Renaissance, with the number of original tv programming hitting a high of 455 in 2016 (compared to 182 shows in 2002). Clearly, great and breakthrough content can have some impact on consumer habits and trends.</p>
@@ -592,16 +600,18 @@
           </div>
 				</div>
 				<div class="stream-explain explain">
-					<p id="first-explain" class="explain1" data-graph='1'>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about? More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
-					<br />
-					<p class="explain2" data-graph='2'>The data is complicated by the dramatic spike in the total number of pieces played per season, starting in the 1909-10 season, when the orchestra <a target='_blank' href='http://www.nytimes.com/1982/03/07/arts/the-philharmonic-on-disk-the-maestro-is-the-message.html?pagewanted=2'>increased the number of concerts it performed each season from 18 to 54</a>. Furthermore, the absolute number of compositions performed each season actually varies quite a bit even with a fixed number of concerts. To account for this, I normalized the data, and re-graphed the first performances and repeat performances as a percentage of total pieces performed each season. But even as a percentage, the season-to-season fluctuation of first time-to-repeat performances is still quite noisy.</p>
-					<br />
-					<p class="explain3" data-graph='3'>To get a better sense of the overall trend across time, I applied a rolling average on the dataset to smooth out the noise.** By the sixth season, the average percentage of repeat performances each season is already over 40%. By the 1859-60 season, the average percentage of first-time performances each season drops below 50%. Repeat performances would be the norm from this point on in the Phil's history. Essentially, within two decades of the Philharmonic's founding, it had already turned into a 'Greatest Hits' band. This is actually a rather remarkable fact, since at this point in history, some of the most performed orchestral music today had yet to be composed; Johannes Brahms' First Symphony was completed in 1876, nearly two decades after the 1859-60 season. In fact, some of the most familiar composers like Mahler, Debussy, Ravel, Stravinsky, and Shostakovich were yet to be born.</p>
-					<br />
-					<p class="explain4" data-graph='4'>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
-					<br />
-					<p class="explain5" data-graph='5'>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
-          <br />
+					<p id="first-explain" class="explain1" data-graph='1'>First, I plotted the number of unique compositions* performed each season by the New York Philharmonic. The <span class='area-first'><strong>orange</strong></span> area represents the pieces being played for the first time by the NYP. In contrast, the <span class='area-repeat'><strong>blue</strong></span> area represents pieces that have been played before in a previous season. Other than the first season, every subsequent season has featured at least some pieces that the orchestra had previously performed. NOVELTY....</p>
+					<br>
+          <p class="explain2">At first glance, there's not much of a pattern. The absolute number of pieces programmed each year fluctuates quite a bit. The data is also complicated by the dramatic spike in the total number of pieces played per season, starting in the <a target='_blank' href='http://www.nytimes.com/1982/03/07/arts/the-philharmonic-on-disk-the-maestro-is-the-message.html?pagewanted=2'>1909-10 season</a>. To make more sense of our data, we'll have to normalize it, and look at the ratios of 1st-time-to-repeat pieces each season instead.</p>
+          <br>
+					<p class="explain3" data-graph='2'><em>Now we're comparing apples to apples.</em> However, even this normalized data that represents a ratio is quite difficult to decipher. The level of noise is still too high for any obvious trend to emerge. We'll have to transform our data further: this time, to filter out some of the noise.</p>
+					<br>
+          <p class="explain4" data-graph='3'>I applied a <a target='_blank' href='https://en.wikipedia.org/wiki/Moving_average#Simple_moving_average'>simple central moving average</a> to each season to smooth out the data. I was very surprised to see how soon after the founding of the orchestra when it essentially became a 'Greatest Hits' band. In less than two decades (the 1859-60 season), the orchestra is, on average, repeating more pieces than they are playing pieces for the first time. Beginning in the mid-1860s, the percentage of pieces being played for the first time starts to slowly, but steadily decline, from around 35% to ~20-25% today.</p>
+					<br>
+					<p class="explain5" data-graph='4'>We can look at the data in other ways too. What other parameters can help us gauge the health of the genre? We can take the 'dead or alive' metaphor more literally and ask: is the orchestra still performing music by living composers? Using the same techniques of data transformation earlier, we can look at the ratio of compositions each season between living and dead composers. On this metric, the decline is even more dramatic.</p>
+					<br>
+					<p class="explain6" data-graph='5'>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
+          <br>
 					<p id="last-explain">More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p>
 				</div>
 			</div>
