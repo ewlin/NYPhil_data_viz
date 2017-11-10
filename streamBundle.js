@@ -277,6 +277,35 @@ d3.json('../../data/composers.json', (err, d) => {
     .attr('transform', 'translate(67,0)'); 
 
   
+  
+  //if (windowWidth > 1024) {
+  //  //legendScaleX.range([0, SVG_WIDTH - 92]);
+  //  
+  //  legendKey.select('rect').transition().duration(500)
+  //    .attr('x', (d, i) => legendScaleX(i))
+  //    .attr('y', 2)
+  //    .attr('width', 45)
+  //    .attr('height', 20); 
+  //  
+  //  legendKey.select('text').transition().duration(500)
+  //    .attr('x', (d, i) => legendScaleX(i) + 60)
+  //    .attr('y', 0); 
+  //  
+  //} else if (windowWidth <= 1024) {
+  //  
+  //  legendKey.select('rect').transition().duration(500)
+  //    .attr('width', 35)
+  //    .attr('height', 15)
+  //    .attr('x', 0)
+  //    .attr('y', (d, i) => i == 0 ? 0 : 25); 
+  //  
+  //  legendKey.select('text').transition().duration(500)
+  //    .attr('x', 40)
+  //    .attr('y', (d, i) => i == 0 ? 0 : 25); 
+  //}
+  
+  
+  
   legendKey.append('rect')
     .attr('x', (d, i) => legendScaleX(i))
     .attr('y', 2)
@@ -375,7 +404,7 @@ d3.json('../../data/composers.json', (err, d) => {
     //.attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
     .attr('transform', `translate(67,0)`)
     .call(makeAnnotations); 
-	
+	  
   let line = d3.line()
     .curve(d3.curveCardinal.tension(.1))
     .x((d, i) => x(i))
@@ -699,6 +728,7 @@ d3.json('../../data/composers.json', (err, d) => {
       legendKey.select('text').transition().duration(500)
         .attr('x', (d, i) => legendScaleX(i) + 60)
         .attr('y', 0); 
+    
     } else if (windowWidth <= 1024) {
       
       legendKey.select('rect').transition().duration(500)

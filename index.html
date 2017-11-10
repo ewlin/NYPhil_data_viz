@@ -110,14 +110,14 @@
       }
 			
 			.title {
-				padding-top: 25px; 
-				font-size: 58px;
-				max-width: 45rem; 
+        padding: 25px 1em 0;
+				font-size: 3.5em;
+				max-width: 40rem; 
 				margin: 0 auto 25px;
 				text-align: center; 
 				font-weight: 700; 
 				font-family: 'Playfair Display', serif; 
-				line-height: 60px; 
+				line-height: 1em; 
 				color: #463D3D; 
 			}
 			
@@ -532,6 +532,10 @@
           letter-spacing: 0; 
         }
         
+        .title {
+          font-size: 2.5em; 
+        }
+        
       }
       
       @media screen and (max-width: 1024px) {
@@ -584,7 +588,7 @@
 			<div class="outer-container streamgraph-section">
 				<div class="inner-container">
 					<div class="container">
-            <h2 class='graphic-title'>1st Movement: Trends of the New York Phil</h2>
+            <h2 class='graphic-title'>1st Movement: Macro Trends at the New York Phil</h2>
           </div>
 				</div>
 				<div class="stream-explain explain">
@@ -604,15 +608,15 @@
 		
 		
 		  <section class="dot-chart-explain prose dot-chart-prelude">
-        <p>Now that's we've looked at the data at a high level, let's zoom into a more granular level and look closely at what composers and music is actually being played.</p>
+        <p>Now that's we've looked at the data at a high level, let's zoom to a more granular level and look closely at what composers and music are actually being played.</p>
         <p>It turns out that the success of composers seems to follow a classic 'long-tail' distribution: a small subset of composers receive a disproportionate number of performances. The top-59 most performed composers (actually 61, with 3 composers sharing 59th place) represent over 75% of all pieces programmed while accounting for just under 5.8% of all composers ever performed on a subscription concert (61 out of 1039). [Might want a static chart here]</p>
         <p>Some particularly interesting composer trends/patterns include:</p>
         <ul>
           <li class="living-success"><strong>POPULAR IN THEIR LIFETIMES AND AFTER: </strong>52 of the 61 most performed composers were alive during some portion of the NYP's history. Nearly half (29 of 61) were born after the NYP was founded. Despite the common belief that great artists are often not appreicated during their lifetimes, a number of composers in this elite group found quite a bit of success during their lifetimes, including <span class="composer-trigger" data-index="5">Richard Strauss</span>, <span data-index="13" class="composer-trigger">Stravinsky</span>, <span data-index="21" class="composer-trigger">Rachmaninoff</span>, <span class="composer-trigger" data-index="40">Hindemith</span>, and <span data-index="25" class="composer-trigger">Shostakovich</span> among others.</li>
-          <li class="after-death"><strong>NEGLECTED DURING THEIR LIFETIMES: </strong>Of these 52 composers alive for at least a portion of the NYP's existence, only 7 were <em>not performed at all</em> by the NYP in their lifetimes. Two are particularly notable: <span class="composer-trigger" data-index="35">Musorgsky's</span> posthumous reputation came mostly as a result of arragements and reworkings of his music by Ravel and Rimsky-Korsakov, while <span class="composer-trigger" data-index="52">Anton von Webern's</span> small oeuvre became more performed in the mid 20th century.</li>
-          <li class="neglected">However, a few additional composers became more popular at the New York Phil only after their deaths. During their lifetimes, they were mostly ignored and received mostly a smattering of performances. <span class="composer-trigger" data-index="23">B&#233;la Bart&#243;k</span> is one of the more notable in this category. On the extreme end, <span class="composer-trigger" data-index="27">Bruckner</span> and <span class="composer-trigger" data-index="50">Ives</span> received only one performance of a work by the NYP before they died.</li>
-          <li class="one-hit"><strong>ONE-HIT WONDERS: </strong>While composers like Beethoven, Brahms, and Ravel seem to have a pretty balanced output, with a number of compositions performed multiple times by the NYP, other composers in the top 59 are clearly One-Hit Wonders. <span class="composer-trigger" data-index="59">Paul Dukas</span> is probably the epitome of a One-Hit Wonder composer. Almost all of his performances are of his <em>The Sorcerer's Apprentice</em> (nearly 80% of his performances). Some other One-Hit Wonders in the top 59: <span class="composer-trigger" data-index="42">Max Bruch</span> (Violin Concerto No. 1) <span class="composer-trigger" data-index="54">Edouard Lalo</span> (<em>Symphonie Espagnole</em>)</li>
-          <li class="declined"><strong>FADED AWAY: </strong>The last major category of composers are those whose popularity has mostly faded with time. Composers like <span class="composer-trigger" data-index="60">Louis Spohr</span>, <span class="composer-trigger" data-index="58">Karl Goldmark</span>, <span class="composer-trigger" data-index="53">Anton Rubinstein</span>, and <span class="composer-trigger" data-index="55">William Schuman</span> are probably unfamiliar today to most people, even among some Classical Music connoisseurs, but they were popular with the orchestra (and likely, with audiences) when they were alive. In the first few seasons of the NYP, Spohr was as popular as Beethoven and Mozart!</li>
+          <li class="after-death"><strong>COMPLETELY NEGLECTED DURING THEIR LIFETIMES: </strong>Of these 52 composers alive for at least a portion of the NYP's existence, only 7 were <em>not performed at all</em> by the NYP during their lifetimes. Two are particularly notable: <span class="composer-trigger" data-index="35">Musorgsky's</span> posthumous reputation came mostly as a result of arragements and reworkings of his music by Ravel and Rimsky-Korsakov, while <span class="composer-trigger" data-index="52">Anton von Webern's</span> small oeuvre became more performed in the mid 20th century.</li>
+          <li class="neglected"><strong>MOSTLY IGNORED DURING THEIR LIFETIMES: </strong>Some composers, though not completely neglected by the NYP while they were alive, became considerably more popular after their deaths. During their lifetimes, they received only a smattering of performances. <span class="composer-trigger" data-index="23">B&#233;la Bart&#243;k</span> is one of the more notable in this category. On the extreme end, <span class="composer-trigger" data-index="27">Anton Bruckner</span> and <span class="composer-trigger" data-index="50">Charles Ives</span> each had a single piece performed in one season by the NYP before they died.</li>
+          <li class="declined"><strong>FADED AWAY: </strong>The fourth category of composers are those whose popularity has mostly faded with time. Composers like <span class="composer-trigger" data-index="60">Louis Spohr</span>, <span class="composer-trigger" data-index="58">Karl Goldmark</span>, <span class="composer-trigger" data-index="53">Anton Rubinstein</span>, and <span class="composer-trigger" data-index="55">William Schuman</span> are probably unfamiliar today to most people, even among some Classical Music connoisseurs, but they were popular with the orchestra (and likely, with audiences) when they were alive. In the first few seasons of the NYP, Spohr was as popular as Beethoven and Mozart!</li>
+          <li class="one-hit"><strong>ONE-HIT WONDERS: </strong>While composers like Beethoven, Brahms, and Ravel seem to have a pretty balanced output, with a number of compositions performed multiple times by the NYP, other composers in the top 59 make the list mostly off the extreme popularity of one or two compositions. <span class="composer-trigger" data-index="59">Paul Dukas</span> is probably the epitome of a One-Hit Wonder composer. Almost all&#8212about 80%&#8212of his performances are of his <em>The Sorcerer's Apprentice</em>. Some other One-Hit Wonders in the top 59: <span class="composer-trigger" data-index="42">Max Bruch</span> (Violin Concerto No. 1 in G minor) <span class="composer-trigger" data-index="54">Edouard Lalo</span> (<em>Symphonie Espagnole</em>) <span class="composer-trigger" data-index="51">Bedrich Smetana</span> (Pieces from the symphonic cycle <em>Ma Vlast</em> and his opera <em>The Bartered Bride</em>...so I guess he's more of a Two-Hit Wonder?)</li>
         </ul>
         <p>You can explore the New York Philharmonic performance history of these 61 composers by season <a href='/#dot-chart'>below</a>. Each dot represents a unique composition programmed in a particular season. <strong>Hover</strong> over the dots to see some metadata about each composition; <strong>click</strong> to highlight all appearances of the piece across the NYP's history. [Insert legend explaining dot colors]</p>
         <p>The more hollow red dots indicate that, the fewer solid red dots....one hit</p>
