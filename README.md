@@ -51,8 +51,8 @@
 
 #### PROSE: 
 * {PRIORITY} Methodology
-* Introduction/Background
-* {PRIORITY} Chart one explainations 
+* Introduction/Background [Almost complete]
+* {PRIORITY} Chart one explainations [rewrote much of it]
 * {PRIORITY} Chart two explainations [write prose, started; needs fixing]
 
 #### Re-factoring: 

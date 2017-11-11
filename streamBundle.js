@@ -88,7 +88,7 @@ const ALL_SEASONS = generateSeasons(1842, 2016);
 //Reuse when writing re-sizing code 
 $('#first-explain').css('margin-top', $(window).innerHeight()/2); 
 
-$('.explain p').css('margin-bottom', function() {
+$('.explain div').css('margin-bottom', function() {
   return this.id !== 'last-explain' ? $(window).innerHeight() : 0; 
 }); 
 
@@ -495,10 +495,14 @@ d3.json('../../data/composers.json', (err, d) => {
       dy: -65,
       dx: -95 
     }]; 
-    makeAnnotations.accessors({
-      x: d => x(d.i),
-      y: d => yAbs(d.workCount)
-    }).annotations(annotations);
+    
+    if (window.innerWidth > 550 && window.innerHeight > 586) {
+      makeAnnotations.accessors({
+        x: d => x(d.i),
+        y: d => yAbs(d.workCount)
+      }).annotations(annotations);
+    } 
+    
   }
   
 	
@@ -807,7 +811,8 @@ d3.json('../../data/composers.json', (err, d) => {
     
     $('#first-explain').css('margin-top', $(window).innerHeight()/2); 
 
-    $('.explain p').css('margin-bottom', function() {
+    $('div.explain div').css('margin-bottom', function() {
+      console.log(this); 
       return this.id !== 'last-explain' ? $(window).innerHeight() : 0; 
     }); 
 
