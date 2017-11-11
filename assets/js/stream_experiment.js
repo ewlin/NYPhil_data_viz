@@ -15,14 +15,17 @@ let debounce = require('just-debounce-it');
 
 //track current graph to determine which 'd' attribute area to use
 let currentGraph = 'abs'; 
+let windowWidth = window.innerWidth; 
 
 //line drawing timer
 let animateLine; 
 
 const PADDING = 25; 
-let MARGINS = {left: 0, right: 0, top: 0, bottom: 0}; 
+let titleHeight = $('.streamgraph-section .graphic-title').outerHeight(true); 
+
+let MARGINS = {left: 0, right: 0, top: 0, bottom: 25}; 
 let SVG_WIDTH = $('.container').innerWidth();
-let SVG_HEIGHT = $(window).innerHeight() * 0.89; 
+let SVG_HEIGHT = $(window).innerHeight() - titleHeight; 
 
 //let SVG_HEIGHT = SVG_WIDTH > '550' ? $(window).innerHeight() * 0.9 : $(window).innerHeight() * 0.8; 
 //$('.container') is 80% of the width of div.outer-container (which is 100% of window), centered. 
@@ -44,9 +47,9 @@ let x = d3.scaleLinear().domain([0, 174]).range([0, SVG_WIDTH - 92]); //changed 
 //let yAbs = d3.scaleLinear().range([SVG_HEIGHT-4*PADDING, 10]);
 //let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 10]);
 
-//TODO: Set up for legend on top-  range (more padding on top of graph content)
-let yAbs = d3.scaleLinear().range([SVG_HEIGHT-4*PADDING, 50]);
-let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-4*PADDING, 50]);
+//TODO: Set up for legend on top-  range (more padding on top of graph content) 50 is for the legend
+let yAbs = d3.scaleLinear().range([SVG_HEIGHT-3*PADDING, 50]);
+let yPct = d3.scaleLinear().domain([0, 1]).range([SVG_HEIGHT-3*PADDING, 50]);
 
 
 let areaAbsolute = d3.area()
@@ -84,16 +87,16 @@ const ALL_SEASONS = generateSeasons(1842, 2016);
 //Reuse when writing re-sizing code 
 $('#first-explain').css('margin-top', $(window).innerHeight()/2); 
 
-$('.explain p').css('margin-bottom', function() {
+$('.explain div').css('margin-bottom', function() {
   return this.id !== 'last-explain' ? $(window).innerHeight() : 0; 
 }); 
 
                     
 //GITHUB pages bug 
-d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
+//d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 
 //DEV
-//d3.json('../../data/composers.json', (err, d) => {
+d3.json('../../data/composers.json', (err, d) => {
 	
   d.forEach( (composer, composerIdx) => {  //[] of work objects
     let works = composer.works,
@@ -243,20 +246,20 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
   //const ORG_TEXTS = ['New York Phil first-time performance', 'Repeat performances']; 
 
   //annotation experiment 
-  const annotations = [{
-    note: {
-      title: '1909-10 Season', 
-      label: 'Gustav Mahler\'s first season as music director was also a milestone season for the NYP: the orchestra 3X\'ed their concert offerings (from 18 to 54 concerts), and nearly tripled the # of uniques pieces they performed (31 to 85).',
-      wrap: window.innerWidth <= 1024 ? 130 : 165
-    },
-    connector: {
-      end: "arrow"
-    },
-    //can use x, y directly instead of data
-    data: { i: 67, workCount: 85 },
-    dy: -65,
-    dx: -95 
-  }]; 
+  //const annotations = [{
+  //  note: {
+  //    title: '1909-10 Season', 
+  //    label: 'Gustav Mahler\'s first season as music director was also a milestone season for the NYP: the orchestra 3X\'ed their concert offerings (from 18 to 54 concerts), and nearly tripled the # of uniques pieces they performed (31 to 85).',
+  //    wrap: window.innerWidth <= 1024 ? 130 : 165
+  //  },
+  //  connector: {
+  //    end: "arrow"
+  //  },
+  //  //can use x, y directly instead of data
+  //  data: { i: 67, workCount: 85 },
+  //  dy: -65,
+  //  dx: -95 
+  //}]; 
 	
   const legendDataA = [{text: "1st-time NYP performance", color: 'Tomato'}, {text: "Repeat NYP performances", color: 'Steelblue'}]; 
 
@@ -266,33 +269,51 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
   let legend = SVG.append('g')
     .attr('class', 'graph-legend'); 
   
-  //Absolute Graph text
-  
+
+  //CREATE LEGEND FOR STREAM/AREA GRAPHS 
   let legendKey = legend.selectAll('.legend-key')
     .data(legendDataA)
     .enter()
     .append('g')
     .attr('class', 'legend-key')
     .attr('transform', 'translate(67,0)'); 
-
   
   legendKey.append('rect')
-    .attr('x', (d, i) => legendScaleX(i))
-    .attr('y', 2)
-    .attr('width', 45)
-    .attr('height', 20)
     .attr('fill', d => d.color)
     .attr('fill-opacity', .65)
     .attr('stroke', d => d.color)
     .attr('stroke-width', 3);
-
   
   legendKey.append('text')
-    .attr('x', (d, i) => legendScaleX(i) + 60)
-    .attr('y', 0)
     .attr('transform', 'translate(0,14)')
     .text(d => d.text);
-
+    
+  if (windowWidth > 1024) {
+    
+    legendKey.select('rect')
+      .attr('x', (d, i) => legendScaleX(i))
+      .attr('y', 2)
+      .attr('width', 45)
+      .attr('height', 20); 
+    
+    legendKey.select('text')
+      .attr('x', (d, i) => legendScaleX(i) + 60)
+      .attr('y', 0); 
+    
+  } else if (windowWidth <= 1024) {
+    
+    legendKey.select('rect')
+      .attr('width', 35)
+      .attr('height', 15)
+      .attr('x', 0)
+      .attr('y', (d, i) => i == 0 ? 0 : 25); 
+    
+    legendKey.select('text')
+      .attr('x', 40)
+      .attr('y', (d, i) => i == 0 ? 0 : 25); 
+  }
+  
+  
   
   SVG.append('g')
     .attr('class', 'graph-content')
@@ -344,7 +365,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
   let xStreamAxis = SVG.append('g')
     .attr('class', 'xAxis axis stream-axis')
     //.attr('transform', `translate(${0.05*SVG_WIDTH},${SVG_HEIGHT-3.9*PADDING})`)
-    .attr('transform', `translate(67,${SVG_HEIGHT-3.9*PADDING})`)
+    .attr('transform', `translate(67,${SVG_HEIGHT-3*PADDING})`)
 
     .attr('shape-rendering', 'geometricPrecision')
     .call(xAxisYear); 
@@ -366,15 +387,13 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
     .select("line")				
     .attr("stroke", "rgba(40, 60, 70, 1)")
     .attr("stroke-dasharray", "2,2"); 
-
-  makeAnnotations.annotations(annotations); 
 	
   SVG.append('g')
     .attr('class', 'annotation-group')
     //.attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
     .attr('transform', `translate(67,0)`)
     .call(makeAnnotations); 
-	
+	  
   let line = d3.line()
     .curve(d3.curveCardinal.tension(.1))
     .x((d, i) => x(i))
@@ -417,15 +436,76 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
       .duration(1400)
       .text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON'); 
     
+    let newAnnotations = [{
+      note: {
+        title: " "
+      },
+      connector: {
+        end: "none"
+      },
+      data: { i: 0, workCount: 0 }, 
+      dy: 0,
+      dx: 0
+    }]; 
     makeAnnotations.accessors({
       x: d => x(d.i),
       y: d => yAbs(d.workCount)
-    }).annotations(annotations);
+    }).annotations(newAnnotations);
  
   }; 
 	
-	
   let transition2 = function() {
+    currentGraph = 'abs'; 
+    
+    let temp = SVG.selectAll('path')
+      .data(stackB(totalWorksPerSeason))
+      .transition().duration(1400)
+      .attr('d', areaAbsolute)
+      .attr('fill', (d) => {
+        if (d.key == 'first') return 'Tomato';
+        if (d.key == 'repeat') return 'Steelblue';
+      });
+  
+    console.log(totalWorksPerSeason);
+    
+    SVG.select('.yAxis')
+      .transition()
+      .duration(1400)
+      .call(yAxisAbs); 
+    
+    d3.select('.yAxis').select('.domain').remove(); 
+    
+    d3.select('.y-axis-label')
+      .transition()
+      .duration(1400)
+      .text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON'); 
+    
+    const annotations = [{
+      note: {
+        title: '1909-10 Season', 
+        label: 'Gustav Mahler\'s first season as music director was also a milestone season for the NYP: the orchestra 3X\'ed their concert offerings (from 18 to 54 concerts), and nearly tripled the # of uniques pieces they performed (31 to 85).',
+        wrap: window.innerWidth <= 1024 ? 130 : 165
+      },
+      //connector: {
+      //  end: "arrow"
+      //},
+      //can use x, y directly instead of data
+      data: { i: 67, workCount: 85 },
+      dy: -65,
+      dx: -95 
+    }]; 
+    
+    if (window.innerWidth > 550 && window.innerHeight > 586) {
+      makeAnnotations.accessors({
+        x: d => x(d.i),
+        y: d => yAbs(d.workCount)
+      }).annotations(annotations);
+    } 
+    
+  }
+  
+	
+  let transition3 = function() {
     currentGraph = 'pct'; 
 
     //const TEXTS = ['Percentage of first-time performance', 'Percentage of repeat performances']; 
@@ -467,7 +547,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 		    
   }; 
 	
-  let transition3 = function() {
+  let transition4 = function() {
     currentGraph = 'pct'; 
 
     let newAnnotations = [{
@@ -506,7 +586,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 
   }; 
 	
-  let transition4 = function () {
+  let transition5 = function () {
     currentGraph = 'pct'; 
 
     //const MORE_TEXTS = ['Percentage of pieces by living composers', 'Percentage of pieces by deceased composers']; 
@@ -664,27 +744,41 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
     $('.explain4').removeClass('focus');
   }); 
   
-  SMScenes.prose5.on('enter', (e) => {
+  SMScenes.prose5.on('enter', () => {
     $('.explain5').addClass('focus');
+    transition5(); 
+  }); 
+		
+  SMScenes.prose5.on('leave', () => {
+    $('.explain5').removeClass('focus');
+  }); 
+  
+  SMScenes.prose6.on('enter', (e) => {
+    $('.explain6').addClass('focus');
     if (e.scrollDirection === 'FORWARD') transitionLine(); 
   }); 
 	
-  SMScenes.prose5.on('leave', (e) => {
-    $('.explain5').removeClass('focus');
+  SMScenes.prose6.on('leave', (e) => {
+    $('.explain6').removeClass('focus');
     if (e.scrollDirection === 'REVERSE') transitionLineExit(); 	
   }); 
 	
   function resize() {
-    //update scales
+    //calculate title height; use this to subtract from later for total height
+    let titleHeight = $('.streamgraph-section .graphic-title').outerHeight(true); 
+
     let windowWidth = $(window).innerWidth(); 
     let areaGen = {}; 
-    SVG_HEIGHT = $(window).innerHeight() * .89; 
+    SVG_HEIGHT = $(window).innerHeight() - titleHeight; 
     SVG_WIDTH = $('.container').innerWidth(); 
-    SVG.attr('width', SVG_WIDTH) 
+    SVG.attr('width', SVG_WIDTH)
       .attr('height', SVG_HEIGHT); 
+    
+    //update scales
+
     x.range([0, SVG_WIDTH - 92]);
-    yAbs.range([SVG_HEIGHT-4*PADDING, 50]);
-    yPct.range([SVG_HEIGHT-4*PADDING, 50]); 
+    yAbs.range([SVG_HEIGHT-3*PADDING, 50]);
+    yPct.range([SVG_HEIGHT-3*PADDING, 50]); 
 		
     if (windowWidth > 1024) {
       legendScaleX.range([0, SVG_WIDTH - 92]);
@@ -698,6 +792,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
       legendKey.select('text').transition().duration(500)
         .attr('x', (d, i) => legendScaleX(i) + 60)
         .attr('y', 0); 
+    
     } else if (windowWidth <= 1024) {
       
       legendKey.select('rect').transition().duration(500)
@@ -715,7 +810,8 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
     
     $('#first-explain').css('margin-top', $(window).innerHeight()/2); 
 
-    $('.explain p').css('margin-bottom', function() {
+    $('div.explain div').css('margin-bottom', function() {
+      console.log(this); 
       return this.id !== 'last-explain' ? $(window).innerHeight() : 0; 
     }); 
 
@@ -744,7 +840,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
     SVG.select('.xAxis')
       .transition()
       .duration(500)
-      .attr('transform', `translate(67,${SVG_HEIGHT-3.9*PADDING})`)
+      .attr('transform', `translate(67,${SVG_HEIGHT-3*PADDING})`)
       .call(xAxisYear); 
     SVG.select('.xAxis').select('.domain').remove(); 
     SVG.select('.x-axis-label').attr('x', `${(SVG_WIDTH - 92) * 0.5}`);
