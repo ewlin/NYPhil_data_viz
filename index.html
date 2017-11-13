@@ -9,7 +9,7 @@
       type="image/png" 
       href="new-graph.png">
 		
-    <!--<link rel="stylesheet" type="text/css" href="assets/css/global.css">-->
+    <link rel="stylesheet" type="text/css" href="assets/css/select2.min.css">
 		<style>
 			
       
@@ -129,6 +129,7 @@
 			
 			.subtitle {
 				font-family: 'Open Sans'; 
+        font-weight: 400; 
 				font-size: 20px;
 				text-align: center; 
         margin: auto;
@@ -480,6 +481,23 @@
         text-align: left;
       }
       
+      .select2-container--default .select2-selection--single {
+        background-color: rgba(52,52,52,1);
+        border-radius: 4px;
+        border: 1px solid rgba(177, 163, 149, 1);
+        color: aliceblue;
+        line-height: 2.5em;
+        height: 2.5em;
+      }
+      
+      .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: aliceblue;
+        line-height: 2.5em;
+      }
+      
+      .select2-container--default .select2-selection--single .select2-selection__arrow {
+        height: 2.5em; 
+      }
 			
 			.main-container {
 				width: 100%; 
@@ -625,7 +643,6 @@
 			
 		</style>
 
-    <link rel="stylesheet" type="text/css" href="assets/css/select2.min.css">
 		<link href="https://fonts.googleapis.com/css?family=Sumana:400,700|Lato:300,400,700|Rozha+One|Lora:400,400i,700,700i|Alegreya+Sans|Open+Sans:300,400,400i,700|Playfair+Display:400,700,900|Spectral:400,700" rel="stylesheet">
 
 		
@@ -694,8 +711,8 @@
         <p>It turns out that the success of composers seems to follow a classic 'long-tail' distribution: a small subset of composers receive a disproportionate number of performances. The top-59 most performed composers (actually a total of 61, with 3 composers sharing 59th place) represent over 75% of all pieces programmed while accounting for just under 5.8% of all composers ever performed on a subscription concert (61 out of 1039). [Might want a static chart here?]</p>
         <p>Some particularly interesting composer trends/patterns include:</p>
         <ul>
-          <li class="living-success"><strong>POPULAR IN THEIR LIFETIMES AND AFTER: </strong>52 of the 61 most performed composers were alive during some portion of the NYP's history. Nearly half (29 of 61) were born after the NYP was founded. Despite the common belief that great artists are often not appreicated during their lifetimes, a number of composers in this elite group found quite a bit of success during their lifetimes, including <span class="composer-trigger" data-index="5">Richard Strauss</span>, <span data-index="13" class="composer-trigger">Stravinsky</span>, <span data-index="21" class="composer-trigger">Rachmaninoff</span>, <span class="composer-trigger" data-index="40">Hindemith</span>, and <span data-index="25" class="composer-trigger">Shostakovich</span> among others.</li>
-          <li class="after-death"><strong>COMPLETELY NEGLECTED DURING THEIR LIFETIMES: </strong>Of these 52 composers alive for at least a portion of the NYP's existence, only 7 were <em>not performed at all</em> by the NYP during their lifetimes. Two are particularly notable: <span class="composer-trigger" data-index="35">Musorgsky's</span> posthumous reputation came mostly as a result of arragements and reworkings of his music by Ravel and Rimsky-Korsakov, while <span class="composer-trigger" data-index="52">Anton von Webern's</span> small oeuvre became more performed in the mid 20th century.</li>
+          <li class="living-success"><strong>POPULAR IN THEIR LIFETIMES AND AFTER: </strong>52 of the 61 most performed composers were alive during some portion of the NYP's history. Nearly half (29 of 61) were born after the NYP was founded. Despite the common belief that great artists are often not appreicated when they're alive, a number of composers in this elite group found quite a bit of success during their lifetimes, and continue to be popular today, including names like <span class="composer-trigger" data-index="5">Richard Strauss</span>, <span data-index="13" class="composer-trigger">Stravinsky</span>, <span data-index="21" class="composer-trigger">Rachmaninoff</span>, <span class="composer-trigger" data-index="40">Hindemith</span>, and <span data-index="25" class="composer-trigger">Shostakovich</span> among others.</li>
+          <li class="after-death"><strong>COMPLETELY NEGLECTED DURING THEIR LIFETIMES: </strong>Of these 52 composers alive for at least a portion of the NYP's existence, only 7 were <em>not performed at all</em> by the NYP during their lifetimes. Two are particularly notable: <span class="composer-trigger" data-index="35">Musorgsky's</span> posthumous popularity came mostly as a result of arragements and reworkings of his music by Ravel and Rimsky-Korsakov, while <span class="composer-trigger" data-index="52">Anton von Webern</span> became a cult figure among some members of avant-garde composer circles, and orchestras began programming pieces from his small oeuvre more regularly.</li>
           <li class="neglected"><strong>MOSTLY IGNORED DURING THEIR LIFETIMES: </strong>Some composers, though not completely neglected by the NYP while they were alive, became considerably more popular after their deaths. During their lifetimes, they received only a smattering of performances. <span class="composer-trigger" data-index="23">B&#233;la Bart&#243;k</span> is one of the more notable in this category. On the extreme end, <span class="composer-trigger" data-index="27">Anton Bruckner</span> and <span class="composer-trigger" data-index="50">Charles Ives</span> each had a single piece performed in one season by the NYP before they died.</li>
           <li class="declined"><strong>FADED AWAY: </strong>The fourth category of composers are those whose popularity has mostly faded with time. The music of composers like <span class="composer-trigger" data-index="60">Louis Spohr</span>, <span class="composer-trigger" data-index="58">Karl Goldmark</span>, <span class="composer-trigger" data-index="53">Anton Rubinstein</span>, and <span class="composer-trigger" data-index="55">William Schuman</span> are probably unfamiliar to most people today, even among some Classical Music connoisseurs, but they were popular with the orchestra (and probably, with audiences) when they were alive. In the first few seasons of the NYP, Spohr was as popular as Beethoven and Mozart!</li>
           <li class="one-hit"><strong>ONE-HIT WONDERS: </strong>While some composers like Beethoven, Brahms, and Ravel seem to have a pretty balanced performance history, with multiple compositions performed repeatedly by the NYP, other composers in the top 59 make the list mostly off the extreme popularity of one or two compositions. <span class="composer-trigger" data-index="59">Paul Dukas</span> is probably the epitome of a One-Hit Wonder composer. Almost all&#8212about 80%&#8212of his performances are of his <em>The Sorcerer's Apprentice</em>. Some other One-Hit Wonders in the top 59: <span class="composer-trigger" data-index="42">Max Bruch</span> (Violin Concerto No. 1 in G minor) <span class="composer-trigger" data-index="54">Edouard Lalo</span> (<em>Symphonie Espagnole</em>) <span class="composer-trigger" data-index="51">Bedrich Smetana</span> (Pieces from the symphonic cycle <em>Ma Vlast</em> and his opera <em>The Bartered Bride</em>...so I guess he's more of a Two-Hit Wonder?)</li>

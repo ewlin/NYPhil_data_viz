@@ -353,7 +353,7 @@ d3.json('../../data/composers.json', (err, d) => {
 	
   yStreamAxis.append('text')
     .attr('class', 'axis-label stream-label y-axis-label')
-    .text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON')
+    .text('NUMBER OF UNIQUE PIECES PER SEASON')
     .attr('x', 0)
     .attr('y', 0)
     .attr('transform', 'rotate(-90)')
@@ -434,7 +434,7 @@ d3.json('../../data/composers.json', (err, d) => {
     d3.select('.y-axis-label')
       .transition()
       .duration(1400)
-      .text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON'); 
+      .text('NUMBER OF UNIQUE PIECES PER SEASON'); 
     
     let newAnnotations = [{
       note: {
@@ -478,7 +478,7 @@ d3.json('../../data/composers.json', (err, d) => {
     d3.select('.y-axis-label')
       .transition()
       .duration(1400)
-      .text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON'); 
+      .text('NUMBER OF UNIQUE PIECES PER SEASON'); 
     
     const annotations = [{
       note: {
