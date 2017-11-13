@@ -544,7 +544,7 @@ d3.json('../../data/composers.json', (err, d) => {
 		
     d3.select('.yAxis').select('.domain').remove(); 
 
-    d3.select('.y-axis-label').transition().duration(1400).text('PERCENTAGE OF UNIQUE PIECES PER SEASON');
+    d3.select('.y-axis-label').transition().duration(1400).text('PERCENTAGE OF UNIQUE COMPOSITIONS PER SEASON');
 		    
   }; 
 	
@@ -649,7 +649,7 @@ d3.json('../../data/composers.json', (err, d) => {
         animateLine.stop();
         makeAnnotations.annotations(newAnnotations); 
       } else {
-        startIndex += 1;  
+        startIndex += 2;  
         trendline.attr('d', d => line(d.slice(0, startIndex)));
       }
     });
@@ -882,7 +882,7 @@ d3.json('../../data/composers.json', (err, d) => {
               animateLine.stop();
               //makeAnnotations.annotations(annotations3); 
             } else {
-              startIndex += 1;  
+              startIndex += 2;  
               d3.select('.trendline')
                 //.attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
                 .attr('d', d => line(d.slice(0, startIndex)));

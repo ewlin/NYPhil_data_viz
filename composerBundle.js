@@ -105,7 +105,7 @@ d3.json('../../data/new_top60.json', composers => {
 	//Event listeners when option is selected from dropdown
 	$('.select-value').on('change', function(e) {
 		let index = this.value; 
-    selectComposer(index); 
+    renderComposer(index); 
 	});
   
   $('.dot-chart-prelude').on('click', (e) => {
@@ -273,11 +273,16 @@ d3.json('../../data/new_top60.json', composers => {
   
 
   /* END HEAT MAP */
-  
   function selectComposer(index) {
-    $('option').attr('selected', false); 
-    $(`.select-value option[value=${index}]`).attr('selected', true);
+    document.querySelector('.select-value').value = index;
+    renderComposer(index);
+  }
 
+  
+  function renderComposer(index) {
+    //$('option').attr('selected', false); 
+    //$(`.select-value option[value=${index}]`).attr('selected', true);
+    
     console.log(`composer selected: ${index}: ${composers[index].composer}`);
     $('.composer-face').remove(); 
     let composer = composers[index].composer; 
@@ -410,7 +415,7 @@ d3.json('../../data/new_top60.json', composers => {
 				tooltip.html(html); 
         //vertically center tooltip with the dot
 				height = document.querySelector('.tooltip').getBoundingClientRect().height; 
-				tooltip.style('top', (dimensions.top - Math.floor(height/2)) + "px"); 
+				tooltip.style('top', (dimensions.top - Math.floor(height/1.5)) + "px"); 
 				tooltip.transition().duration(500).style('opacity', .9); 
 				d3.select(d3.event.target)
 					.attr('stroke-width', 3)

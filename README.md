@@ -1,9 +1,64 @@
 # Data Visualization Project w/New York Philharmonic Historical Concert Data
 
-### _(Updated 11/10/2017)_
+### _(Updated 11/13/2017)_
 
-### TODOs: 
+## TODOs: 
 
+### BUGS: 
+
+### GENERAL: 
+* Babelfy everything so works on older browsers
+
+### INTRO
+* Prose. Finish writing last paragraph to intro. Talk about repeat/first-time and alive/dead as metrics 
+
+### AREA GRAPHS
+#### CODE: GENERAL 
+* Resize for second chart (with 1909-10 annotation) needs to add/remove annotation based on screen width 
+* Fix Axis label text when vertically compressed charts (e.g. Instead of 'Percentage of' say '% of')
+#### CODE: MOBILE
+* Fix master branch mobile resize (remove !isMobile()...code)
+* Resize should not redraw trendline in mobile
+
+
+#### PROSE
+* Talk about sources of noise ()
+* Finish (.explain p) for living/dead panel
+* Finish .trendline explain panel 
+* Finish stream graph final panel (conclusion)
+* Finish transition from stream to composers 
+
+
+### TOP 59 COMPOSERS GRAPH
+#### CODE: JS
+
+* check if new code (meta tag info) fixes zooming issue when select is focused (in mobile)
+* Auto-select value in select with JS when composer name clicked. Current code not working in mobile Safari or mobile Chrome on iOS [Added changes on 11/11; test to see works]
+* Select element style weird in mobile/consider removing styling for mobile
+* Add rank + number of performances for each composer
+* Smooth scrolling when composer name is clicked (if possible)
+
+* Code Heatmap (Legend, layout, lifetime border)
+* Add d3-voronoi to Dot chart
+* Dot chart resize
+* Dot chart margins and height determined by calculations 
+* Dot chart legend (dot colors + lifetime box)
+
+* Optimize dot annotation rendering (cache some calculations?)?????
+
+
+#### Methodology 
+
+* Mobile sizing
+
+
+
+
+
+
+
+
+[OLD TO-DOs- Pre ~11/5/17]
 #### BUGS: 
 * Resizing issues [Mostly fixed, some scale issues, margins etc. remain--COMPLETED on STREAMGRAPH]
 * X-Axis ticks sometimes not showing up in AREA graph [COMPLETED]

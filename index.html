@@ -3,7 +3,7 @@
 <html> 
 	<head>
 		<title>Pulsecheck: Trends from 175 seasons at the New York Philharmonic</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 
 		<link rel="icon" 
       type="image/png" 
@@ -73,7 +73,7 @@
     
 			
 		  header {
-				margin: auto; 
+				margin: 0 auto 3em; 
 				text-align: center; 
 				padding: 20px 0;
 			}
@@ -131,7 +131,9 @@
 				font-family: 'Open Sans'; 
 				font-size: 20px;
 				text-align: center; 
+        margin: auto;
 				color: #8D5C5C; 
+        max-width: 40rem;
 			}
 			
 			.byline {
@@ -178,6 +180,7 @@
 			
 			.prose {
         font-family: 'Open Sans';
+        color: #2d2525;
 				max-width: 35rem; 
 				margin: 1em auto;
         padding: 0 1em;
@@ -197,7 +200,7 @@
 				padding-top: 10px;
 			}
       
-      .prose p, .prose ul {
+      .prose p, .prose ul, .prose h4 {
         margin-bottom: 1.7em;
       }
       
@@ -206,7 +209,7 @@
       }
       
       .prose ul li {
-        margin-bottom: .3em;
+        margin-bottom: 1em;
       }
       
       
@@ -444,7 +447,7 @@
         min-width: 325px;
 				height: 38px; 
 				border: 5px solid Steelblue; 
-        background-color: rgba(52,52,52,0);
+        background-color: rgba(52,52,52,1);
 				font-family: 'Alegreya Sans';
 				font-size: 15px;
 				margin: 15px auto; 
@@ -577,6 +580,15 @@
           font-size: 2.5em; 
         }
         
+        div.prose.note {
+          max-width: 90%; 
+        }
+        
+        .methodology {
+          max-width: 90%;
+        }
+        
+        
       }
       
       @media screen and (max-width: 1024px) {
@@ -606,7 +618,7 @@
 		<header>
       <a class="logo" href="/"><img src='new-graph.png' /><span>I'M YOUR DATA HOMER</span></a>
       <div class='titles'>
-				<h1 class="title">Pulsecheck: Is Classical Music Still a Living Art Form?</h1>
+				<h1 class="title">Pulsecheck: Is Orchestral Music Still a Living Art Form in 2017?</h1>
 				<p class="subtitle">Extrapolating trends from 175 seasons at the New York Philharmonic</p>
 				<p class="byline">By <span class="name">Eric William Lin</span><img src='author.png'/>
 </p>
@@ -617,7 +629,7 @@
 			
 			
 			<div class="prose">
-
+        <h2 class='graphic-title'>Prelude</h2>
 				<p class='epigraph'><em>When people hear "classical," they think "dead." The music is described in terms of its distance from the present, its resistance to the mass&#8212what it is not[...] But the same story could have been written ten years ago or twenty. If this be death, the record is skipping. A complete version of the Death of Classical Music Archive would go back to the fourteenth century...</em><span>-Alex Ross, <a target='_blank' href='https://www.newyorker.com/magazine/2004/02/16/listen-to-this'>"Listen to This"</a>, <em>The New Yorker</em> (2004)</span></p>
 				<p>Throughout the history of Classical Music, the perception that the genre's on its deathbed has always been a recurring motif. But how accurate are these anecdotal impressions today, in 2017? Is Classical Music any more 'dead' than 20 years ago? 100 years ago? Can we quantify any of this with data?</p>
 				<p>The 2016-2017 season marked the 175th anniversary of the New York Philharmonic, and at nearly two centuries old, the oldest continually-performing American orchestra is almost four decades older than its closest sibling, the <a target='_blank' href='https://www.bso.org/brands/bso/about-us/historyarchives/the-history-of-the-bso.aspx'>Boston Symphony Orchestra</a> (founded in 1881). In fact, the NYP was in existence well before the births of some of the most performed and well-known Classical composers, names like Debussy, Ravel, Shostakovich, Mahler, and Prokofiev. This means that the earliest performances by the New York Phil stretch back well into the Golden Age of the genre, and give us some nice benchmarks to compare today with.</p>
@@ -628,7 +640,7 @@
 			<div class="outer-container streamgraph-section">
 				<div class="inner-container">
 					<div class="container">
-            <h2 class='graphic-title'>Macro Trends at the New York Phil</h2>
+            <h2 class='graphic-title'>Theme: Macro Trends from 175 Years at the New York Phil</h2>
           </div>
 				</div>
 				<div class="stream-explain explain">
@@ -653,10 +665,13 @@
 			</div>
 		
       <div class="note prose">
-        <p><strong>* DEFINING A 'UNIQUE' COMPOSITION</strong> : Regardless of how many times a piece is performed during a single season, it is only counted once. Likewise, if two different excerpts or movements of a piece are performed on different concerts in the same season, the movements are treated as one single piece and are also only counted as one unique piece. This isn't a perfect approach, since there are some scenarios where certain 'movements' of larger works are often traditionally programmed as a standalone piece by orchestras, such as the overture to some operas. The NYP's categorizations in their data set are also sometimes inconsistent. For example, it treats the three movements of Debussy's <em>Images</em> as seperate compositions, while each of the six pieces from Smetana's <em>Ma Vlast</em> are treated as 'movements'. I've preserved the original categorizations since it's not feasible to manually recategorize all pieces. Some attempt has been made to exclude compositions that appear on a Subscription Series concert, but that do not require a conductor. For example, sometimes a soloist will perform a short encore piece before they play a concerto with the orchestra. Most of the known cases have been omitted from the data set.</p>
+        <h4><strong>*AN INTERMEZZO: DEFINING 'A UNIQUE COMPOSITION'</strong></h4>
+        <p>In this analysis, regardless of how many times a piece is performed during a single season, it is only counted once. Furthermore, if two different excerpts or movements of a piece are performed on different concerts in the same season, the piece is also treated as one single unique piece for the season. This isn't a perfect approach, since there are some scenarios in which certain 'movements' of larger works are often traditionally programmed as a standalone piece by orchestras, such as certain overtures of operas. On this front, the NYP's categorizations in their data set are sometimes inconsistent. For example, it treats the three movements of Debussy's <em>Images</em> as seperate compositions, while each of the six pieces from Smetana's <em>Ma Vlast</em> are treated as 'movements'. I've preserved the orchestra's original categorizations since it's not feasible to manually recategorize all pieces.</p>
+        <p>We've attempted to exclude most non-orchestral compositions (e.g., pieces that don't require a conductor) that appear on a Subscription Series concert. For example, sometimes a soloist will perform a short solo encore piece after they play a concerto with the orchestra. Most of the known cases in this category have been omitted from the analysis and these pieces are <em>not</em> counted towards the number of unique compositions in a season.</p>
       </div>
 		
 		  <section class="dot-chart-explain prose dot-chart-prelude">
+        <h2 class='graphic-title'>Variations: Composers &#38; Their Differing Destinies</h2>
         <p>Now that we've looked at the data from a high level, let's zoom in and look at what composers and music are actually being played.</p>
         <p>It turns out that the success of composers seems to follow a classic 'long-tail' distribution: a small subset of composers receive a disproportionate number of performances. The top-59 most performed composers (actually a total of 61, with 3 composers sharing 59th place) represent over 75% of all pieces programmed while accounting for just under 5.8% of all composers ever performed on a subscription concert (61 out of 1039). [Might want a static chart here?]</p>
         <p>Some particularly interesting composer trends/patterns include:</p>
@@ -665,9 +680,9 @@
           <li class="after-death"><strong>COMPLETELY NEGLECTED DURING THEIR LIFETIMES: </strong>Of these 52 composers alive for at least a portion of the NYP's existence, only 7 were <em>not performed at all</em> by the NYP during their lifetimes. Two are particularly notable: <span class="composer-trigger" data-index="35">Musorgsky's</span> posthumous reputation came mostly as a result of arragements and reworkings of his music by Ravel and Rimsky-Korsakov, while <span class="composer-trigger" data-index="52">Anton von Webern's</span> small oeuvre became more performed in the mid 20th century.</li>
           <li class="neglected"><strong>MOSTLY IGNORED DURING THEIR LIFETIMES: </strong>Some composers, though not completely neglected by the NYP while they were alive, became considerably more popular after their deaths. During their lifetimes, they received only a smattering of performances. <span class="composer-trigger" data-index="23">B&#233;la Bart&#243;k</span> is one of the more notable in this category. On the extreme end, <span class="composer-trigger" data-index="27">Anton Bruckner</span> and <span class="composer-trigger" data-index="50">Charles Ives</span> each had a single piece performed in one season by the NYP before they died.</li>
           <li class="declined"><strong>FADED AWAY: </strong>The fourth category of composers are those whose popularity has mostly faded with time. The music of composers like <span class="composer-trigger" data-index="60">Louis Spohr</span>, <span class="composer-trigger" data-index="58">Karl Goldmark</span>, <span class="composer-trigger" data-index="53">Anton Rubinstein</span>, and <span class="composer-trigger" data-index="55">William Schuman</span> are probably unfamiliar to most people today, even among some Classical Music connoisseurs, but they were popular with the orchestra (and probably, with audiences) when they were alive. In the first few seasons of the NYP, Spohr was as popular as Beethoven and Mozart!</li>
-          <li class="one-hit"><strong>ONE-HIT WONDERS: </strong>While composers like Beethoven, Brahms, and Ravel seem to have a pretty balanced output, with a number of compositions performed multiple times by the NYP, other composers in the top 59 make the list mostly off the extreme popularity of one or two compositions. <span class="composer-trigger" data-index="59">Paul Dukas</span> is probably the epitome of a One-Hit Wonder composer. Almost all&#8212about 80%&#8212of his performances are of his <em>The Sorcerer's Apprentice</em>. Some other One-Hit Wonders in the top 59: <span class="composer-trigger" data-index="42">Max Bruch</span> (Violin Concerto No. 1 in G minor) <span class="composer-trigger" data-index="54">Edouard Lalo</span> (<em>Symphonie Espagnole</em>) <span class="composer-trigger" data-index="51">Bedrich Smetana</span> (Pieces from the symphonic cycle <em>Ma Vlast</em> and his opera <em>The Bartered Bride</em>...so I guess he's more of a Two-Hit Wonder?)</li>
+          <li class="one-hit"><strong>ONE-HIT WONDERS: </strong>While some composers like Beethoven, Brahms, and Ravel seem to have a pretty balanced performance history, with multiple compositions performed repeatedly by the NYP, other composers in the top 59 make the list mostly off the extreme popularity of one or two compositions. <span class="composer-trigger" data-index="59">Paul Dukas</span> is probably the epitome of a One-Hit Wonder composer. Almost all&#8212about 80%&#8212of his performances are of his <em>The Sorcerer's Apprentice</em>. Some other One-Hit Wonders in the top 59: <span class="composer-trigger" data-index="42">Max Bruch</span> (Violin Concerto No. 1 in G minor) <span class="composer-trigger" data-index="54">Edouard Lalo</span> (<em>Symphonie Espagnole</em>) <span class="composer-trigger" data-index="51">Bedrich Smetana</span> (Pieces from the symphonic cycle <em>Ma Vlast</em> and his opera <em>The Bartered Bride</em>...so I guess he's more of a Two-Hit Wonder?)</li>
         </ul>
-        <p>You can explore the New York Philharmonic performance history of these 61 composers by season <a href='/#dot-chart'>below</a>. Each dot represents a unique composition programmed in a particular season. <strong>Hover</strong> over the dots to see some metadata about each composition; <strong>click</strong> to highlight all appearances of the piece across the NYP's history. [Insert legend explaining dot colors]</p>
+        <p>You can explore the New York Philharmonic's performance history of these 61 composers by season <a href='/#dot-chart'>below</a>. Each dot represents a unique composition programmed in a particular season. <strong>Hover</strong> over the dots to see some metadata about each composition; <strong>click</strong> to highlight all appearances of the piece across the NYP's history. [Insert legend explaining dot colors]</p>
         <p>The more hollow red dots indicate that, the fewer solid red dots....one hit</p>
       </section>
 		
@@ -683,6 +698,7 @@
 			</section>
       
       <section class="dot-chart-explain prose">
+        <h2 class='graphic-title'>Coda</h2>
         <p>Throughout the history of Classical Music, the perception that the genre's on its deathbed has always been a recurring motif. But how accurate are these anecdotal impressions? Can we move beyond anecdotes and back it up with some data?</p>
       </section>
 			
