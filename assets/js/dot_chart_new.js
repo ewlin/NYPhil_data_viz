@@ -117,7 +117,7 @@ d3.json('../../data/new_top60.json', composers => {
     //console.log(browserVersion);
     
     if (e.target.dataset.index) {
-      document.querySelector('.dot-chart').scrollIntoView(); 
+      document.querySelector('.dot-chart .graphic-title').scrollIntoView(); 
       selectComposer(index);
     } 
   });
@@ -135,7 +135,9 @@ d3.json('../../data/new_top60.json', composers => {
 		$('.select-value').append(option); 
 	}); 
   
-  //$('.select-value').select2(); 
+  
+  //Create Select2 object
+  $('.select-value').select2(); 
   
   //function expects composer object
   function calculateComposerSeasonData (composer, composerIndex) {
@@ -273,7 +275,13 @@ d3.json('../../data/new_top60.json', composers => {
 
   /* END HEAT MAP */
   function selectComposer(index) {
-    document.querySelector('.select-value').value = index;
+    //Code for vanilla select element
+    //document.querySelector('.select-value').value = index;
+    
+    //Code for using Select2 control
+    $('.select-value').val(index);
+    $('.select-value').trigger('change');
+    
     renderComposer(index);
   }
 

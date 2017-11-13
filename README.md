@@ -35,7 +35,7 @@
 * check if new code (meta tag info) fixes zooming issue when select is focused (in mobile)
 * Auto-select value in select with JS when composer name clicked. Current code not working in mobile Safari or mobile Chrome on iOS [Added changes on 11/11; test to see works]
 * Select element style weird in mobile/consider removing styling for mobile
-* Add rank + number of performances for each composer
+* Add rank + number of performances for each composer/figure out Select2 API
 * Smooth scrolling when composer name is clicked (if possible)
 
 * Code Heatmap (Legend, layout, lifetime border)
@@ -45,6 +45,9 @@
 * Dot chart legend (dot colors + lifetime box)
 
 * Optimize dot annotation rendering (cache some calculations?)?????
+
+#### PROSE
+* CtA if users on a mobile device; suggest getting the full experience by viewing on a device with at least 1024 pixels 
 
 
 #### Methodology 
