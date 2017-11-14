@@ -10,7 +10,7 @@
 * Babelfy everything so works on older browsers
 
 ### INTRO
-* Prose. Finish writing last paragraph to intro. Talk about repeat/first-time and alive/dead as metrics 
+* Prose. Finish writing last paragraph to intro. Talk about repeat/first-time and alive/dead as metrics [COMPLETED]
 
 ### AREA GRAPHS
 #### CODE: GENERAL 
@@ -22,21 +22,22 @@
 
 
 #### PROSE
-* Talk about sources of noise ()
-* Finish (.explain p) for living/dead panel
-* Finish .trendline explain panel 
-* Finish stream graph final panel (conclusion)
-* Finish transition from stream to composers 
+* Talk about sources of noise () [NOT ESSENTIAL]
+* Finish (.explain p) for living/dead panel [COMPLETED ]
+* Finish .trendline explain panel [COMPLETED]
+* Finish stream graph final panel (conclusion) [COMPLETED]
+* Finish transition from stream to composers [COMPLETED]
 
 
 ### TOP 59 COMPOSERS GRAPH
 #### CODE: JS
 
 * check if new code (meta tag info) fixes zooming issue when select is focused (in mobile)
-* Auto-select value in select with JS when composer name clicked. Current code not working in mobile Safari or mobile Chrome on iOS [Added changes on 11/11; test to see works]
-* Select element style weird in mobile/consider removing styling for mobile
+* Auto-select value in select with JS when composer name clicked. Current code not working in mobile Safari or mobile Chrome on iOS [Added changes on 11/11; test to see works]/[COMPLETED]
+* Write custom matching function for select2- deal with composer names with accent marks + ignore 'ranking part'
+* Select element style weird in mobile/consider removing styling for mobile [COMPLETED?]
 * Add rank + number of performances for each composer/figure out Select2 API
-* Smooth scrolling when composer name is clicked (if possible)
+* Smooth scrolling when composer name is clicked (if possible, browser conditional code)
 
 * Code Heatmap (Legend, layout, lifetime border)
 * Add d3-voronoi to Dot chart
@@ -48,11 +49,12 @@
 
 #### PROSE
 * CtA if users on a mobile device; suggest getting the full experience by viewing on a device with at least 1024 pixels 
+* display/hide prose about exploring invividual pieces if on mobile/desktop
 
 
 #### Methodology 
 
-* Mobile sizing
+* Mobile sizing; added margins [COMPLETED]
 
 
 

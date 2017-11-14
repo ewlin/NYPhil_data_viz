@@ -216,6 +216,9 @@ d3.json('../../data/composers.json', (err, d) => {
       //percentageOfTotalRepeatsLiving: repeatAlive/total * 100 
     };
   }); 
+  
+  console.log('repeat alive');
+  console.log(percentagesOfLivingRepeats);
 	
   yAbs.domain([0, MAX_NUMBER_PER_SEASON]); 
 
@@ -406,7 +409,7 @@ d3.json('../../data/composers.json', (err, d) => {
     .datum(movingAverage(percentagesOfAllRepeatsLiving, ['percentageOfTotalRepeatsLiving'], 7))
     //.enter()
     .attr('fill', 'none')
-    .attr('stroke', 'rgb(218, 155, 103)')
+    .attr('stroke', 'rgba(218, 155, 103, 1)')
     .attr('stroke-dasharray', '7, 2')
     .attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]))
     .style('stroke-width', '2px'); 
@@ -609,6 +612,7 @@ d3.json('../../data/composers.json', (err, d) => {
     let newStuff = SVG.selectAll('path')
       .data(stack(movingAverage(percentagesLivingDead, ['percentageAlive', 'percentageDead'], 7))); 
 		
+    console.log(movingAverage(percentagesLivingDead, ['percentageAlive', 'percentageDead'], 7));
     //without moving average
     //let newStuff = SVG.selectAll('path')
     //  .data(stack(percentagesLivingDead));

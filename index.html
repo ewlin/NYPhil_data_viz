@@ -334,7 +334,18 @@
       span.area-repeat {
         color: steelblue;
       }
-
+      
+      span.area-alive {
+        color: #ff645f;
+      }
+      
+      span.area-dead {
+        color: #7776bd;
+      }
+      
+      span.line-living-repeat {
+        color: rgba(218, 155, 103, 1);
+      }
       /* Centered chart and explainations
 
 			.container {
@@ -398,6 +409,7 @@
 				width: 100%;
 				padding: 20px;
 				box-sizing: border-box; 
+        margin-bottom: 3em;
 				/*font-family: 'IM Fell Great Primer', serif;
 				/*font-family: 'Arimo', sans-serif;
 				/*font-family: 'Titillium Web', sans-serif;*/
@@ -665,51 +677,60 @@
 			
 			<div class="prose">
         <h2 class='graphic-title'>Prelude</h2>
-				<p class='epigraph'><em>When people hear "classical," they think "dead." The music is described in terms of its distance from the present, its resistance to the mass&#8212what it is not[...] But the same story could have been written ten years ago or twenty. If this be death, the record is skipping. A complete version of the Death of Classical Music Archive would go back to the fourteenth century...</em><span>-Alex Ross, <a target='_blank' href='https://www.newyorker.com/magazine/2004/02/16/listen-to-this'>"Listen to This"</a>, <em>The New Yorker</em> (2004)</span></p>
-				<p>Throughout the history of Classical Music, the perception that the genre's on its deathbed has always been a recurring motif. But how accurate are these anecdotal impressions today, in 2017? Is Classical Music any more 'dead' than 20 years ago? 100 years ago? Can we quantify any of this with data?</p>
-				<p>The 2016-2017 season marked the 175th anniversary of the New York Philharmonic, and at nearly two centuries old, the oldest continually-performing American orchestra is almost four decades older than its closest sibling, the <a target='_blank' href='https://www.bso.org/brands/bso/about-us/historyarchives/the-history-of-the-bso.aspx'>Boston Symphony Orchestra</a> (founded in 1881). In fact, the NYP was in existence well before the births of some of the most performed and well-known Classical composers, names like Debussy, Ravel, Shostakovich, Mahler, and Prokofiev. This means that the earliest performances by the New York Phil stretch back well into the Golden Age of the genre, and give us some nice benchmarks to compare today with.</p>
-        <p>Something about NOVELTY....</p>
+				<p class='epigraph'><em>When people hear "classical," they think "dead." The music is described in terms of its distance from the present[...] But the same story could have been written ten years ago or twenty. If this be death, the record is skipping. A complete version of the Death of Classical Music Archive would go back to the fourteenth century...</em><span>-Alex Ross, <a target='_blank' href='https://www.newyorker.com/magazine/2004/02/16/listen-to-this'>"Listen to This"</a>, <em>The New Yorker</em> (Feb 2004)</span></p>
+        <p>Throughout the history of Classical Music, the perception that the genre's on its deathbed has always been a recurring motif. But how accurate are these perceptions today? What is Classical Music's current state of health? Instead of relying on anecdotal evidence, let's try to come to a conclusion using data instead.</p>
+				<p>The 2016-2017 season marked the 175th anniversary of the New York Philharmonic, and at nearly two centuries old, the oldest continually-performing American orchestra is almost four decades older than its closest sibling, the <a target='_blank' href='https://www.bso.org/brands/bso/about-us/historyarchives/the-history-of-the-bso.aspx'>Boston Symphony Orchestra</a> (founded in 1881). In fact, the NYP was in existence well before the births of some of the most performed and well-known Classical composers, names like Debussy, Ravel, Shostakovich, Mahler, and Prokofiev. This means that the earliest performances by the New York Phil stretch back deep into the Golden Age of the genre, and give us some nice benchmarks for comparison. So how does a typical season of the Philharmonic from the late 1800s compare to today? Is Classical Music really "dead" and what does the data say?</p> 
+        
+        <p>Let's dig in.</p>
 			</div>
-			
-		
 			<div class="outer-container streamgraph-section">
 				<div class="inner-container">
 					<div class="container">
-            <h2 class='graphic-title'>Theme: Macro Trends from 175 Years at the New York Phil</h2>
+            <h2 class='graphic-title'>Theme: Trends from 175 Years at the New York Phil</h2>
           </div>
 				</div>
 				<div class="stream-explain explain">
 					<div id="first-explain" class="explain1" data-graph='1'>
-            <p>First, I plotted the number of unique compositions* performed each season by the New York Philharmonic. The <span class='area-first'><strong>orange</strong></span> area represents the pieces being played for the first time by the NYP. In contrast, the <span class='area-repeat'><strong>blue</strong></span> area represents pieces that have been played before in a previous season. Other than the first season, every subsequent season has featured at least some pieces that the orchestra had previously performed.</p>
+            <p>The first metric we'll explore is what I'm calling 'The Novelty Factor'. Is the orchestra exploring new pieces they've never performed before, or are they repeating music they've played over-and-over again? First, I plotted the number of <a href="/#define-unique">unique compositions*</a> performed each season by the New York Philharmonic. The <span class='area-first'><strong>orange</strong></span> area represents the pieces being played for the first time by the NYP. In contrast, the <span class='area-repeat'><strong>blue</strong></span> area represents pieces that have been played before in a previous season. Other than the first season (1842-43), every subsequent season has featured at least some pieces that the orchestra had previously performed.</p>
           </div>
 					<br>
-          <div class="explain2"><p>At first glance, there's not much of a pattern. The absolute number of pieces programmed each year fluctuates quite a bit. The data is also complicated by the dramatic spike in the total number of pieces played per season, starting in the <a target='_blank' href='http://www.nytimes.com/1982/03/07/arts/the-philharmonic-on-disk-the-maestro-is-the-message.html?pagewanted=2'>1909-10 season</a>. To make more sense of our data, we'll have to normalize it, and look at the ratios of 1st-time-to-repeat pieces each season instead.</p></div>
+          <div class="explain2">
+            <p>At first glance, there's not much of a pattern. The absolute number of pieces programmed each year (and in both categories) fluctuates quite unpredictably. The data is also complicated by the dramatic spike in the total number of pieces played per season, starting in the <a target='_blank' href='http://www.nytimes.com/1982/03/07/arts/the-philharmonic-on-disk-the-maestro-is-the-message.html?pagewanted=2'>1909-10 season</a>. To make more sense of our data, we'll have to normalize it, and look at the ratios of 1st-time-to-repeat pieces each season instead.</p>
+          </div>
           <br>
-					<div class="explain3" data-graph='2'><p><em>Now we're comparing apples to apples.</em> However, even this normalized data that represents a ratio is quite difficult to decipher. The level of noise is still too high for any obvious trend to emerge. We'll have to transform our data further: this time, we want to filter out some of the noise.</p></div>
+					<div class="explain3" data-graph='2'>
+            <p><em>Now we're comparing apples to apples.</em> However, even this normalized data representing a ratio is quite difficult to decipher. The level of noise is still too high for us to see any obvious trends. We'll have to transform our data further: this time, we want to filter out some of the noise.</p>
+          </div>
 					<br>
-          <div class="explain4" data-graph='3'><p>I applied a <a target='_blank' href='https://en.wikipedia.org/wiki/Moving_average#Simple_moving_average'>simple central moving average</a> to each season to smooth out the data. I was very surprised to see how soon after the founding of the orchestra when it essentially became a 'Greatest Hits' band. In less than two decades (by the 1859-60 season), the orchestra is, on average, repeating more pieces than they are playing pieces for the first time. Beginning in the mid-1860s, the percentage of pieces being played for the first time starts to slowly, but steadily decline, from around 35% to ~20-25% today.</p></div>
+          <div class="explain4" data-graph='3'>
+            <p>I applied a <a target='_blank' href='https://en.wikipedia.org/wiki/Moving_average#Simple_moving_average'>simple central moving average</a>** to each season to smooth out the data. Beginning in the mid-1860s, the percentage of pieces being played for the first time starts to slowly, but steadily decline, from around 35% to the ~25% that is today. I was very surprised to see how early into its existence the orchestra essentially became a 'Greatest Hits' band. In less than two decades (by the 1859-60 season) of its founding, the orchestra is already, on average, repeating more pieces than they are playing pieces for the first time.</p>
+            <hr>
+            <p class='notes'>**With a sample window of 7 seasons, 3 on each side of the central season. The remaining graphs all apply this filter on the data.</p>
+          </div>
 					<br>
           <div class="explain5" data-graph='4'>
-            <p>We can look at the data in other ways too. What other parameters can help us gauge the health of the genre? We can take the 'dead or alive' metaphor more literally and ask: is the orchestra still performing music by living composers? Using the same techniques of data transformation earlier, we can look at the ratio of compositions each season between living and dead composers. On this metric, the decline is even more dramatic.</p>
+            <p>Next, let's take the 'dead or alive' metaphor literally. Is the orchestra still performing music by living composers? Compare the percentage of pieces by <span class='area-dead'><strong>dead</strong></span> composers with those by <span class='area-alive'><strong>living</strong></span> composers: Again, surprisingly, for most of the NYP's history (save for a few early seasons), they've performed more dead composers than living. Even when Wagner was still writing his operas, and when Brahms had yet to compose his symphonies, the Phil was already mostly playing the music of 'Dead White Guys' (from then). Still, it's worth noting that there is a long-term decline in the percentage of performances by living composers, and this percentage collapses dramatically in the late 20th century. In the 1967-68 season, the average percentage of living composers dipped below 20% and has never recovered since. Since the 1990s, this percentage has hovered in the low teens.</p>
           </div>
 					<br>
-          <div class="explain6" data-graph='5'><p>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p></div>
+          <div class="explain6" data-graph='5'>
+            <p>Finally, let's combine our two metrics (repeat/first-time and dead/alive) into a hybrid metric. Many Billboard-charting songs get there through repeated plays on Spotify, the radio, or at clubs by DJs. The more we hear something, the more familiar it gets, and the greater the chance it'll become popular. Are living Classical composers getting this sort of repeated play? For most of the NYP's history, the share of pieces by living composers that are also repeat performances is relatively steady (around <sup>1</sup>&frasl;<sub>3</sub> to <sup>1</sup>&frasl;<sub>2</sub>; look at the <span class="line-living-repeat"><strong>dotted trend line</strong></span> relative to the percentage of <span class='area-alive'><strong>living</strong></span> composers). But by the 1990s, this share plummets to around 10%. Given that the % of performances by living composers was already declining, the relative proportion of all performances that are <em>repeat performances</em> by living composers today is now almost negligible (percentages in the low single digits). Living composers are still getting some performances, but they almost never hear their pieces again.</p>
+          </div>
           <br>
-          <div id="last-explain"><p>More history about the rest of the latest trends in composition amoung others the rest is to is loren ipshe other text might be more interesting. What else can we write about? So let's write more.What other interesting stuff is there to write about?</p></div>
+          <div id="last-explain"><p>So based on these metrics, things seem pretty dire and dicey for Classical Music, right? But it turns out, things aren't so simple. Just because lots of living composers are being performed, it doesn't mean those pieces will suvrive the sands of time, and just because the composers being performed are dead, doesn't mean their music can't bring vitality and novelty to the concert hall.</p></div>
 				</div>
 			</div>
 		
-      <div class="note prose">
-        <h4><strong>*AN INTERMEZZO: DEFINING 'A UNIQUE COMPOSITION'</strong></h4>
+      <div id="define-unique" class="note prose">
+        <h4><strong>*A BRIEF INTERMEZZO: DEFINING 'A UNIQUE COMPOSITION'</strong></h4>
         <p>In this analysis, regardless of how many times a piece is performed during a single season, it is only counted once. Furthermore, if two different excerpts or movements of a piece are performed on different concerts in the same season, the piece is also treated as one single unique piece for the season. This isn't a perfect approach, since there are some scenarios in which certain 'movements' of larger works are often traditionally programmed as a standalone piece by orchestras, such as certain overtures of operas. On this front, the NYP's categorizations in their data set are sometimes inconsistent. For example, it treats the three movements of Debussy's <em>Images</em> as seperate compositions, while each of the six pieces from Smetana's <em>Ma Vlast</em> are treated as 'movements'. I've preserved the orchestra's original categorizations since it's not feasible to manually recategorize all pieces.</p>
         <p>We've attempted to exclude most non-orchestral compositions (e.g., pieces that don't require a conductor) that appear on a Subscription Series concert. For example, sometimes a soloist will perform a short solo encore piece after they play a concerto with the orchestra. Most of the known cases in this category have been omitted from the analysis and these pieces are <em>not</em> counted towards the number of unique compositions in a season.</p>
       </div>
 		
 		  <section class="dot-chart-explain prose dot-chart-prelude">
         <h2 class='graphic-title'>Variations: Composers &#38; Their Differing Destinies</h2>
-        <p>Now that we've looked at the data from a high level, let's zoom in and look at what composers and music are actually being played.</p>
-        <p>It turns out that the success of composers seems to follow a classic 'long-tail' distribution: a small subset of composers receive a disproportionate number of performances. The top-59 most performed composers (actually a total of 61, with 3 composers sharing 59th place) represent over 75% of all pieces programmed while accounting for just under 5.8% of all composers ever performed on a subscription concert (61 out of 1039). [Might want a static chart here?]</p>
-        <p>Some particularly interesting composer trends/patterns include:</p>
+        <p>Now that we've looked at the data from a high level, let's zoom in and explore what composers and music are actually being played.</p>
+        <p>It turns out that the success of composers seems to follow a classic 'long-tail' distribution: a small subset of composers receive a disproportionate number of performances. The top-59 most performed composers (actually a total of 61, with 3 composers sharing 59th place) represent over 75% of all pieces programmed while accounting for just under 5.8% of all composers ever performed on a subscription concert (61 out of 1039).</p>
+        <p>But even within this elite group, we find a range and variety in the patterns of success (or in some cases, of decline), of how the composers' music came to be frequenty performed by the New York Philharmonic:</p>
         <ul>
           <li class="living-success"><strong>POPULAR IN THEIR LIFETIMES AND AFTER: </strong>52 of the 61 most performed composers were alive during some portion of the NYP's history. Nearly half (29 of 61) were born after the NYP was founded. Despite the common belief that great artists are often not appreicated when they're alive, a number of composers in this elite group found quite a bit of success during their lifetimes, and continue to be popular today, including names like <span class="composer-trigger" data-index="5">Richard Strauss</span>, <span data-index="13" class="composer-trigger">Stravinsky</span>, <span data-index="21" class="composer-trigger">Rachmaninoff</span>, <span class="composer-trigger" data-index="40">Hindemith</span>, and <span data-index="25" class="composer-trigger">Shostakovich</span> among others.</li>
           <li class="after-death"><strong>COMPLETELY NEGLECTED DURING THEIR LIFETIMES: </strong>Of these 52 composers alive for at least a portion of the NYP's existence, only 7 were <em>not performed at all</em> by the NYP during their lifetimes. Two are particularly notable: <span class="composer-trigger" data-index="35">Musorgsky's</span> posthumous popularity came mostly as a result of arragements and reworkings of his music by Ravel and Rimsky-Korsakov, while <span class="composer-trigger" data-index="52">Anton von Webern</span> became a cult figure among some members of avant-garde composer circles, and orchestras began programming pieces from his small oeuvre more regularly.</li>
@@ -717,11 +738,10 @@
           <li class="declined"><strong>FADED AWAY: </strong>The fourth category of composers are those whose popularity has mostly faded with time. The music of composers like <span class="composer-trigger" data-index="60">Louis Spohr</span>, <span class="composer-trigger" data-index="58">Karl Goldmark</span>, <span class="composer-trigger" data-index="53">Anton Rubinstein</span>, and <span class="composer-trigger" data-index="55">William Schuman</span> are probably unfamiliar to most people today, even among some Classical Music connoisseurs, but they were popular with the orchestra (and probably, with audiences) when they were alive. In the first few seasons of the NYP, Spohr was as popular as Beethoven and Mozart!</li>
           <li class="one-hit"><strong>ONE-HIT WONDERS: </strong>While some composers like Beethoven, Brahms, and Ravel seem to have a pretty balanced performance history, with multiple compositions performed repeatedly by the NYP, other composers in the top 59 make the list mostly off the extreme popularity of one or two compositions. <span class="composer-trigger" data-index="59">Paul Dukas</span> is probably the epitome of a One-Hit Wonder composer. Almost all&#8212about 80%&#8212of his performances are of his <em>The Sorcerer's Apprentice</em>. Some other One-Hit Wonders in the top 59: <span class="composer-trigger" data-index="42">Max Bruch</span> (Violin Concerto No. 1 in G minor) <span class="composer-trigger" data-index="54">Edouard Lalo</span> (<em>Symphonie Espagnole</em>) <span class="composer-trigger" data-index="51">Bedrich Smetana</span> (Pieces from the symphonic cycle <em>Ma Vlast</em> and his opera <em>The Bartered Bride</em>...so I guess he's more of a Two-Hit Wonder?)</li>
         </ul>
-        <p>You can explore the New York Philharmonic's performance history of these 61 composers by season <a href='/#dot-chart'>below</a>. Each dot represents a unique composition programmed in a particular season. <strong>Hover</strong> over the dots to see some metadata about each composition; <strong>click</strong> to highlight all appearances of the piece across the NYP's history. [Insert legend explaining dot colors]</p>
-        <p>The more hollow red dots indicate that, the fewer solid red dots....one hit</p>
+        <p>You can explore the New York Philharmonic's performance history of these 61 composers by season <a href='/#dot-chart'>below</a>. See if you spot any other trends or patterns. Each dot represents a unique composition programmed + performed in a particular season. <strong>HOVER</strong> over the dots to see some metadata about each composition; <strong>CLICK</strong> on the dot to highlight all appearances of the piece across the NYP's history. [Insert legend explaining dot colors]</p>
       </section>
 		
-			<section id="dot-chart" class="dot-chart">
+			<section id="dot-chart" class="dot-chart composers-chart">
         <h2 class='graphic-title'>The 61 Most-Performed Composers by the NY Phil</h2>
         <div>
           <div class="dot-chart-heading-middle">
@@ -732,9 +752,12 @@
 				<div class="main-container"></div>
 			</section>
       
-      <section class="dot-chart-explain prose">
+      <section class="coda coda-prose prose">
         <h2 class='graphic-title'>Coda</h2>
-        <p>Throughout the history of Classical Music, the perception that the genre's on its deathbed has always been a recurring motif. But how accurate are these anecdotal impressions? Can we move beyond anecdotes and back it up with some data?</p>
+        <p>Though the New York Philharmonic is just one orchestra out of many in the US, and indeed, in the world, its long, continuous existence gives us an interesting panaramic glimpse into the ebbs and flows of an artistic genre. In this piece, we've used primarily two distinct dimensions in the NYP's history to pulsecheck the genre: the ratios of dead-to-living composers performed, and of repeat-vs-first-time compositions. In both measures, the NYP has clearly trended towards the repeat and the dead, and superfically, it would seem like the Phil is in danger of going towards the profile of an aging Classical Rock band playing oldies and going on nostalgia tours rather than the route of a hip</p>
+        <p>But Classical Music has always had an eye towards the past, even in its heyday.</p>
+        <p>Audience data</p>
+        <p>Bright sides. Movies, film music</p>
       </section>
 			
 			<div class="methodology">

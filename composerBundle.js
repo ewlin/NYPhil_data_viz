@@ -141,6 +141,7 @@ d3.json('../../data/new_top60.json', composers => {
   $('.select-value').select2(); 
   
   //function expects composer object
+  //UGLY CODE. Does side-effects + and returns data. Refactor ASAP
   function calculateComposerSeasonData (composer, composerIndex) {
     let seasonsCount = []; 
     
@@ -323,41 +324,6 @@ d3.json('../../data/new_top60.json', composers => {
 		}
 		
     calculateComposerSeasonData(composer, composerIndex);
-    
-		//composerWorks = []; 
-		//ALL_SEASONS.forEach( (season, season_idx) => {
-		//	let works = composer.works; 
-    //  //accumulates the # of pieces per season by one composer
-		//	let seasonWorkCount = 0; 
-		//	works.forEach( (work, work_idx) => {
-		//		let workSeasons = work.seasons; 
-		//		let numOfPerformances = workSeasons.length; 
-//
-		//		if (workSeasons.includes(season)) {
-		//			let workMetaData = {
-    //        id: `${composerIndex}:${work_idx}`, 
-    //        title: work.title, 
-    //        season: season,
-    //        seasonWorkCount: seasonWorkCount, 
-    //        seasonCount: work.seasonCount, 
-    //        numOfPerfs: numOfPerformances, 
-    //        composer: work.composer
-    //      }; 
-		//			if (workSeasons.length === 1) {
-		//				workMetaData["orphanWork"] = true; 
-		//			} else if (workSeasons.indexOf(season) === 0) {
-		//				workMetaData["firstPerf"] = true; 
-		//			} 
-		//			composerWorks.push(workMetaData); 
-		//			seasonWorkCount++; 
-		//		}
-		//		
-		//	});
-		//  seasonsCount.push(seasonWorkCount);
-		//}); 
-		//
-		//console.log(composerWorks.length);
-    //console.log(seasonsCount);
 
 		// Composer birth-death box transition
 		svg.select('rect').transition().duration(1400).attr('x', rectX)
