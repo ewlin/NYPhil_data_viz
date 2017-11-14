@@ -903,9 +903,10 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 
   }
 
-  if (!isMobile().any()) {
-    window.addEventListener('resize', debounce(resize, 200)); 
-  }
+  //if (!isMobile().any()) {
+  //  window.addEventListener('resize', debounce(resize, 200)); 
+  //}
+  window.addEventListener('resize', debounce(resize, 200)); 
 	
 }); 
 
