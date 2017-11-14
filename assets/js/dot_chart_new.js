@@ -378,12 +378,14 @@ d3.json('../../data/new_top60.json', composers => {
 			})
 			.attr('opacity', 1)
 			.attr('stroke-width', 1)
-			.attr('r', seasonsScale.bandwidth()/2.4); 
+			.attr('r', seasonsScale.bandwidth()/2.4)
+      .attr('class', (d, i) => `piece unid:${i}`);
+
 		
 		dots.enter().append('circle').attr('r', seasonsScale.bandwidth()/2.4)
 			.attr('cx', d => seasonsScale(d.season))
 			.attr('cy', SVG_HEIGHT + 5)
-			.attr('class', 'piece')
+			.attr('class', (d, i) => `piece unid:${i}`)
 			.on('click', d => {
 				let id = d.id; 
 
@@ -444,13 +446,13 @@ d3.json('../../data/new_top60.json', composers => {
     
     
     //Voronoi inside renderDots; needs calculateComposerSeasonData to have been called
-    voronoiOverlay
-      .selectAll('path')
-      .data(voronoiGen.polygons(composerWorks))
-      .enter()
+    voronoiOverlay.selectAll('path').remove(); 
+    
+    voronoiOverlay.selectAll('path').data(voronoiGen.polygons(composerWorks)).enter()
       .append('path')
-      .attr('d', d => "M" + d.join("L") + "Z")
-      .style("stroke", "#2074A0")
+      .attr('d', d => "M" + d.join("L") + "Z") 
+      .attr('class', (d, i) => `piece unid:${i}`)
+      .style("stroke", "rgba(180, 180, 180, .5)")
       .style('fill', 'none');
 	}
 	
