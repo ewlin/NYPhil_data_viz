@@ -16,7 +16,7 @@ function formatComposerName (name) {
   let names = name.split(',');  
   console.log(names);
   let match; 
-  let firstname = names[1];
+  let firstname = names[1].trim();
   let surname = (match = names[0].match(/\[.*\]/)) ? match[0].substr(1, match[0].length - 2) : names[0]; 
   return names.length === 3 ? `${firstname} ${surname} II`.trim() : `${firstname} ${surname}`.trim(); 
 }
@@ -135,10 +135,31 @@ d3.json('../../data/new_top60.json', composers => {
 		$('.select-value').append(option); 
 	}); 
   
-  
+  function matchComposers(params, data) {
+    // If there are no search terms, return all of the data
+    let altNames = [{name: 'antonin dvorak', id: 14}, {name: 'camille saint-saens', id: 22}, {name: 'bela bartok', id: 23}, {name: 'cesar franck', id: 33}, {name: 'frederic chopin', id: 34}, {name: 'peter ilich tchaikovsky', id: 3}, {name: 'sergey rachmaninov', id: 21}, {name: 'modest mussorgsky', id: 35}, {name: 'sergey prokofieff', id: 18}];
+    
+    if ($.trim(params.term) === '') {
+      return data;
+    }
+    
+    for (let i = 0; i < altNames.length; i++) {
+      if (altNames[i].name.match(params.term.toLowerCase().trim()) && data.id == altNames[i].id) {
+        return data; 
+      }
+    }
+         
+    if (data.text.toLowerCase().indexOf(params.term.toLowerCase().trim()) > -1) {
+      return data; 
+    }
+    
+    // Return `null` if the term should not be displayed
+    return null;
+}
   //Create Select2 object
-  $('.select-value').select2(); 
-  
+  //$('.select-value').select2(); 
+  $('.select-value').select2({matcher: matchComposers}); 
+
   //function expects composer object
   //UGLY CODE. Does side-effects + and returns data. Refactor ASAP
   function calculateComposerSeasonData (composer, composerIndex) {
