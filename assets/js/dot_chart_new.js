@@ -179,7 +179,7 @@ d3.json('../../data/new_top60.json', composers => {
             id: `${composerIndex}:${work_idx}`, 
             title: work.title, 
             season: season,
-            seasonWorkCount: seasonWorkCount, 
+            seasonWorkCount: ++seasonWorkCount, 
             seasonCount: work.seasonCount, 
             numOfPerfs: numOfPerformances, 
             composer: work.composer
@@ -190,11 +190,11 @@ d3.json('../../data/new_top60.json', composers => {
 						workMetaData["firstPerf"] = true; 
 					} 
 					composerWorks.push(workMetaData); 
-					seasonWorkCount++; 
+					//seasonWorkCount++; 
 				}
 				
 			});
-		  seasonsCount.push({count: seasonWorkCount, season: season});
+		  seasonsCount.push({count: seasonWorkCount === 0 ? 0 : seasonWorkCount, season: season});
 		}); 
 		
 		console.log(composerWorks.length);
@@ -347,10 +347,10 @@ d3.json('../../data/new_top60.json', composers => {
 
 		// Composer birth-death box transition
 		svg.select('rect').transition().duration(1400).attr('x', rectX)
-		.attr('width', rectWidth); 
+		  .attr('width', rectWidth); 
     
     svg.select('.lifetime-box').select('line').transition().duration(1400).attr('x1', rectX)
-    .attr('x2', rectX + rectWidth); 
+      .attr('x2', rectX + rectWidth); 
 		
 		let dots = svg.selectAll('circle')
 			.data(composerWorks); 
