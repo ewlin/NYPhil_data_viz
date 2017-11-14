@@ -448,7 +448,8 @@ d3.json('../../data/new_top60.json', composers => {
     .attr('y', 0)
     .attr('width', rectWidth)
     .attr('height', SVG_HEIGHT*.92)
-    .attr('opacity', .3).attr('fill', 'grey'); 
+    .attr('opacity', .3)
+    .attr('fill', 'grey'); 
 	
   ////LINE ABOVE LIFETIME BOX
   lifetime.append('line')

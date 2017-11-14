@@ -595,11 +595,13 @@ d3.json('../../data/composers.json', (err, d) => {
     //const MORE_TEXTS = ['Percentage of pieces by living composers', 'Percentage of pieces by deceased composers']; 
     let newAnnotations = [{
       note: {
-        title: " "
+        title: "1967-68 Season", 
+        label: "Average % of living composers drops below 20% and has remained under 20% since",
+        wrap: window.innerWidth <= 1024 ? 130 : 165
       },
-      data: { i: 0, perc: 0 }, 
-      dy: 0,
-      dx: 0
+      data: { i: 125, perc: .197 }, 
+      dy: -65,
+      dx: 0, 
     }]; 
     
     makeAnnotations
