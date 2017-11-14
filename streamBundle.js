@@ -556,11 +556,13 @@ d3.json('../../data/composers.json', (err, d) => {
 
     let newAnnotations = [{
       note: {
-        title: " "
+        title: "1859-60 Season (The 18th Season)",
+        label: "First-time performances drop under 50%; more repeats than first-time pieces every season from this point on",
+        wrap: window.innerWidth <= 1024 ? 130 : 165
       },
-      data: { i: 0, perc: 0 }, 
-      dy: 0,
-      dx: 0
+      data: { i: 17, perc: 0.488 }, 
+      dy: -70,
+      dx: 80
     }]; 
 
     makeAnnotations.accessors({
