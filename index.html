@@ -2,7 +2,7 @@
 
 <html> 
 	<head>
-		<title>Pulsecheck: Trends from 175 seasons at the New York Philharmonic</title>
+		<title>Trends from 175 seasons at the New York Philharmonic</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 
 		<link rel="icon" 
@@ -102,7 +102,8 @@
 			}
 			
 			.annotation-note-label {
-				fill: #6E5D5D; 
+				/*fill: #6E5D5D; */
+				fill: #302B2B; 
 				font-size: 12px;
 			}
 			
@@ -145,7 +146,7 @@
 				text-align: center;
 			}
 			
-			.byline span.name {
+			.byline span {
 				font-weight: 700; 
       }
 			
@@ -517,14 +518,70 @@
 				padding-top: 18px;
 				/*background-color: blue; */ 
 			}
-			
+      
+      span.dot-legd {
+        display: inline-block; 
+        width: .5em; 
+        height: .5em;
+        box-sizing: border-box;
+        border-radius: 50%;
+        margin-right: 1.4em;
+        /*background: blue;*/
+      }
+      
+      p.first-dot {
+        color: Tomato;
+      }
+      
+      p.repeat-dot {
+        color: #3f74a1;
+      }
+      
+      p.orphan-dot {
+        color: #df644e;
+      }
+      
+      p.lifetime-box {
+        color: rgba(102, 102, 102, 1);
+        vertical-align: middle;
+      }
+      
+      span.dot-legd.first-dot {
+        background: Tomato;
+      }
+      
+      span.dot-legd.repeat-dot {
+        background: #3f74a1; 
+      }
+      
+      span.dot-legd.orphan-dot {
+        border: 1px solid #df644e;
+      }
+      
+      span.dot-legd.lifetime-box {
+        vertical-align: middle;
+        border-radius: 0;
+        width: 1.4em;
+        height: 1.2em;
+        background: rgba(122, 122, 122, 0.8);
+        border-top: 4px solid #ff645f;
+      }
+      
+      .dot-chart-explain.prose.note p {
+        margin-bottom: .5em; 
+        font-size: .9em;
+      }
+      
       div.prose.note {
-        font-size: .75em;
         max-width: 35rem; 
         background-color: rgba(177, 163, 149, 1);
         padding: 1em 1em .2em;
         border-radius: .3em;
         margin: 0 auto 5em;
+      }
+      
+      #define-unique {
+        font-size: .8em;
       }
       
       .axis {
@@ -578,7 +635,7 @@
 			.tooltip {
 				pointer-events: none; 
 				position: fixed; 
-				width: 340px; 
+				width: 320px; 
 				padding: 13px 10px;
 				background-color: rgb(219, 221, 224); 
 				box-shadow: 1px 5px 5px -3px #A6ADB3;
@@ -667,7 +724,7 @@
       <div class='titles'>
 				<h1 class="title">Pulsecheck: Is Orchestral Music Still a Living Art Form in 2017?</h1>
 				<p class="subtitle">Extrapolating trends from 175 seasons at the New York Philharmonic</p>
-				<p class="byline">By <span class="name">Eric William Lin</span><img src='author.png'/>
+				<p class="byline"><span>DESIGN</span>, <span>CODE</span>, &#38; <span>PROSE</span> by <span class="name">Eric William Lin</span><img src='author.png'/>
 </p>
 			</div>
     </header>		
@@ -691,7 +748,7 @@
 				</div>
 				<div class="stream-explain explain">
 					<div id="first-explain" class="explain1" data-graph='1'>
-            <p>The first metric we'll explore is what I'm calling 'The Novelty Factor'. Is the orchestra exploring new pieces they've never performed before, or are they repeating music they've played over-and-over again? First, I plotted the number of <a href="/#define-unique">unique compositions*</a> performed each season by the New York Philharmonic. The <span class='area-first'><strong>orange</strong></span> area represents the pieces being played for the first time by the NYP. In contrast, the <span class='area-repeat'><strong>blue</strong></span> area represents pieces that have been played before in a previous season. Other than the first season (1842-43), every subsequent season has featured at least some pieces that the orchestra had previously performed.</p>
+            <p>The first metric we'll explore is what I'm calling 'The Novelty Factor'. Is the orchestra exploring new pieces they've never performed before, or are they repeating music they've played over-and-over again? I plotted the number of <a href="/#define-unique">unique compositions*</a> performed each season by the New York Philharmonic. The <span class='area-first'><strong>orange</strong></span> area represents the pieces being played for the first time by the NYP. In contrast, the <span class='area-repeat'><strong>blue</strong></span> area represents pieces that have been played before in a previous season. Other than the first season (1842-43), every subsequent season has featured at least some pieces that the orchestra had previously performed.</p>
           </div>
 					<br>
           <div class="explain2">
@@ -709,7 +766,7 @@
           </div>
 					<br>
           <div class="explain5" data-graph='4'>
-            <p>Next, let's take the 'dead or alive' metaphor literally. Is the orchestra still performing music by living composers? Compare the percentage of pieces by <span class='area-dead'><strong>dead</strong></span> composers with those by <span class='area-alive'><strong>living</strong></span> composers: Again, surprisingly, for most of the NYP's history (save for a few early seasons), they've performed more dead composers than living. Even when Wagner was still writing his operas, and when Brahms had yet to compose his symphonies, the Phil was already mostly playing the music of 'Dead White Guys' (from then). Still, it's worth noting that there is a long-term decline in the percentage of performances by living composers, and this percentage collapses dramatically in the late 20th century. In the 1967-68 season, the average percentage of living composers dipped below 20% and has never recovered since. Since the 1990s, this percentage has hovered in the low teens.</p>
+            <p>Next, let's take the 'dead or alive' metaphor literally. Is the orchestra still performing music by living composers? Compare the percentage of pieces by <span class='area-dead'><strong>dead</strong></span> composers with those by <span class='area-alive'><strong>living</strong></span> composers: Again, surprisingly, for most of the NYP's history (save for a few early seasons), they've performed more dead composers than living. Even when Wagner was still writing his operas, and when Brahms had yet to compose his symphonies, the Phil was already mostly playing the music of 'Dead White Guys' (yes, already dead back then). Still, it's worth noting that there is a long-term decline in the percentage of performances by living composers, and this percentage collapses dramatically in the late 20th century. In the 1967-68 season, the average percentage of living composers dipped below 20% and has never recovered since. Since the 1990s, this percentage has hovered in the low teens.</p>
           </div>
 					<br>
           <div class="explain6" data-graph='5'>
@@ -723,23 +780,34 @@
       <div id="define-unique" class="note prose">
         <h4><strong>*A BRIEF INTERMEZZO: DEFINING 'A UNIQUE COMPOSITION'</strong></h4>
         <p>In this analysis, regardless of how many times a piece is performed during a single season, it is only counted once. Furthermore, if two different excerpts or movements of a piece are performed on different concerts in the same season, the piece is also treated as one single unique piece for the season. This isn't a perfect approach, since there are some scenarios in which certain 'movements' of larger works are often traditionally programmed as a standalone piece by orchestras, such as certain overtures of operas. On this front, the NYP's categorizations in their data set are sometimes inconsistent. For example, it treats the three movements of Debussy's <em>Images</em> as seperate compositions, while each of the six pieces from Smetana's <em>Ma Vlast</em> are treated as 'movements'. I've preserved the orchestra's original categorizations since it's not feasible to manually recategorize all pieces.</p>
-        <p>We've attempted to exclude most non-orchestral compositions (e.g., pieces that don't require a conductor) that appear on a Subscription Series concert. For example, sometimes a soloist will perform a short solo encore piece after they play a concerto with the orchestra. Most of the known cases in this category have been omitted from the analysis and these pieces are <em>not</em> counted towards the number of unique compositions in a season.</p>
+        <p>We've attempted to exclude most non-orchestral compositions (e.g., pieces that don't require a conductor) that occasionally appear on a Subscription Series concert. For example, sometimes a soloist will perform a short solo encore piece after they play a concerto with the orchestra. Most of the known cases in this category have been omitted from the analysis and these pieces are <em>not</em> counted towards the number of unique compositions in a season. Arragements of non-orchestral pieces for orchestra however, <em>are</em> counted.</p>
       </div>
 		
 		  <section class="dot-chart-explain prose dot-chart-prelude">
         <h2 class='graphic-title'>Variations: Composers &#38; Their Differing Destinies</h2>
         <p>Now that we've looked at the data from a high level, let's zoom in and explore what composers and music are actually being played.</p>
+        <p>How do we define a composer who's made it? There are many ways we can rank composers, but the easiest is probably to stick with our earlier method of counting unique compositions each season. A more successful composer, will simply be one who has racked up more performances by the orchestra. Though this method is flawed statistically (since it's biased in favor of composers who were alive earlier in the NYP's history, and penalizes composers born later, including those alive today), it can give us a chance to make some interesting observations (say between two composers who have received around the same number of performances).</p>
         <p>It turns out that the success of composers seems to follow a classic 'long-tail' distribution: a small subset of composers receive a disproportionate number of performances. The top-59 most performed composers (actually a total of 61, with 3 composers sharing 59th place) represent over 75% of all pieces programmed while accounting for just under 5.8% of all composers ever performed on a subscription concert (61 out of 1039).</p>
         <p>But even within this elite group, we find a range and variety in the patterns of success (or in some cases, of decline), of how the composers' music came to be frequenty performed by the New York Philharmonic:</p>
         <ul>
           <li class="living-success"><strong>POPULAR IN THEIR LIFETIMES AND AFTER: </strong>52 of the 61 most performed composers were alive during some portion of the NYP's history. Nearly half (29 of 61) were born after the NYP was founded. Despite the common belief that great artists are often not appreicated when they're alive, a number of composers in this elite group found quite a bit of success during their lifetimes, and continue to be popular today, including names like <span class="composer-trigger" data-index="5">Richard Strauss</span>, <span data-index="13" class="composer-trigger">Stravinsky</span>, <span data-index="21" class="composer-trigger">Rachmaninoff</span>, <span class="composer-trigger" data-index="40">Hindemith</span>, and <span data-index="25" class="composer-trigger">Shostakovich</span> among others.</li>
-          <li class="after-death"><strong>COMPLETELY NEGLECTED DURING THEIR LIFETIMES: </strong>Of these 52 composers alive for at least a portion of the NYP's existence, only 7 were <em>not performed at all</em> by the NYP during their lifetimes. Two are particularly notable: <span class="composer-trigger" data-index="35">Musorgsky's</span> posthumous popularity came mostly as a result of arragements and reworkings of his music by Ravel and Rimsky-Korsakov, while <span class="composer-trigger" data-index="52">Anton von Webern</span> became a cult figure among some members of avant-garde composer circles, and orchestras began programming pieces from his small oeuvre more regularly.</li>
+          <li class="after-death"><strong>COMPLETELY NEGLECTED DURING THEIR LIFETIMES: </strong>Of these 52 composers alive for at least a portion of the NYP's existence, 7 were <em>not performed at all</em> by the NYP during their lifetimes. Two are particularly notable: <span class="composer-trigger" data-index="35">Musorgsky's</span> posthumous popularity came mostly as a result of arragements and reworkings of his music by Ravel and Rimsky-Korsakov, while <span class="composer-trigger" data-index="52">Anton von Webern</span> became a cult figure among some members of avant-garde composer circles, and orchestras began programming pieces from his small oeuvre more regularly.</li>
           <li class="neglected"><strong>MOSTLY IGNORED DURING THEIR LIFETIMES: </strong>Some composers, though not completely neglected by the NYP while they were alive, became considerably more popular after their deaths. During their lifetimes, they received only a smattering of performances. <span class="composer-trigger" data-index="23">B&#233;la Bart&#243;k</span> is one of the more notable in this category. On the extreme end, <span class="composer-trigger" data-index="27">Anton Bruckner</span> and <span class="composer-trigger" data-index="50">Charles Ives</span> each had a single piece performed in one season by the NYP before they died.</li>
           <li class="declined"><strong>FADED AWAY: </strong>The fourth category of composers are those whose popularity has mostly faded with time. The music of composers like <span class="composer-trigger" data-index="60">Louis Spohr</span>, <span class="composer-trigger" data-index="58">Karl Goldmark</span>, <span class="composer-trigger" data-index="53">Anton Rubinstein</span>, and <span class="composer-trigger" data-index="55">William Schuman</span> are probably unfamiliar to most people today, even among some Classical Music connoisseurs, but they were popular with the orchestra (and probably, with audiences) when they were alive. In the first few seasons of the NYP, Spohr was as popular as Beethoven and Mozart!</li>
           <li class="one-hit"><strong>ONE-HIT WONDERS: </strong>While some composers like Beethoven, Brahms, and Ravel seem to have a pretty balanced performance history, with multiple compositions performed repeatedly by the NYP, other composers in the top 59 make the list mostly off the extreme popularity of one or two compositions. <span class="composer-trigger" data-index="59">Paul Dukas</span> is probably the epitome of a One-Hit Wonder composer. Almost all&#8212about 80%&#8212of his performances are of his <em>The Sorcerer's Apprentice</em>. Some other One-Hit Wonders in the top 59: <span class="composer-trigger" data-index="42">Max Bruch</span> (Violin Concerto No. 1 in G minor) <span class="composer-trigger" data-index="54">Edouard Lalo</span> (<em>Symphonie Espagnole</em>) <span class="composer-trigger" data-index="51">Bedrich Smetana</span> (Pieces from the symphonic cycle <em>Ma Vlast</em> and his opera <em>The Bartered Bride</em>...so I guess he's more of a Two-Hit Wonder?)</li>
         </ul>
-        <p>You can explore the New York Philharmonic's performance history of these 61 composers by season <a href='/#dot-chart'>below</a>. See if you spot any other trends or patterns. Each dot represents a unique composition programmed + performed in a particular season. <strong>HOVER</strong> over the dots to see some metadata about each composition; <strong>CLICK</strong> on the dot to highlight all appearances of the piece across the NYP's history. [Insert legend explaining dot colors]</p>
       </section>
+      <div class="dot-chart-explain prose note">
+        <p><strong>You can explore the New York Philharmonic's performance history of these 61 composers by season <a href='/#dot-chart'>below</a></strong>. See if you spot any other trends or patterns.</p> 
+        <p>Each dot represents a unique composition programmed + performed in a particular season.</p>
+        <hr>
+        <p><strong>HOVER</strong> over the dots to see some metadata about each composition</p>
+        <p><strong>CLICK</strong> on the dot to highlight all appearances of that piece across the NYP's history.</p> 
+        <p class='orphan-dot'><span class='dot-legd orphan-dot'></span><strong>First and only performance of piece</strong></p>     
+        <p class='first-dot'><span class='dot-legd first-dot'></span><strong>First-time performance by NYP</strong></p>
+        <p class='repeat-dot'><span class='dot-legd repeat-dot'></span><strong>Repeat performance by NYP</strong></p>
+        <p class='lifetime-box'><span class='dot-legd lifetime-box'></span><strong>Lifespan of composer (if overlaps in part or whole with NYP history)</strong></p>
+      </div>
 		
 			<section id="dot-chart" class="dot-chart composers-chart">
         <h2 class='graphic-title'>The 61 Most-Performed Composers by the NY Phil</h2>
@@ -754,10 +822,10 @@
       
       <section class="coda coda-prose prose">
         <h2 class='graphic-title'>Coda</h2>
-        <p>Though the New York Philharmonic is just one orchestra out of many in the US, and indeed, in the world, its long, continuous existence gives us an interesting panaramic glimpse into the ebbs and flows of an artistic genre. In this piece, we've used primarily two distinct dimensions in the NYP's history to pulsecheck the genre: the ratios of dead-to-living composers performed, and of repeat-vs-first-time compositions. In both measures, the NYP has clearly trended towards the repeat and the dead, and superfically, it would seem like the Phil is in danger of going towards the profile of an aging Classical Rock band playing oldies and going on nostalgia tours rather than the route of a hip</p>
-        <p>But Classical Music has always had an eye towards the past, even in its heyday.</p>
-        <p>Audience data</p>
-        <p>Bright sides. Movies, film music</p>
+        <p>Though the New York Philharmonic is just one orchestra out of many in the US, and indeed, in the world, its long, continuous existence gives us an expansive temporal-panaramic glimpse into the ebbs and flows of an artistic genre. In this essay, we primarily used two distinct dimensions in the NYP's history to pulsecheck the genre: the ratios of dead-to-living composers performed, and of repeat-vs-first-time compositions. In both measures, the NYP is clearly increasingly trending towards the repeats and the dead. But is this evidence the genre is dying?</p>
+        <p>As Alex Ross suggested, Classical Music has always had an eye towards the past, and from our data, we can see that even in its heyday, the New York Philharmonic was already mostly playing the works of dead composers, and happily playing those pieces over and over again.</p>
+        <p>And as we saw with composers like Spohr and Rubinstein, just because an orchestra is performing a lot of works by a living composer is no guarantee that music will last. Likewise, composers like B&#233;la Bart&#243;k and Ives show that orchestras can discover new music and expand the repertoire with formerly-obscure composers who have long passed. 'Current' and 'now' are not the only sources of novelty.</p>
+        <p>For fans of orchestral music, there are also other reasons to be hopeful that this is still a thriving genre. I have a nagging feeling that many younger aficionados of orchestral music come to the genre not from the concert hall repertoire, but from the orchestral scores of film and video games. From John Williams to Joe Hisaishi to Michael Giacchino, the soundtracks to our modern entertainment are still rich with the sounds of innovations birthed from the concert hall, and now, musicians of all stripes are taking the centuries of innovation out of the Classical concert hall and applying them everywhere else. Maybe one day, their innovations will find their way back into the Classical concert hall. It probably already has.</p>
       </section>
 			
 			<div class="methodology">
