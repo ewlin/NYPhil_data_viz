@@ -397,8 +397,8 @@ d3.json('../../data/new_top60.json', composers => {
 				console.log(composer.composer); 
 				let dimensions = d3.event.target.getBoundingClientRect(); 
 				let left = dimensions.right > svgDimensions.left + svgDimensions.width/2 
-												? dimensions.right - 320
-												: dimensions.right + 10; 
+												? dimensions.right - 370
+												: dimensions.right + 20; 
 				let tooltip = d3.select('.tooltip').style('left', left + "px"); 
 				//will be variable based on the text content
         let height; 
