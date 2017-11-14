@@ -513,7 +513,7 @@ d3.json('../../data/new_top60.json', composers => {
 	      	.attr('stroke-width', 1)
 	      	.attr('r', seasonsScale.bandwidth()/2.4); 
       })
-      .style("stroke", "rgba(180, 180, 180, .5)")
+      //.style("stroke", "rgba(180, 180, 180, .5)")
       .style('pointer-events', 'all')
       .style('fill', 'none');
 	}
