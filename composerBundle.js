@@ -52,14 +52,21 @@ d3.json('../../data/new_top60.json', composers => {
 	console.log(SVG_HEIGHT); 
 	
   //scales for DOT CHART
-	let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([SVG_WIDTH*.05,SVG_WIDTH*.95]); 
+	let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([SVG_WIDTH*.05, SVG_WIDTH*.95]); 
 	let yScale = d3.scaleLinear().domain([0,31]).range([SVG_HEIGHT*.92, 0]);
 	
+  //Begin Voronoi tests; voronoi generator/accessors
+  let voronoiGen = d3.voronoi()
+    .x(d => seasonsScale(d.season))
+    .y(d => yScale(d.seasonWorkCount))
+    .extent([[SVG_WIDTH*.05, 0], [SVG_WIDTH*.95, SVG_HEIGHT*.92]]);
+  
   let svg = d3.select('.main-container').append('svg')
   
   svg.attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
 	
-  
+  //Voronoi grouping
+  let voronoiOverlay = svg.append('g').attr('class', 'voronoi-overlay'); 
 	
 	//Axes logic and display 
 	svgDimensions = document.getElementsByTagName('svg')[0].getBoundingClientRect(); 
@@ -156,7 +163,7 @@ d3.json('../../data/new_top60.json', composers => {
     
     // Return `null` if the term should not be displayed
     return null;
-}
+  }
   //Create Select2 object
   //$('.select-value').select2(); 
   $('.select-value').select2({matcher: matchComposers}); 
@@ -435,6 +442,17 @@ d3.json('../../data/new_top60.json', composers => {
 			}); 
 	
     console.log(composerWorks); 
+    
+    
+    //Voronoi inside renderDots; needs calculateComposerSeasonData to have been called
+    voronoiOverlay
+      .selectAll('path')
+      .data(voronoiGen.polygons(composerWorks))
+      .enter()
+      .append('path')
+      .attr('d', d => "M" + d.join("L") + "Z")
+      .style("stroke", "#2074A0")
+      .style('fill', 'none');
 	}
 	
   
