@@ -1,9 +1,69 @@
 # Data Visualization Project w/New York Philharmonic Historical Concert Data
 
-### _(Updated 11/10/2017)_
+### _(Updated 11/13/2017)_
 
-### TODOs: 
+## TODOs: 
 
+### BUGS: 
+
+### GENERAL: 
+* Babelfy everything so works on older browsers
+
+### INTRO
+* Prose. Finish writing last paragraph to intro. Talk about repeat/first-time and alive/dead as metrics [COMPLETED]
+
+### AREA GRAPHS
+#### CODE: GENERAL 
+* Resize for second chart (with 1909-10 annotation) needs to add/remove annotation based on screen width 
+* Fix Axis label text when vertically compressed charts (e.g. Instead of 'Percentage of' say '% of')
+#### CODE: MOBILE
+* Fix master branch mobile resize (remove !isMobile()...code)
+* Resize should not redraw trendline in mobile
+
+
+#### PROSE
+* Talk about sources of noise () [NOT ESSENTIAL]
+* Finish (.explain p) for living/dead panel [COMPLETED ]
+* Finish .trendline explain panel [COMPLETED]
+* Finish stream graph final panel (conclusion) [COMPLETED]
+* Finish transition from stream to composers [COMPLETED]
+
+
+### TOP 59 COMPOSERS GRAPH
+#### CODE: JS
+
+* check if new code (meta tag info) fixes zooming issue when select is focused (in mobile)
+* Auto-select value in select with JS when composer name clicked. Current code not working in mobile Safari or mobile Chrome on iOS [Added changes on 11/11; test to see works]/[COMPLETED]
+* Write custom matching function for select2- deal with composer names with accent marks + ignore 'ranking part'
+* Select element style weird in mobile/consider removing styling for mobile [COMPLETED?]
+* Add rank + number of performances for each composer/figure out Select2 API
+* Smooth scrolling when composer name is clicked (if possible, browser conditional code)
+
+* Code Heatmap (Legend, layout, lifetime border)
+* Add d3-voronoi to Dot chart
+* Dot chart resize
+* Dot chart margins and height determined by calculations 
+* Dot chart legend (dot colors + lifetime box)
+
+* Optimize dot annotation rendering (cache some calculations?)?????
+
+#### PROSE
+* CtA if users on a mobile device; suggest getting the full experience by viewing on a device with at least 1024 pixels 
+* display/hide prose about exploring invividual pieces if on mobile/desktop
+
+
+#### Methodology 
+
+* Mobile sizing; added margins [COMPLETED]
+
+
+
+
+
+
+
+
+[OLD TO-DOs- Pre ~11/5/17]
 #### BUGS: 
 * Resizing issues [Mostly fixed, some scale issues, margins etc. remain--COMPLETED on STREAMGRAPH]
 * X-Axis ticks sometimes not showing up in AREA graph [COMPLETED]

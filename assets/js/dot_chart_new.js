@@ -16,7 +16,7 @@ function formatComposerName (name) {
   let names = name.split(',');  
   console.log(names);
   let match; 
-  let firstname = names[1];
+  let firstname = names[1].trim();
   let surname = (match = names[0].match(/\[.*\]/)) ? match[0].substr(1, match[0].length - 2) : names[0]; 
   return names.length === 3 ? `${firstname} ${surname} II`.trim() : `${firstname} ${surname}`.trim(); 
 }
@@ -104,7 +104,7 @@ d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
 	//Event listeners when option is selected from dropdown
 	$('.select-value').on('change', function(e) {
 		let index = this.value; 
-    selectComposer(index); 
+    renderComposer(index); 
 	});
   
   $('.dot-chart-prelude').on('click', (e) => {
@@ -117,7 +117,7 @@ d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
     //console.log(browserVersion);
     
     if (e.target.dataset.index) {
-      document.querySelector('.dot-chart').scrollIntoView(); 
+      document.querySelector('.dot-chart .graphic-title').scrollIntoView(); 
       selectComposer(index);
     } 
   });
@@ -135,9 +135,33 @@ d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
 		$('.select-value').append(option); 
 	}); 
   
+  function matchComposers(params, data) {
+    // If there are no search terms, return all of the data
+    let altNames = [{name: 'antonin dvorak', id: 14}, {name: 'camille saint-saens', id: 22}, {name: 'bela bartok', id: 23}, {name: 'cesar franck', id: 33}, {name: 'frederic chopin', id: 34}, {name: 'peter ilich tchaikovsky', id: 3}, {name: 'sergey rachmaninov', id: 21}, {name: 'modest mussorgsky', id: 35}, {name: 'sergey prokofieff', id: 18}];
+    
+    if ($.trim(params.term) === '') {
+      return data;
+    }
+    
+    for (let i = 0; i < altNames.length; i++) {
+      if (altNames[i].name.match(params.term.toLowerCase().trim()) && data.id == altNames[i].id) {
+        return data; 
+      }
+    }
+         
+    if (data.text.toLowerCase().indexOf(params.term.toLowerCase().trim()) > -1) {
+      return data; 
+    }
+    
+    // Return `null` if the term should not be displayed
+    return null;
+}
+  //Create Select2 object
   //$('.select-value').select2(); 
-  
+  $('.select-value').select2({matcher: matchComposers}); 
+
   //function expects composer object
+  //UGLY CODE. Does side-effects + and returns data. Refactor ASAP
   function calculateComposerSeasonData (composer, composerIndex) {
     let seasonsCount = []; 
     
@@ -272,11 +296,22 @@ d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
   
 
   /* END HEAT MAP */
-  
   function selectComposer(index) {
-    $('option').attr('selected', false); 
-    $(`.select-value option[value=${index}]`).attr('selected', true);
+    //Code for vanilla select element
+    //document.querySelector('.select-value').value = index;
+    
+    //Code for using Select2 control
+    $('.select-value').val(index);
+    $('.select-value').trigger('change');
+    
+    renderComposer(index);
+  }
 
+  
+  function renderComposer(index) {
+    //$('option').attr('selected', false); 
+    //$(`.select-value option[value=${index}]`).attr('selected', true);
+    
     console.log(`composer selected: ${index}: ${composers[index].composer}`);
     $('.composer-face').remove(); 
     let composer = composers[index].composer; 
@@ -309,41 +344,6 @@ d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
 		}
 		
     calculateComposerSeasonData(composer, composerIndex);
-    
-		//composerWorks = []; 
-		//ALL_SEASONS.forEach( (season, season_idx) => {
-		//	let works = composer.works; 
-    //  //accumulates the # of pieces per season by one composer
-		//	let seasonWorkCount = 0; 
-		//	works.forEach( (work, work_idx) => {
-		//		let workSeasons = work.seasons; 
-		//		let numOfPerformances = workSeasons.length; 
-//
-		//		if (workSeasons.includes(season)) {
-		//			let workMetaData = {
-    //        id: `${composerIndex}:${work_idx}`, 
-    //        title: work.title, 
-    //        season: season,
-    //        seasonWorkCount: seasonWorkCount, 
-    //        seasonCount: work.seasonCount, 
-    //        numOfPerfs: numOfPerformances, 
-    //        composer: work.composer
-    //      }; 
-		//			if (workSeasons.length === 1) {
-		//				workMetaData["orphanWork"] = true; 
-		//			} else if (workSeasons.indexOf(season) === 0) {
-		//				workMetaData["firstPerf"] = true; 
-		//			} 
-		//			composerWorks.push(workMetaData); 
-		//			seasonWorkCount++; 
-		//		}
-		//		
-		//	});
-		//  seasonsCount.push(seasonWorkCount);
-		//}); 
-		//
-		//console.log(composerWorks.length);
-    //console.log(seasonsCount);
 
 		// Composer birth-death box transition
 		svg.select('rect').transition().duration(1400).attr('x', rectX)
@@ -409,7 +409,7 @@ d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
 				tooltip.html(html); 
         //vertically center tooltip with the dot
 				height = document.querySelector('.tooltip').getBoundingClientRect().height; 
-				tooltip.style('top', (dimensions.top - Math.floor(height/2)) + "px"); 
+				tooltip.style('top', (dimensions.top - Math.floor(height/1.5)) + "px"); 
 				tooltip.transition().duration(500).style('opacity', .9); 
 				d3.select(d3.event.target)
 					.attr('stroke-width', 3)

@@ -216,6 +216,9 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
       //percentageOfTotalRepeatsLiving: repeatAlive/total * 100 
     };
   }); 
+  
+  console.log('repeat alive');
+  console.log(percentagesOfLivingRepeats);
 	
   yAbs.domain([0, MAX_NUMBER_PER_SEASON]); 
 
@@ -354,7 +357,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 	
   yStreamAxis.append('text')
     .attr('class', 'axis-label stream-label y-axis-label')
-    .text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON')
+    .text('NUMBER OF UNIQUE PIECES PER SEASON')
     .attr('x', 0)
     .attr('y', 0)
     .attr('transform', 'rotate(-90)')
@@ -406,7 +409,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
     .datum(movingAverage(percentagesOfAllRepeatsLiving, ['percentageOfTotalRepeatsLiving'], 7))
     //.enter()
     .attr('fill', 'none')
-    .attr('stroke', 'rgb(218, 155, 103)')
+    .attr('stroke', 'rgba(218, 155, 103, 1)')
     .attr('stroke-dasharray', '7, 2')
     .attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]))
     .style('stroke-width', '2px'); 
@@ -435,7 +438,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
     d3.select('.y-axis-label')
       .transition()
       .duration(1400)
-      .text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON'); 
+      .text('NUMBER OF UNIQUE PIECES PER SEASON'); 
     
     let newAnnotations = [{
       note: {
@@ -479,7 +482,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
     d3.select('.y-axis-label')
       .transition()
       .duration(1400)
-      .text('NUMBER OF UNIQUE COMPOSITIONS PER SEASON'); 
+      .text('NUMBER OF UNIQUE PIECES PER SEASON'); 
     
     const annotations = [{
       note: {
@@ -544,7 +547,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 		
     d3.select('.yAxis').select('.domain').remove(); 
 
-    d3.select('.y-axis-label').transition().duration(1400).text('PERCENTAGE OF UNIQUE PIECES PER SEASON');
+    d3.select('.y-axis-label').transition().duration(1400).text('PERCENTAGE OF UNIQUE COMPOSITIONS PER SEASON');
 		    
   }; 
 	
@@ -609,6 +612,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
     let newStuff = SVG.selectAll('path')
       .data(stack(movingAverage(percentagesLivingDead, ['percentageAlive', 'percentageDead'], 7))); 
 		
+    console.log(movingAverage(percentagesLivingDead, ['percentageAlive', 'percentageDead'], 7));
     //without moving average
     //let newStuff = SVG.selectAll('path')
     //  .data(stack(percentagesLivingDead));
@@ -649,7 +653,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
         animateLine.stop();
         makeAnnotations.annotations(newAnnotations); 
       } else {
-        startIndex += 1;  
+        startIndex += 2;  
         trendline.attr('d', d => line(d.slice(0, startIndex)));
       }
     });
@@ -882,7 +886,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
               animateLine.stop();
               //makeAnnotations.annotations(annotations3); 
             } else {
-              startIndex += 1;  
+              startIndex += 2;  
               d3.select('.trendline')
                 //.attr('transform', `translate(${0.05*SVG_WIDTH},0)`)
                 .attr('d', d => line(d.slice(0, startIndex)));
