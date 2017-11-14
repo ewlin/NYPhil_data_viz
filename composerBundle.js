@@ -58,8 +58,7 @@ d3.json('../../data/new_top60.json', composers => {
   //Begin Voronoi tests; voronoi generator/accessors
   let voronoiGen = d3.voronoi()
     .x(d => seasonsScale(d.season))
-    .y(d => yScale(d.seasonWorkCount))
-    .extent([[SVG_WIDTH*.05, 0], [SVG_WIDTH*.95, SVG_HEIGHT*.92]]);
+    .y(d => yScale(d.seasonWorkCount)); 
   
   let svg = d3.select('.main-container').append('svg')
   
@@ -456,6 +455,14 @@ d3.json('../../data/new_top60.json', composers => {
     //Voronoi inside renderDots; needs calculateComposerSeasonData to have been called
     voronoiOverlay.selectAll('path').remove(); 
     
+    //min X seasonsScale(composerWorks[0].season) - 20
+    //max X seasonsScale(composerWorks[composerWorks.length - 1].season) + 20
+    //min Y SVG_HEIGHT*.92
+    //max Y yScale(d3.max(composerWorks, work => work.seasonWorkCount))
+    //TODO calculate new extents depending on composer
+    //OLD: voronoiGen.extent([[SVG_WIDTH*.05, 0], [SVG_WIDTH*.95, SVG_HEIGHT*.92]]);
+    voronoiGen.extent([[seasonsScale(composerWorks[0].season) - 7, yScale(d3.max(composerWorks, work => work.seasonWorkCount)) - 7], [seasonsScale(composerWorks[composerWorks.length - 1].season) + 7, SVG_HEIGHT*.92]]);
+
     voronoiOverlay.selectAll('path').data(voronoiGen.polygons(composerWorks)).enter()
       .append('path')
       .attr('d', d => "M" + d.join("L") + "Z") 
@@ -514,6 +521,7 @@ d3.json('../../data/new_top60.json', composers => {
 	      	.attr('stroke-width', 1)
 	      	.attr('r', seasonsScale.bandwidth()/2.4); 
       })
+      //To see voronoi outline/dev env; comment out in production 
       //.style("stroke", "rgba(180, 180, 180, .5)")
       .style('pointer-events', 'all')
       .style('fill', 'none');
