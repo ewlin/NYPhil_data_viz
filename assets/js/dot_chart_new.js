@@ -64,9 +64,13 @@ d3.json('../../data/new_top60.json', composers => {
   
   svg.attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
 	
+  //Lifetime box
+  let lifetime = svg.append('g').attr('class', 'lifetime-box'); 
+  //Dots grouping
+  let dots = svg.append('g').attr('class', 'dots-grouping');
   //Voronoi grouping
   let voronoiOverlay = svg.append('g').attr('class', 'voronoi-overlay'); 
-	
+
 	//Axes logic and display 
 	svgDimensions = document.getElementsByTagName('svg')[0].getBoundingClientRect(); 
 	let axisYears = d3.axisBottom(seasonsScale)
@@ -130,10 +134,10 @@ d3.json('../../data/new_top60.json', composers => {
   });
 	
 	//Reset dots 
-	$('svg').on('click', function(e) {
+	$('#dot-chart').on('click', function(e) {
 		let index = $('.select-value').val() || 0; 
 		//THIS APPROACH IS PROBABLY WASTEFUL PERFORMANCE-WISE; redo without calling so much extra code 
-		if (e.target.tagName !== 'circle') renderDots(index); 
+		if (e.target.tagName !== 'path') renderDots(index); 
 	}); 
 	
 	//Create Options for select elements populated with composer names
@@ -359,7 +363,7 @@ d3.json('../../data/new_top60.json', composers => {
     svg.select('.lifetime-box').select('line').transition().duration(1400).attr('x1', rectX)
       .attr('x2', rectX + rectWidth); 
 		
-		let dots = svg.selectAll('circle')
+		let dots = svg.select('.dots-grouping').selectAll('circle')
 			.data(composerWorks); 
 		
 		dots.exit().remove(); 
@@ -379,57 +383,60 @@ d3.json('../../data/new_top60.json', composers => {
 			.attr('opacity', 1)
 			.attr('stroke-width', 1)
 			.attr('r', seasonsScale.bandwidth()/2.4)
-      .attr('class', (d, i) => `piece unid:${i}`);
+      .attr('class', (d, i) => `piece unid-${i}`);
 
 		
 		dots.enter().append('circle').attr('r', seasonsScale.bandwidth()/2.4)
 			.attr('cx', d => seasonsScale(d.season))
 			.attr('cy', SVG_HEIGHT + 5)
-			.attr('class', (d, i) => `piece unid:${i}`)
-			.on('click', d => {
-				let id = d.id; 
-
-				d3.selectAll('.piece').attr('stroke', d => {
-					if (d.id == id) return 'white'; 
-				}).attr('opacity', d => {
-					if (d.id != id) return 0.4; 
-					else return 1; 
-				})
-				.attr('r', seasonsScale.bandwidth()/2.4)					
-				.attr('stroke-width', 1); 
-		    console.log(d3.event.target);
-
-				d3.select(d3.event.target)
-					.attr('stroke-width', 3)
-					.attr('r', seasonsScale.bandwidth()/1.5); 
-			}).on('mouseover', d => {
-				console.log(composer.composer); 
-				let dimensions = d3.event.target.getBoundingClientRect(); 
-				let left = dimensions.right > svgDimensions.left + svgDimensions.width/2 
-												? dimensions.right - 370
-												: dimensions.right + 20; 
-				let tooltip = d3.select('.tooltip').style('left', left + "px"); 
-				//will be variable based on the text content
-        let height; 
-
-        console.log(composerWorks.length);
-        console.log(d.numOfPerfs);
-				let html = `<span class='tooltip-title'>${d.title}</span><br><span class='tooltip-content'><em>${d.season} season</em></span><br><span class='tooltip-content'>Appeared in ${d.seasonCount} ${d.seasonCount == 1 ? 'season' : 'seasons'}</span><br><span class='tooltip-content'>${((d.numOfPerfs/composerWorks.length)*100).toFixed(2)}% of all performances of works by ${d.composer}</span>`; 
-				tooltip.html(html); 
-        //vertically center tooltip with the dot
-				height = document.querySelector('.tooltip').getBoundingClientRect().height; 
-				tooltip.style('top', (dimensions.top - Math.floor(height/1.5)) + "px"); 
-				tooltip.transition().duration(500).style('opacity', .9); 
-				d3.select(d3.event.target)
-					.attr('stroke-width', 3)
-					.attr('r', seasonsScale.bandwidth()/1.5); 
-			}).on('mouseout', d => {
-				let tooltip = d3.select('.tooltip'); 
-				tooltip.transition().duration(300).style('opacity', 0); 
-				d3.select(d3.event.target)
-					.attr('stroke-width', 1)
-					.attr('r', seasonsScale.bandwidth()/2.4); 
-			}).transition().duration(1400)	
+			.attr('class', (d, i) => `piece unid-${i}`)
+			//.on('click', d => {
+			//	let id = d.id; 
+//
+			//	d3.selectAll('.piece').attr('stroke', d => {
+			//		if (d.id == id) return 'white'; 
+			//	}).attr('opacity', d => {
+			//		if (d.id != id) return 0.4; 
+			//		else return 1; 
+			//	})
+			//	.attr('r', seasonsScale.bandwidth()/2.4)					
+			//	.attr('stroke-width', 1); 
+		  //  console.log(d3.event.target);
+//
+			//	d3.select(d3.event.target)
+			//		.attr('stroke-width', 3)
+			//		.attr('r', seasonsScale.bandwidth()/1.5); 
+			//})
+      //.on('mouseover', d => {
+			//	console.log(composer.composer); 
+			//	let dimensions = d3.event.target.getBoundingClientRect(); 
+			//	let left = dimensions.right > svgDimensions.left + svgDimensions.width/2 
+			//									? dimensions.right - 370
+			//									: dimensions.right + 20; 
+			//	let tooltip = d3.select('.tooltip').style('left', left + "px"); 
+			//	//will be variable based on the text content
+      //  let height; 
+//
+      //  console.log(composerWorks.length);
+      //  console.log(d.numOfPerfs);
+			//	let html = `<span class='tooltip-title'>${d.title}</span><br><span class='tooltip-content'><em>${d.season} season</em></span><br><span class='tooltip-content'>Appeared in ${d.seasonCount} ${d.seasonCount == 1 ? 'season' : 'seasons'}</span><br><span class='tooltip-content'>${((d.numOfPerfs/composerWorks.length)*100).toFixed(2)}% of all performances of works by ${d.composer}</span>`; 
+			//	tooltip.html(html); 
+      //  //vertically center tooltip with the dot
+			//	height = document.querySelector('.tooltip').getBoundingClientRect().height; 
+			//	tooltip.style('top', (dimensions.top - Math.floor(height/1.5)) + "px"); 
+			//	tooltip.transition().duration(500).style('opacity', .9); 
+			//	d3.select(d3.event.target)
+			//		.attr('stroke-width', 3)
+			//		.attr('r', seasonsScale.bandwidth()/1.5); 
+			//})
+      //.on('mouseout', d => {
+			//	let tooltip = d3.select('.tooltip'); 
+			//	tooltip.transition().duration(300).style('opacity', 0); 
+			//	d3.select(d3.event.target)
+			//		.attr('stroke-width', 1)
+			//		.attr('r', seasonsScale.bandwidth()/2.4); 
+			//})
+      .transition().duration(1400)	
 			.attr('r', seasonsScale.bandwidth()/2.4)
 			.attr('cx', d => seasonsScale(d.season))
 			.attr('cy', d => yScale(d.seasonWorkCount))
@@ -451,8 +458,63 @@ d3.json('../../data/new_top60.json', composers => {
     voronoiOverlay.selectAll('path').data(voronoiGen.polygons(composerWorks)).enter()
       .append('path')
       .attr('d', d => "M" + d.join("L") + "Z") 
-      .attr('class', (d, i) => `piece unid:${i}`)
+      .attr('class', (d, i) => `piece unid-${i}`)
+      .on('click', (d, i) => {
+				let id = d.data.id; 
+
+				d3.selectAll('.piece').attr('stroke', d => {
+					if (d.id == id) return 'white'; 
+				}).attr('opacity', d => {
+					if (d.id != id) return 0.4; 
+					else return 1; 
+				})
+				.attr('r', seasonsScale.bandwidth()/2.4)					
+				.attr('stroke-width', 1); 
+		    //console.log(d3.event.target);
+
+				d3.select(`circle.unid-${i}`)
+					.attr('stroke-width', 3)
+					.attr('r', seasonsScale.bandwidth()/1.5); 
+			})
+      .on('mouseover', (d, i) => {
+        console.log(d.data);
+        let data = d.data; 
+				//console.log(composer.composer); 
+				//let dimensions = d3.event.target.getBoundingClientRect(); 
+        let dimensions = document.querySelector(`circle.unid-${i}`).getBoundingClientRect(); 
+
+				let left = dimensions.right > svgDimensions.left + svgDimensions.width/2 
+												? dimensions.right - 370
+												: dimensions.right + 20; 
+				let tooltip = d3.select('.tooltip').style('left', left + "px"); 
+				//will be variable based on the text content
+        let height; 
+        let id = `unid-${i}`; 
+      
+        console.log(composerWorks.length);
+        console.log(data.numOfPerfs);
+				let html = `<span class='tooltip-title'>${data.title}</span><br><span class='tooltip-content'><em>${data.season} season</em></span><br><span class='tooltip-content'>Appeared in ${data.seasonCount} ${data.seasonCount == 1 ? 'season' : 'seasons'}</span><br><span class='tooltip-content'>${((data.numOfPerfs/composerWorks.length)*100).toFixed(2)}% of all performances of works by ${data.composer}</span>`; 
+				tooltip.html(html); 
+        //vertically center tooltip with the dot
+				height = document.querySelector('.tooltip').getBoundingClientRect().height; 
+				tooltip.style('top', (dimensions.top - Math.floor(height/1.5)) + "px"); 
+				tooltip.transition().duration(500).style('opacity', .9); 
+				//d3.select(d3.event.target)
+				//	.attr('stroke-width', 3)
+				//	.attr('r', seasonsScale.bandwidth()/1.5); 
+        d3.select(`circle.unid-${i}`)
+	       .attr('stroke-width', 3)
+	       .attr('r', seasonsScale.bandwidth()/1.5); 
+			})
+      .on('mouseout', (d, i) => {
+	      let tooltip = d3.select('.tooltip'); 
+	      tooltip.transition().duration(300).style('opacity', 0); 
+	      d3.select(`circle.unid-${i}`)
+	      	.attr('stroke-width', 1)
+	      	.attr('r', seasonsScale.bandwidth()/2.4); 
+      })
       .style("stroke", "rgba(180, 180, 180, .5)")
+      .style('pointer-events', 'all')
       .style('fill', 'none');
 	}
 	
@@ -461,8 +523,6 @@ d3.json('../../data/new_top60.json', composers => {
 	 
   let rectX = seasonsScale("1842-43"); 
 	let rectWidth = 0; 
-
-  let lifetime = svg.append('g').attr('class', 'lifetime-box'); 
   
   lifetime.append('rect').attr('x', rectX)
     .attr('y', 0)
