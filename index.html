@@ -5,7 +5,13 @@
 		<title>Trends from 175 seasons at the New York Philharmonic</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <meta property="og:title" content="Pulsecheck: Is Orchestral Music Still a Living Art Form in 2017?" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="assets/images/pulsecheck-og.png" />
+    <meta property="og:image" content="https://ewlin.github.io/NYPhil_data_viz/" />
+    <meta property="og:description" content="Using the 175-years of performace data from the New York Philharmonic, we look at the trends and changes of Classical Music through history." />
 
+    
 		<link rel="icon" 
       type="image/png" 
       href="new-graph.png">
@@ -491,8 +497,17 @@
         color: aliceblue;
 			}
       
+      /**
+      .select2-container *:focus {
+        outline: none;
+      }
+      **/
       .select2 .selection {
         text-align: left;
+      }
+      
+      .select2-selection:focus {
+        outline: none;
       }
       
       .select2-container--default .select2-selection--single {
