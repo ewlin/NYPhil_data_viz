@@ -590,7 +590,7 @@ d3.json('../../data/composers.json', (err, d) => {
     legendGroup.select('text').transition().duration(1400).text(d => d.text);
 
   }; 
-	
+
   let transition5 = function () {
     currentGraph = 'pct'; 
 
