@@ -13,10 +13,11 @@ function any (array, func) {
 }
 //Incomplete; need to finish and move to utilities folder
 function formatComposerName (name) {
-  let names = name.split(',');  
+  let names = name.split(','); 
   console.log(names);
   let match; 
-  let firstname = names[1].trim();
+  //.split(' ').filter(el => !!el).join(' ')  
+  let firstname = names[1].trim().split(' ').filter(el => !!el).join(' '); 
   let surname = (match = names[0].match(/\[.*\]/)) ? match[0].substr(1, match[0].length - 2) : names[0]; 
   return names.length === 3 ? `${firstname} ${surname} II`.trim() : `${firstname} ${surname}`.trim(); 
 }
