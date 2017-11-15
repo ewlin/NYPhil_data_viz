@@ -64,13 +64,6 @@ d3.json('../../data/new_top60.json', composers => {
   
   svg.attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
 	
-  //Lifetime box
-  let lifetime = svg.append('g').attr('class', 'lifetime-box'); 
-  //Dots grouping
-  let dots = svg.append('g').attr('class', 'dots-grouping');
-  //Voronoi grouping
-  let voronoiOverlay = svg.append('g').attr('class', 'voronoi-overlay'); 
-
 	//Axes logic and display 
 	svgDimensions = document.getElementsByTagName('svg')[0].getBoundingClientRect(); 
 	let axisYears = d3.axisBottom(seasonsScale)
@@ -110,7 +103,13 @@ d3.json('../../data/new_top60.json', composers => {
 														.attr('dy', -SVG_WIDTH*0.03); 
 	
 	
-  
+  //Lifetime box
+  let lifetime = svg.append('g').attr('class', 'lifetime-box'); 
+  //Dots grouping
+  let dots = svg.append('g').attr('class', 'dots-grouping');
+  //Voronoi grouping
+  let voronoiOverlay = svg.append('g').attr('class', 'voronoi-overlay'); 
+
   
 	//Event listeners when option is selected from dropdown
 	$('.select-value').on('change', function(e) {
