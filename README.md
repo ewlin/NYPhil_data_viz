@@ -14,7 +14,7 @@
 * MOBILE COMPOSER HEATMAP
 * DOT CHART RESIZE
 * AXIS RESIZING TEXT, DYNAMIC
-* SELECT2/OPTIONS COMPOSER NAME FORMATTING BUG [EXTRA space?]
+* SELECT2/OPTIONS COMPOSER NAME FORMATTING BUG [EXTRA space?] (Fixed, hack-ish version in formatComposerName function 11/15/17, 9:40am EST)
 
 #### MAJOR REFACTOR/RE-ORG OF REPO:
 * Babelfy everything so works on older browsers
