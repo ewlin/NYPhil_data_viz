@@ -1,6 +1,8 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 let generateSeasons = require('../../temp_utils/generate_seasons.js');
 let isMobile = require('../../temp_utils/is-mobile.js');
+let debounce = require('just-debounce-it'); 
+
 
 const ALL_SEASONS = generateSeasons(1842, 2016); 
 
@@ -18,6 +20,7 @@ function formatComposerName (name) {
   console.log(names);
   let match; 
   //.split(' ').filter(el => !!el).join(' ')  
+  // hackish way to remove spaces
   let firstname = names[1].trim().split(' ').filter(el => !!el).join(' '); 
   let surname = (match = names[0].match(/\[.*\]/)) ? match[0].substr(1, match[0].length - 2) : names[0]; 
   return names.length === 3 ? `${firstname} ${surname} II`.trim() : `${firstname} ${surname}`.trim(); 
@@ -52,6 +55,10 @@ d3.json('../../data/new_top60.json', composers => {
 	console.log(SVG_WIDTH);
 	console.log(SVG_HEIGHT); 
 	
+  //Heatmap color values (use samples[3])
+  let samples = [[27, 243, 6, 128, 94, 52], [89, 248, 15, 182, 15, 7], [94, 207, 34, 195, 175, 46], [89, 207, 15, 195, 15, 46]]; 
+
+  
   //scales for DOT CHART
 	let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([SVG_WIDTH*.05, SVG_WIDTH*.95]); 
 	let yScale = d3.scaleLinear().domain([0,31]).range([SVG_HEIGHT*.92, 0]);
@@ -61,7 +68,7 @@ d3.json('../../data/new_top60.json', composers => {
     .x(d => seasonsScale(d.season))
     .y(d => yScale(d.seasonWorkCount)); 
   
-  let svg = d3.select('.main-container').append('svg')
+  let svg = d3.select('.main-container').append('svg').attr('class', 'composers-chart-container'); 
   
   svg.attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
 	
@@ -79,44 +86,98 @@ d3.json('../../data/new_top60.json', composers => {
 										.ticks(5)
 										.tickSize(SVG_WIDTH*.009); 
 			
-	let dotXAxis = svg.append('g')
-									.attr('class', 'axis')
-									.attr('transform',`translate(${-seasonsScale.bandwidth()/2.4},0)`)
-									.call(axisYears); 
-	
-	dotXAxis.select('.domain').remove(); 
-	dotXAxis.selectAll('.tick line')
-					.style('stroke', 'White')
-					.style('stroke-dasharray', '8,3')
-  dotXAxis.selectAll('text').style("text-anchor", d => (d === '1842-43' || d === '2016-17') ? "middle" : "start");
-	
-	dotXAxis.selectAll('.tick text').attr('transform', `translate(0,${SVG_HEIGHT*.015})`); 
-	dotXAxis.append('text').attr('class', 'axis-label x-axis-label')
-					.text('NEW YORK PHILHARMONIC SUBSCRIPTION SEASONS')
-					.attr('transform', `translate(${SVG_WIDTH*.5},${SVG_HEIGHT*.995})`); 
-	
-	let dotFreqAxis = svg.append('g').attr('class', 'axis').attr('transform', `translate(${SVG_WIDTH*.05},0)`).call(axisFreq); 
-	
-	dotFreqAxis.select('.domain').remove(); 
-	dotFreqAxis.append('text').attr('class', 'axis-label').text('NUMBER OF COMPOSITIONS PER SEASON')
-														.attr("transform", "rotate(-90)")
-														//.attr('dx', -SVG_HEIGHT/2.5)
-														.attr('dy', -SVG_WIDTH*0.03); 
-	
-	
+  //Global SVG DOM elements
+  let dotXAxis; 
+  let dotFreqAxis; 
+  
   //Lifetime box
   let lifetime = svg.append('g').attr('class', 'lifetime-box'); 
   //Dots grouping
   let dots = svg.append('g').attr('class', 'dots-grouping');
   //Voronoi grouping
   let voronoiOverlay = svg.append('g').attr('class', 'voronoi-overlay'); 
-
   
+    
 	//Event listeners when option is selected from dropdown
 	$('.select-value').on('change', function(e) {
 		let index = this.value; 
     renderComposer(index); 
 	});
+  
+  function setupDotChart() {
+    //Add X axis
+    dotXAxis = svg.append('g')
+      .attr('class', 'axis')
+      .attr('transform',`translate(${-seasonsScale.bandwidth()/2.4},0)`)
+		  .call(axisYears); 
+	
+    dotXAxis.select('.domain').remove(); 
+    dotXAxis.selectAll('.tick line')
+      .style('stroke', 'White')
+      .style('stroke-dasharray', '8,3');
+    dotXAxis.selectAll('text')
+      .style("text-anchor", d => (d === '1842-43' || d === '2016-17') ? "middle" : "start");
+  
+    dotXAxis.selectAll('.tick text')
+      .attr('transform', `translate(0,${SVG_HEIGHT*.015})`); 
+    dotXAxis.append('text')
+      .attr('class', 'axis-label x-axis-label')
+      .text('NEW YORK PHILHARMONIC SUBSCRIPTION SEASONS')
+      .attr('transform', `translate(${SVG_WIDTH*.5},${SVG_HEIGHT*.995})`); 
+  
+    //Add Y Axis
+    dotFreqAxis = svg.append('g')
+      .attr('class', 'axis')
+      .attr('transform', `translate(${SVG_WIDTH*.05},0)`).call(axisFreq); 
+  
+    dotFreqAxis.select('.domain').remove(); 
+    dotFreqAxis.append('text')
+      .attr('class', 'axis-label')
+      .text('NUMBER OF COMPOSITIONS PER SEASON')
+  		.attr("transform", "rotate(-90)")
+  		//.attr('dx', -SVG_HEIGHT/2.5)
+  		.attr('dy', -SVG_WIDTH*0.03); 
+  
+    dotFreqAxis.selectAll(".tick").select("line")
+		  .attr("stroke", "White")
+		  .attr("stroke-dasharray", "2,2"); 
+
+    
+    //Lifetime box setup
+    let rectX = seasonsScale("1842-43"); 
+    let rectWidth = 0; 
+  
+    lifetime.append('rect').attr('x', rectX)
+      .attr('y', 0)
+      .attr('width', rectWidth)
+      .attr('height', SVG_HEIGHT*.92)
+      .attr('opacity', .3)
+      .attr('fill', 'grey'); 
+	
+    ////LINE ABOVE LIFETIME BOX
+    lifetime.append('line')
+      .attr('x1', rectX)
+      .attr('x2', rectX + rectWidth)
+      .attr('y1', 0)
+      .attr('y2', 0)
+      .attr('stroke', '#ff645f')
+      .attr('stroke-width', '10');
+    
+    //Tooltip setup
+    d3.select('body').append('div')
+      .attr('class', 'tooltip')
+      .style('opacity', 0); 
+
+
+  }
+  
+  //Create Options for select elements populated with composer names
+	composers.forEach( (composer, idx) => {
+		let option = `<option value='${idx}'>${formatComposerName(composer.composer)}</option>`; 
+		$('.select-value').append(option); 
+	}); 
+  
+  
   
   $('.dot-chart-prelude').on('click', (e) => {
     let index = e.target.dataset.index; 
@@ -140,11 +201,29 @@ d3.json('../../data/new_top60.json', composers => {
 		if (e.target.tagName !== 'path') renderDots(index); 
 	}); 
 	
-	//Create Options for select elements populated with composer names
-	composers.forEach( (composer, idx) => {
-		let option = `<option value='${idx}'>${formatComposerName(composer.composer)}</option>`; 
-		$('.select-value').append(option); 
-	}); 
+  //  let lifetime = svg.append('g').attr('class', 'lifetime-box'); 
+  ////Dots grouping
+  //let dots = svg.append('g').attr('class', 'dots-grouping');
+  ////Voronoi grouping
+  //let voronoiOverlay = svg.append('g').attr('class', 'voronoi-overlay'); 
+  
+
+	function resize() {
+    if (window.matchMedia("(min-width: 900px)").matches) {
+      svg.select('.lifetime-box').classed('hidden', false);
+      svg.select('.dots-grouping').classed('hidden', false);
+      svg.select('.dots-grouping').classed('hidden', false);
+      svg.selectAll('.axis').classed('hidden', false);
+    } else {
+      svg.select('.lifetime-box').classed('hidden', true);
+      svg.select('.dots-grouping').classed('hidden', true);
+      svg.select('.dots-grouping').classed('hidden', true);
+      svg.selectAll('.axis').classed('hidden', true);
+    }
+  }
+  
+  window.addEventListener('resize', debounce(resize, 200)); 
+
   
   function matchComposers(params, data) {
     // If there are no search terms, return all of the data
@@ -214,18 +293,18 @@ d3.json('../../data/new_top60.json', composers => {
   }
   /* HEAT MAP EXPERIMENT */
   
-  let beethoven = calculateComposerSeasonData(composers[13], 13); 
-  
-  console.log(beethoven);
+  //let beethoven = calculateComposerSeasonData(composers[13], 13); 
+  //
+  //console.log(beethoven);
   
   function renderHeatMap(data, a, b, c, d, e, f) {
 
     //DOM
-    let heatmapContainerA = d3.select('.main-container').append('svg').attr('class', 'heatmapLin'); 
-    let heatmapContainerB = d3.select('.main-container').append('svg').attr('class', 'heatmapPow'); 
+    //let heatmapContainerA = d3.select('.main-container').append('svg').attr('class', 'heatmapLin'); 
+    let heatmapContainerB = svg.append('g').attr('class', 'heatmapPow'); 
 
-    heatmapContainerA.attr('height', 40).attr('width', SVG_WIDTH*.9); 
-    heatmapContainerB.attr('height', 40).attr('width', SVG_WIDTH*.9); 
+    //heatmapContainerA.attr('height', 40).attr('width', SVG_WIDTH*.9); 
+    heatmapContainerB.attr('height', 80).attr('width', SVG_WIDTH*.9); 
 
     
     //Heat map scales 
@@ -237,8 +316,8 @@ d3.json('../../data/new_top60.json', composers => {
         scaleRP = d3.scalePow().exponent(.5).domain([1, 31]).range([e, f]),
         scaleXAxis = d3.scaleLinear().domain([0,174]).range([0, SVG_WIDTH*.9]);
     
-    console.log(arguments); 
     
+    /**
     heatmapContainerA
       .selectAll('.rect')
       .data(data)
@@ -256,6 +335,7 @@ d3.json('../../data/new_top60.json', composers => {
         
         return d.count == 0 ? 'rgba(30,30,30,.45)' : `rgba(${r}, ${g}, ${b}, 1)`; 
       }); 
+    **/
     
     heatmapContainerB
       .selectAll('.rect')
@@ -295,7 +375,6 @@ d3.json('../../data/new_top60.json', composers => {
   //renderHeatMap(); 
   
   
-  //let samples = [[27, 243, 6, 128, 94, 52], [89, 248, 15, 182, 15, 7], [94, 207, 34, 195, 175, 46], [89, 207, 15, 195, 15, 46]]; 
   ////samples.forEach(sample => renderHeatMap.call(null, beethoven, ...sample));
   //renderHeatMap.call(null, calculateComposerSeasonData(composers[12], 12), ...samples[3]);
   //renderHeatMap.call(null, calculateComposerSeasonData(composers[13], 13), ...samples[3]);
@@ -330,7 +409,11 @@ d3.json('../../data/new_top60.json', composers => {
 												? 'strauss_j.png' 
 												: composer.toLowerCase().split(' ')[0].match(/[a-z]*/)[0] + '.png';
 		$('.composer-face-container').append(`<img class='composer-face' src='assets/images/composer_sqs/${composerImage}'/>`); 
-		renderDots(index); 
+    if (!isMobile().any() && window.matchMedia("(min-width: 900px)").matches) {
+      renderDots(index); 
+    } else {
+      renderHeatMap.call(null, calculateComposerSeasonData(composers[index], index), ...samples[3]);
+    }
   }
 	
 	function renderDots(number) {
@@ -390,52 +473,6 @@ d3.json('../../data/new_top60.json', composers => {
 			.attr('cx', d => seasonsScale(d.season))
 			.attr('cy', SVG_HEIGHT + 5)
 			.attr('class', (d, i) => `piece unid-${i}`)
-			//.on('click', d => {
-			//	let id = d.id; 
-//
-			//	d3.selectAll('.piece').attr('stroke', d => {
-			//		if (d.id == id) return 'white'; 
-			//	}).attr('opacity', d => {
-			//		if (d.id != id) return 0.4; 
-			//		else return 1; 
-			//	})
-			//	.attr('r', seasonsScale.bandwidth()/2.4)					
-			//	.attr('stroke-width', 1); 
-		  //  console.log(d3.event.target);
-//
-			//	d3.select(d3.event.target)
-			//		.attr('stroke-width', 3)
-			//		.attr('r', seasonsScale.bandwidth()/1.5); 
-			//})
-      //.on('mouseover', d => {
-			//	console.log(composer.composer); 
-			//	let dimensions = d3.event.target.getBoundingClientRect(); 
-			//	let left = dimensions.right > svgDimensions.left + svgDimensions.width/2 
-			//									? dimensions.right - 370
-			//									: dimensions.right + 20; 
-			//	let tooltip = d3.select('.tooltip').style('left', left + "px"); 
-			//	//will be variable based on the text content
-      //  let height; 
-//
-      //  console.log(composerWorks.length);
-      //  console.log(d.numOfPerfs);
-			//	let html = `<span class='tooltip-title'>${d.title}</span><br><span class='tooltip-content'><em>${d.season} season</em></span><br><span class='tooltip-content'>Appeared in ${d.seasonCount} ${d.seasonCount == 1 ? 'season' : 'seasons'}</span><br><span class='tooltip-content'>${((d.numOfPerfs/composerWorks.length)*100).toFixed(2)}% of all performances of works by ${d.composer}</span>`; 
-			//	tooltip.html(html); 
-      //  //vertically center tooltip with the dot
-			//	height = document.querySelector('.tooltip').getBoundingClientRect().height; 
-			//	tooltip.style('top', (dimensions.top - Math.floor(height/1.5)) + "px"); 
-			//	tooltip.transition().duration(500).style('opacity', .9); 
-			//	d3.select(d3.event.target)
-			//		.attr('stroke-width', 3)
-			//		.attr('r', seasonsScale.bandwidth()/1.5); 
-			//})
-      //.on('mouseout', d => {
-			//	let tooltip = d3.select('.tooltip'); 
-			//	tooltip.transition().duration(300).style('opacity', 0); 
-			//	d3.select(d3.event.target)
-			//		.attr('stroke-width', 1)
-			//		.attr('r', seasonsScale.bandwidth()/2.4); 
-			//})
       .transition().duration(1400)	
 			.attr('r', seasonsScale.bandwidth()/2.4)
 			.attr('cx', d => seasonsScale(d.season))
@@ -527,45 +564,44 @@ d3.json('../../data/new_top60.json', composers => {
       .style('fill', 'none');
 	}
 	
+  if (!isMobile().any() && window.matchMedia("(min-width: 900px)").matches) {
+    setupDotChart(); 
+  }
   
-	$('.composer-face-container').append(`<img class='composer-face' src='assets/images/composer_sqs/beethoven.png'/>`); 
-	 
-  let rectX = seasonsScale("1842-43"); 
-	let rectWidth = 0; 
-  
-  lifetime.append('rect').attr('x', rectX)
-    .attr('y', 0)
-    .attr('width', rectWidth)
-    .attr('height', SVG_HEIGHT*.92)
-    .attr('opacity', .3)
-    .attr('fill', 'grey'); 
-	
-  ////LINE ABOVE LIFETIME BOX
-  lifetime.append('line')
-    .attr('x1', rectX)
-    .attr('x2', rectX + rectWidth)
-    .attr('y1', 0)
-    .attr('y2', 0)
-    .attr('stroke', '#ff645f')
-    .attr('stroke-width', '10');
-
-  renderDots(0); 
-  
-	d3.select('body').append('div')
-										.attr('class', 'tooltip')
-										.style('opacity', 0); 
-
-
-  dotFreqAxis.selectAll(".tick").select("line")
-						.attr("stroke", "White")
-						.attr("stroke-dasharray", "2,2"); 
+  selectComposer(0);
 
 }); 
 
 
 
 
-},{"../../temp_utils/generate_seasons.js":2,"../../temp_utils/is-mobile.js":3}],2:[function(require,module,exports){
+},{"../../temp_utils/generate_seasons.js":3,"../../temp_utils/is-mobile.js":4,"just-debounce-it":2}],2:[function(require,module,exports){
+module.exports = debounce;
+
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function () {
+    if (!wait) {
+      return func.apply(this, arguments);
+    }
+    var context = this;
+    var args = arguments;
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      timeout = null;
+      if (!callNow) {
+        func.apply(context, args);
+      }
+    }, wait);
+
+    if (callNow) {
+      return func.apply(this, arguments);
+    }
+  };
+};
+
+},{}],3:[function(require,module,exports){
 function generateSeasons (start, end) {
 	let seasons = []; 
 	
@@ -578,7 +614,7 @@ function generateSeasons (start, end) {
 }
 
 module.exports = generateSeasons; 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 module.exports = isMobile; 
 
 function isMobile() {
