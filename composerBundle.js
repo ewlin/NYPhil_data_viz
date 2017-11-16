@@ -50,10 +50,10 @@ d3.json('../../data/new_top60.json', composers => {
     if (composer.death <= 1842) console.log(composer.composer);
     
   });
-  const SVG_WIDTH = $('.main-container').innerWidth(); 
-	const SVG_HEIGHT = $(window).innerHeight()*.75; 
-	console.log(SVG_WIDTH);
-	console.log(SVG_HEIGHT); 
+  let SVG_WIDTH = $('.main-container').innerWidth(); 
+	let SVG_HEIGHT = $(window).innerHeight()*.75; 
+	//console.log(SVG_WIDTH);
+	//console.log(SVG_HEIGHT); 
 	
   //Heatmap color values (use samples[3])
   let samples = [[27, 243, 6, 128, 94, 52], [89, 248, 15, 182, 15, 7], [94, 207, 34, 195, 175, 46], [89, 207, 15, 195, 15, 46]]; 
@@ -209,6 +209,17 @@ d3.json('../../data/new_top60.json', composers => {
   
 
 	function resize() {
+    //Reset dimensions + scales
+    //Dimensions
+    SVG_WIDTH = $('.main-container').innerWidth(); 
+    SVG_HEIGHT = $(window).innerHeight()*.75; 
+
+    //Scales
+    //let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([SVG_WIDTH*.05, SVG_WIDTH*.95]); 
+	  //let yScale = d3.scaleLinear().domain([0,31]).range([SVG_HEIGHT*.92, 0]);
+    seasonsScale.range([SVG_WIDTH*.05, SVG_WIDTH*.95]); 
+    yScale.range([SVG_HEIGHT*.92, 0]);
+
     if (window.matchMedia("(min-width: 900px)").matches) {
       svg.select('.lifetime-box').classed('hidden', false);
       svg.select('.dots-grouping').classed('hidden', false);
@@ -220,6 +231,16 @@ d3.json('../../data/new_top60.json', composers => {
       svg.select('.dots-grouping').classed('hidden', true);
       svg.selectAll('.axis').classed('hidden', true);
     }
+    
+    //redraw axes
+    
+    //redraw dots
+    
+    //redraw voronoi overlay
+    
+    //redraw lifetime box
+    
+    
   }
   
   function mobileResize() {}
@@ -421,12 +442,10 @@ d3.json('../../data/new_top60.json', composers => {
 	function renderDots(number) {
 		let composer = composers[number]; 
 		let composerIndex = number; 
-		//let birthSeason = composer.birth + "-" + (+composer.birth.substr(2) + 1); 
 		let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(composer.birth) )]; 
 		console.log(birthSeason); 
 		let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(composer.death) )]; 
 
-		//let deathSeason = composer.death + "-" + (+composer.death.substr(2) + 1); 
 		console.log(deathSeason); 
 
 		let rectX = seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
@@ -524,7 +543,7 @@ d3.json('../../data/new_top60.json', composers => {
 					.attr('r', seasonsScale.bandwidth()/1.5); 
 			})
       .on('mouseover', (d, i) => {
-        console.log(d.data);
+        //console.log(d.data);
         let data = d.data; 
 				//console.log(composer.composer); 
 				//let dimensions = d3.event.target.getBoundingClientRect(); 
@@ -538,8 +557,8 @@ d3.json('../../data/new_top60.json', composers => {
         let height; 
         let id = `unid-${i}`; 
       
-        console.log(composerWorks.length);
-        console.log(data.numOfPerfs);
+        //console.log(composerWorks.length);
+        //console.log(data.numOfPerfs);
 				let html = `<span class='tooltip-title'>${data.title}</span><br><span class='tooltip-content'><em>${data.season} season</em></span><br><span class='tooltip-content'>Appeared in ${data.seasonCount} ${data.seasonCount == 1 ? 'season' : 'seasons'}</span><br><span class='tooltip-content'>${((data.numOfPerfs/composerWorks.length)*100).toFixed(2)}% of all performances of works by ${data.composer}</span>`; 
 				tooltip.html(html); 
         //vertically center tooltip with the dot
