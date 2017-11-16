@@ -7,9 +7,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
     <meta property="og:title" content="Pulsecheck: Is Orchestral Music Still a Living Art Form in 2017?" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="assets/images/pulsecheck-og.png" />
-    <meta property="og:image" content="https://ewlin.github.io/NYPhil_data_viz/" />
+    <meta property="og:image" content="https://ewlin.github.io/NYPhil_data_viz/assets/images/pulsecheck-og.png" />
+    <meta property="og:url" content="https://ewlin.github.io/NYPhil_data_viz/" />
     <meta property="og:description" content="Using the 175-years of performace data from the New York Philharmonic, we look at the trends and changes of Classical Music through history." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@ericwilliamlin" />
+    <meta name="twitter:title" content="Pulsecheck: Is Orchestral Music Still a Living Art Form in 2017?">
+    <meta name="twitter:site" content="https://ewlin.github.io/NYPhil_data_viz/" />
+    <meta name="twitter:description" content="Using the 175-years of performace data from the New York Philharmonic, we look at the trends and changes of Classical Music through history.">
+    <meta name="twitter:image" content="https://ewlin.github.io/NYPhil_data_viz/assets/images/pulsecheck-og.png">
+    
+		<link rel="icon" 
+      type="image/png" 
+      href="new-graph.png">
 
     
 		<link rel="icon" 
@@ -352,7 +362,8 @@
       }
       
       span.line-living-repeat {
-        color: rgba(218, 155, 103, 1);
+        /*color: rgba(218, 155, 103, 1);*/
+        border-bottom: 3px dashed rgba(218, 155, 103, 1);
       }
       /* Centered chart and explainations
 
@@ -810,7 +821,7 @@
           <li class="after-death"><strong>COMPLETELY NEGLECTED DURING THEIR LIFETIMES: </strong>Of these 52 composers alive for at least a portion of the NYP's existence, 7 were <em>not performed at all</em> by the NYP during their lifetimes. Two are particularly notable: <span class="composer-trigger" data-index="35">Musorgsky's</span> posthumous popularity came mostly as a result of arrangements and reworkings of his music by Ravel and Rimsky-Korsakov, while <span class="composer-trigger" data-index="52">Anton von Webern</span> became a cult figure among some members of avant-garde composer circles, and orchestras began programming pieces from his small oeuvre more regularly.</li>
           <li class="neglected"><strong>MOSTLY IGNORED DURING THEIR LIFETIMES: </strong>Some composers, though not completely neglected by the NYP while they were alive, became considerably more popular after their deaths. During their lifetimes, they received only a smattering of performances. <span class="composer-trigger" data-index="23">B&#233;la Bart&#243;k</span> is one of the more notable in this category. On the extreme end, <span class="composer-trigger" data-index="27">Anton Bruckner</span> and <span class="composer-trigger" data-index="50">Charles Ives</span> each had a single piece performed in one season by the NYP before they died.</li>
           <li class="declined"><strong>FADED AWAY: </strong>The fourth category of composers are those whose popularity has mostly faded with time. The music of composers like <span class="composer-trigger" data-index="60">Louis Spohr</span>, <span class="composer-trigger" data-index="58">Karl Goldmark</span>, <span class="composer-trigger" data-index="53">Anton Rubinstein</span>, and <span class="composer-trigger" data-index="55">William Schuman</span> are probably unfamiliar to most people today, even among some Classical Music connoisseurs, but they were popular with the orchestra (and probably, with audiences) when they were alive. In the first few seasons of the NYP, Spohr was as popular as Beethoven and Mozart!</li>
-          <li class="one-hit"><strong>ONE-HIT WONDERS: </strong>While some composers like Beethoven, Brahms, and Ravel seem to have a pretty balanced performance history, with multiple compositions performed repeatedly by the NYP, other composers in the top 59 make the list mostly off the extreme popularity of one or two compositions. <span class="composer-trigger" data-index="59">Paul Dukas</span> is probably the epitome of a One-Hit Wonder composer. Almost all&#8212about 80%&#8212of his performances are of his <em>The Sorcerer's Apprentice</em> (But don't thank Mickey. The NYP had already played the piece in 19 seasons before the release of <em>Fantasia</em> in 1940!). Some other One-Hit Wonders in the top 59: <span class="composer-trigger" data-index="42">Max Bruch</span> (Violin Concerto No. 1 in G minor) <span class="composer-trigger" data-index="54">Edouard Lalo</span> (<em>Symphonie Espagnole</em>) <span class="composer-trigger" data-index="51">Bedrich Smetana</span> (Pieces from the symphonic cycle <em>Ma Vlast</em> and his opera <em>The Bartered Bride</em>...so I guess he's more of a Two-Hit Wonder?)</li>
+          <li class="one-hit"><strong>ONE-HIT WONDERS: </strong>While some composers like Beethoven, Brahms, and Ravel seem to have a pretty balanced performance history, with multiple compositions performed repeatedly by the NYP, other composers in the top 59 make the list mostly off the extreme popularity of one or two compositions. <span class="composer-trigger" data-index="59">Paul Dukas</span> is probably the epitome of a One-Hit Wonder composer. Almost all&#8212about 80%&#8212of his performances are of his <em>The Sorcerer's Apprentice</em> (But don't thank Mickey. The NYP had already played the piece in 19 seasons before the release of <em>Fantasia</em> in 1940!). Some other One-Hit Wonders in the top 59: <span class="composer-trigger" data-index="42">Max Bruch</span> (Violin Concerto No. 1 in G minor) <span class="composer-trigger" data-index="33">C&#233;sar Franck</span> (Symphony in D minor) <span class="composer-trigger" data-index="54">Edouard Lalo</span> (<em>Symphonie Espagnole</em>) <span class="composer-trigger" data-index="51">Bedrich Smetana</span> (Pieces from the symphonic cycle <em>Ma Vlast</em> and his opera <em>The Bartered Bride</em>...so I guess he's more of a Two-Hit Wonder?)</li>
         </ul>
       </section>
       <div class="dot-chart-explain prose note">
