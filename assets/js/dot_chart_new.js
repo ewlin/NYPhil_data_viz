@@ -221,7 +221,9 @@ d3.json('../../data/new_top60.json', composers => {
     }
   }
   
-  window.addEventListener('resize', debounce(resize, 200)); 
+  function mobileResize() {}
+  
+  window.addEventListener('resize', debounce(isMobile().any() ? mobileResize : resize, 200)); 
 
   
   function matchComposers(params, data) {
