@@ -115,13 +115,13 @@
 			
 			.annotation-note-title {
 				fill: #302B2B; 
-				font-size: .9em;
+				font-size: .85em;
 			}
 			
 			.annotation-note-label {
 				/*fill: #6E5D5D; */
 				fill: #302B2B; 
-				font-size: .85em;
+				font-size: .8em;
 			}
 			
 			.annotation-connector path.connector {
@@ -310,8 +310,12 @@
 
       
       .container {
+        /*
+        box-sizing: border-box;
+        padding-left: 33%; 
+        */
+        margin-left: 33%; 
 				position: relative; 
-				margin-left: 33%; 
 				width: 66%;
 			}
 			
@@ -397,7 +401,7 @@
         transform: translate3d(0,0,0);
 			}
       
-      .fixed {
+      .fixed.inner-container {
 				position: fixed; 
 				/*left: auto; */
 				/*top: 0; */
@@ -756,7 +760,7 @@
       <div class='titles'>
 				<h1 class="title">Pulsecheck: Is Orchestral Music Still a Living Art Form in 2017?</h1>
 				<p class="subtitle">Extrapolating trends from 175 seasons at the New York Philharmonic</p>
-				<p class="byline"><span>DESIGN</span>, <span>CODE</span>, &#38; <span>PROSE</span> by <span class="name">Eric William Lin</span><img src='author.png'/></p>
+				<p class="byline"><span>DESIGN</span>, <span>CODE</span>, &#38; <span>PROSE</span> by <span class="name"><a href="https://twitter.com/ericwilliamlin" target="_blank">Eric William Lin</a></span><img src='author.png'/></p>
         <p class="pub-date">November 2017</p>
 			</div>
     </header>		
@@ -829,16 +833,19 @@
           <li class="one-hit"><strong>ONE-HIT WONDERS: </strong>While some composers like Beethoven, Brahms, and Ravel seem to have a pretty balanced performance history, with multiple compositions performed repeatedly by the NYP, other composers in the top 59 make the list mostly off the extreme popularity of one or two compositions. <span class="composer-trigger" data-index="59">Paul Dukas</span> is probably the epitome of a One-Hit Wonder composer. Almost all&#8212about 80%&#8212of his performances are of his <em>The Sorcerer's Apprentice</em> (But don't thank Mickey. The NYP had already played the piece in 19 seasons before the release of <em>Fantasia</em> in 1940!). Some other One-Hit Wonders in the top 59: <span class="composer-trigger" data-index="42">Max Bruch</span> (Violin Concerto No. 1 in G minor) <span class="composer-trigger" data-index="33">C&#233;sar Franck</span> (Symphony in D minor) <span class="composer-trigger" data-index="54">Edouard Lalo</span> (<em>Symphonie Espagnole</em>) <span class="composer-trigger" data-index="51">Bedrich Smetana</span> (Pieces from the symphonic cycle <em>Ma Vlast</em> and his opera <em>The Bartered Bride</em>...so I guess he's more of a Two-Hit Wonder?)</li>
         </ul>
       </section>
+      
       <div class="dot-chart-explain prose note">
         <p><strong>You can explore the New York Philharmonic's performance history of these 61 composers by season <a href='/#dot-chart'>below</a></strong>. Search for your favorite composer and check if they made the list. Do you see any other trends or patterns?</p> 
-        <p>Each dot represents a unique composition programmed + performed in a particular season.</p>
         <hr>
-        <p><strong>HOVER</strong> over the dots to see some metadata about each composition</p>
-        <p><strong>CLICK</strong> on the dot to highlight all appearances of that piece across the NYP's history.</p> 
-        <p class='orphan-dot'><span class='dot-legd orphan-dot'></span><strong>First and only performance of piece</strong></p>     
-        <p class='first-dot'><span class='dot-legd first-dot'></span><strong>First-time performance by NYP</strong></p>
-        <p class='repeat-dot'><span class='dot-legd repeat-dot'></span><strong>Repeat performance by NYP</strong></p>
-        <p class='lifetime-box'><span class='dot-legd lifetime-box'></span><strong>Lifespan of composer (if overlaps in part or whole with NYP history)</strong></p>
+        <div class="desktop-dot-legend">
+          <p>Each dot represents a unique composition programmed + performed in a particular season.</p>
+          <p><strong>HOVER</strong> over the dots to see some metadata about each composition</p>
+          <p><strong>CLICK</strong> on the dot to highlight all appearances of that piece across the NYP's history.</p> 
+          <p class='orphan-dot'><span class='dot-legd orphan-dot'></span><strong>First and only performance of piece</strong></p>     
+          <p class='first-dot'><span class='dot-legd first-dot'></span><strong>First-time performance by NYP</strong></p>
+          <p class='repeat-dot'><span class='dot-legd repeat-dot'></span><strong>Repeat performance by NYP</strong></p>
+          <p class='lifetime-box'><span class='dot-legd lifetime-box'></span><strong>Lifespan of composer (if overlaps in part or whole with NYP history)</strong></p>
+        </div>
       </div>
 		
 			<section id="dot-chart" class="dot-chart composers-chart">
