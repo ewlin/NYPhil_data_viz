@@ -497,8 +497,8 @@ d3.json('../../data/composers.json', (err, d) => {
       //},
       //can use x, y directly instead of data
       data: { i: 67, workCount: 85 },
-      dy: -65,
-      dx: -95 
+      dy: -(.1 * SVG_HEIGHT),
+      dx: -(.1 * SVG_WIDTH) 
     }]; 
     
     if (window.innerWidth > 550 && window.innerHeight > 586) {
@@ -563,8 +563,8 @@ d3.json('../../data/composers.json', (err, d) => {
         wrap: window.innerWidth <= 1024 ? 130 : 165
       },
       data: { i: 17, perc: 0.488 }, 
-      dy: -70,
-      dx: 80
+      dy: -(.12 * SVG_HEIGHT),
+      dx: .1 * SVG_WIDTH
     }]; 
 
     makeAnnotations.accessors({
@@ -605,7 +605,7 @@ d3.json('../../data/composers.json', (err, d) => {
         wrap: window.innerWidth <= 1024 ? 130 : 165
       },
       data: { i: 125, perc: .197 }, 
-      dy: -65,
+      dy: -(.12 * SVG_HEIGHT),
       dx: 0, 
     }]; 
     
@@ -650,8 +650,8 @@ d3.json('../../data/composers.json', (err, d) => {
         wrap: 155
       }, 
       data: { i: 45, perc: percentagesOfAllRepeatsLiving[79].percentageOfTotalRepeatsLiving }, 
-      dy: -135,
-      dx: 105
+      dy: -(.22 * SVG_HEIGHT),
+      dx: .12 * SVG_WIDTH
     }]; 
 
     animateLine = d3.timer(function() {
