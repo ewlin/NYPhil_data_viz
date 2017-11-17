@@ -459,6 +459,9 @@ d3.json('../../data/composers.json', (err, d) => {
   }; 
 	
   let transition2 = function() {
+    console.log('SVG HEIGHT = ' + $('svg').innerHeight());
+    console.log('SVG WIDTH = ' + $('svg').innerWidth());
+
     currentGraph = 'abs'; 
     
     let temp = SVG.selectAll('path')
