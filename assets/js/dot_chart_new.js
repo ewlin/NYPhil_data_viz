@@ -50,7 +50,7 @@ d3.json('../../data/new_top60.json', composers => {
     
   });
   let SVG_WIDTH = $('.main-container').innerWidth(); 
-	let SVG_HEIGHT = $(window).innerHeight()*.75; 
+	let SVG_HEIGHT = $(window).innerHeight()*.75; //REDO and calculate as innerHeight - (title + dropdown)
 	//console.log(SVG_WIDTH);
 	//console.log(SVG_HEIGHT); 
 	
@@ -96,6 +96,15 @@ d3.json('../../data/new_top60.json', composers => {
   //Voronoi grouping
   let voronoiOverlay = svg.append('g').attr('class', 'voronoi-overlay'); 
   
+  //Heatmap container 
+  let heatmapContainer = svg.append('g').attr('class', 'heatmapPow'); 
+  let grid = heatmapContainer.append('g').attr('class', 'grid'); 
+  let texts = svg.append('g').attr('class', 'grid-labels'); 
+  
+  let seasonsLabels = [{row: 0, season: "1842-59"}, {row: 2, season: "1880-99"}, {row: 4, season: "1920-39"}, {row: 6, season: "1960-79"}, {row: 8, season: "2000-17"}]
+    
+  let gridLabels = texts.selectAll('texts').data(seasonsLabels).enter().append('text'); 
+
     
 	//Event listeners when option is selected from dropdown
 	$('.select-value').on('change', function(e) {
@@ -197,7 +206,10 @@ d3.json('../../data/new_top60.json', composers => {
 	$('#dot-chart').on('click', function(e) {
 		let index = $('.select-value').val() || 0; 
 		//THIS APPROACH IS PROBABLY WASTEFUL PERFORMANCE-WISE; redo without calling so much extra code 
-		if (e.target.tagName !== 'path') renderDots(index); 
+    //CAUSING BUGSSSSS ARGH
+		if (e.target.tagName !== 'path' && !isMobile().any() && window.matchMedia("(min-width: 900px)").matches) {
+      renderDots(index); 
+    } 
 	}); 
 	
   //  let lifetime = svg.append('g').attr('class', 'lifetime-box'); 
@@ -211,32 +223,46 @@ d3.json('../../data/new_top60.json', composers => {
     //Reset dimensions + scales
     //Dimensions
     SVG_WIDTH = $('.main-container').innerWidth(); 
-    SVG_HEIGHT = $(window).innerHeight()*.75; 
+    SVG_HEIGHT = $(window).innerHeight()*.75; //REDO and calculate as innerHeight - (title + dropdown)
 
     //Scales
     //let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([SVG_WIDTH*.05, SVG_WIDTH*.95]); 
 	  //let yScale = d3.scaleLinear().domain([0,31]).range([SVG_HEIGHT*.92, 0]);
     seasonsScale.range([SVG_WIDTH*.05, SVG_WIDTH*.95]); 
     yScale.range([SVG_HEIGHT*.92, 0]);
+    voronoiGen
+      .x(d => seasonsScale(d.season))
+      .y(d => yScale(d.seasonWorkCount))
+      .extent([[seasonsScale(composerWorks[0].season) - 7, yScale(d3.max(composerWorks, work => work.seasonWorkCount)) - 7], [seasonsScale(composerWorks[composerWorks.length - 1].season) + 7, SVG_HEIGHT*.92]]);
+
 
     if (window.matchMedia("(min-width: 900px)").matches) {
       svg.select('.lifetime-box').classed('hidden', false);
       svg.select('.dots-grouping').classed('hidden', false);
-      svg.select('.dots-grouping').classed('hidden', false);
+      svg.select('.voronoi-overlay').classed('hidden', false);
       svg.selectAll('.axis').classed('hidden', false);
     } else {
       svg.select('.lifetime-box').classed('hidden', true);
       svg.select('.dots-grouping').classed('hidden', true);
-      svg.select('.dots-grouping').classed('hidden', true);
+      svg.select('.voronoi-overlay').classed('hidden', true);
       svg.selectAll('.axis').classed('hidden', true);
     }
     
     //redraw axes
     
     //redraw dots
+    let dots = svg.select('.dots-grouping').selectAll('circle'); 
+    dots.transition().duration(1400).attr('r', seasonsScale.bandwidth()/2.4)
+			.attr('cx', d => seasonsScale(d.season))
+			.attr('cy', d => yScale(d.seasonWorkCount)); 
     
     //redraw voronoi overlay
-    
+    voronoiOverlay.selectAll('path')
+      .data(voronoiGen.polygons(composerWorks))
+      .transition()
+      .duration(1400)
+      .attr('d', d => "M" + d.join("L") + "Z"); 
+
     //redraw lifetime box
     
     
@@ -306,28 +332,47 @@ d3.json('../../data/new_top60.json', composers => {
 				}
 				
 			});
-		  seasonsCount.push({count: seasonWorkCount === 0 ? 0 : seasonWorkCount, season: season});
+		  //seasonsCount.push({count: seasonWorkCount === 0 ? 0 : seasonWorkCount, season: season});
+      seasonsCount.push({count: seasonWorkCount, season: season});
+
 		}); 
 		
 		console.log(composerWorks.length);
     console.log(seasonsCount);
     return seasonsCount; 
   }
-  /* HEAT MAP EXPERIMENT */
   
-  //let beethoven = calculateComposerSeasonData(composers[13], 13); 
-  //
-  //console.log(beethoven);
+  /* HEAT MAP EXPERIMENT */
+  function calculateGrid(data, cellsPerRow, startColumnIndex = 0) {
+    let dataLength = data.length - 1; 
+    let lastColIndex = cellsPerRow - 1; 
+    let rowCurrent = 0; 
+    let colCurrent = startColumnIndex;
+    let newData = []; 
+    
+    for (let i = 0; i <= dataLength; i++) {
+      newData.push(Object.assign(data[i], {rowIndex: rowCurrent, colIndex: colCurrent})); 
+      if (colCurrent == lastColIndex) {
+        colCurrent = 0; 
+        rowCurrent += 1; 
+      } else {
+        colCurrent += 1; 
+      }
+    }
+    
+    return newData; 
+    
+  }
   
   function renderHeatMap(data, a, b, c, d, e, f) {
 
-    //DOM
-    //let heatmapContainerA = d3.select('.main-container').append('svg').attr('class', 'heatmapLin'); 
-    let heatmapContainerB = svg.append('g').attr('class', 'heatmapPow'); 
+    console.log(data); 
+    heatmapContainer.attr('height', SVG_HEIGHT * .7)
+      .attr('width', SVG_WIDTH); 
+    
+    grid.attr('transform', `translate(${SVG_WIDTH*.2}, 0)`); 
 
-    //heatmapContainerA.attr('height', 40).attr('width', SVG_WIDTH*.9); 
-    heatmapContainerB.attr('height', 80).attr('width', SVG_WIDTH*.9); 
-
+    [89, 207, 15, 195, 15, 46]
     
     //Heat map scales 
     let scaleB = d3.scaleLinear().domain([1, 31]).range([a, b]), 
@@ -336,38 +381,27 @@ d3.json('../../data/new_top60.json', composers => {
         scaleBP = d3.scalePow().exponent(.55).domain([1, 31]).range([a, b]), 
         scaleGP = d3.scalePow().exponent(.65).domain([1, 31]).range([c, d]), 
         scaleRP = d3.scalePow().exponent(.5).domain([1, 31]).range([e, f]),
-        scaleXAxis = d3.scaleLinear().domain([0,174]).range([0, SVG_WIDTH*.9]);
-    
-    
-    /**
-    heatmapContainerA
-      .selectAll('.rect')
-      .data(data)
-      .enter()
-      .append('rect')
-      .attr('x', (d, i) => scaleXAxis(i))
-      .attr('y', 5)
-      .attr('width', 5)
-      .attr('height', 30)
-      .attr('fill', d => {
-        let r, g, b; 
-        r = Math.floor(scaleR(d.count)); 
-        g = Math.floor(scaleG(d.count)); 
-        b = Math.floor(scaleB(d.count)); 
+        scaleCol = d3.scaleLinear().domain([0,20]).range([0, SVG_WIDTH*.8]), 
+        gridCellWidth = scaleCol(1);     
+
+    //.range([0, SVG_WIDTH*.9]); 
         
-        return d.count == 0 ? 'rgba(30,30,30,.45)' : `rgba(${r}, ${g}, ${b}, 1)`; 
-      }); 
-    **/
+    //let seasonsLabels = [{row: 0, season: "1842-59"}, {row: 1, season: "1860-79"}, {row: 2, season: "1880-99"}, {row: 3, season: "1900-19"}, {row: 4, season: "1920-39"}, {row: 5, season: "1940-59"}, {row: 6, season: "1960-79"}, {row: 7, season: "1980-99"}, {row: 8, season: "2000-17"}];
     
-    heatmapContainerB
-      .selectAll('.rect')
-      .data(data)
-      .enter()
-      .append('rect')
-      .attr('x', (d, i) => scaleXAxis(i))
-      .attr('y', 5)
-      .attr('width', 5)
-      .attr('height', 30)
+    
+    
+    gridLabels.attr('x', SVG_WIDTH * .035)
+      .attr('y', d => d.row * gridCellWidth)
+      .attr('transform', `translate(0, ${gridCellWidth/1.5})`)
+      .text(d => d.season); 
+    
+    
+    let rects = grid
+      .selectAll('rect'); 
+    
+    rects.data(data).transition()
+      .duration(1400)
+      //.attr('fill', d => scaleColor(d.count)); 
       .attr('fill', d => {
         let r, g, b; 
         r = Math.floor(scaleRP(d.count)); 
@@ -376,38 +410,34 @@ d3.json('../../data/new_top60.json', composers => {
         
         return d.count == 0 ? 'rgba(30,30,30,.45)' : `rgba(${r}, ${g}, ${b}, 1)`; 
       }); 
-      
+    
+    
+    rects.data(data)
+      .enter()
+      .append('rect')
+      //.attr('x', (d, i) => scaleXAxis(i))
+      .attr('x', d => scaleCol(d.colIndex))
+      .attr('y', d => d.rowIndex * gridCellWidth)
+      .attr('width', gridCellWidth)
+      .attr('height', gridCellWidth)
+      .attr('fill', 'rgba(1,1,1,0)')
+      .transition()
+      .duration(1400)
+      //.attr('fill', d => scaleColor(d.count)); 
+      .attr('fill', d => {
+        let r, g, b; 
+        r = Math.floor(scaleRP(d.count)); 
+        g = Math.floor(scaleGP(d.count)); 
+        b = Math.floor(scaleBP(d.count)); 
+        
+        return d.count == 0 ? 'rgba(30,30,30,.45)' : `rgba(${r}, ${g}, ${b}, 1)`; 
+      }); 
+    
   }
-  
-  //function renderRandomHeatMaps() {
-  //  for (let i=0; i<20; i++) {
-  //    renderHeatMap.apply(null, generateRandomRgbas())
-  //  }
-  //}
-  //
-  //function generateRandomRgbas() {
-  //  let numbersArr = []; 
-  //  for (let j=0; j<6; j++) {
-  //    numbersArr.push(Math.floor(Math.random()*255)); 
-  //  }
-  //  return numbersArr; 
-  //}
-  
-  //renderRandomHeatMaps(); 
-  //renderHeatMap(); 
-  
-  
-  ////samples.forEach(sample => renderHeatMap.call(null, beethoven, ...sample));
-  //renderHeatMap.call(null, calculateComposerSeasonData(composers[12], 12), ...samples[3]);
-  //renderHeatMap.call(null, calculateComposerSeasonData(composers[13], 13), ...samples[3]);
-  //renderHeatMap.call(null, calculateComposerSeasonData(composers[1], 1), ...samples[3]);
-  //renderHeatMap.call(null, calculateComposerSeasonData(composers[0], 0), ...samples[3]);
-  //renderHeatMap.call(null, calculateComposerSeasonData(composers[59], 59), ...samples[3]);
-  //renderHeatMap.call(null, calculateComposerSeasonData(composers[60], 60), ...samples[3]);
-  //renderHeatMap.call(null, calculateComposerSeasonData(composers[5], 5), ...samples[3]);
-  
 
   /* END HEAT MAP */
+  
+  
   function selectComposer(index) {
     //Code for vanilla select element
     //document.querySelector('.select-value').value = index;
@@ -434,7 +464,7 @@ d3.json('../../data/new_top60.json', composers => {
     if (!isMobile().any() && window.matchMedia("(min-width: 900px)").matches) {
       renderDots(index); 
     } else {
-      renderHeatMap.call(null, calculateComposerSeasonData(composers[index], index), ...samples[3]);
+      renderHeatMap.call(null, calculateGrid(calculateComposerSeasonData(composers[index], index), 20, 2), ...samples[3]);
     }
   }
 	
@@ -442,10 +472,7 @@ d3.json('../../data/new_top60.json', composers => {
 		let composer = composers[number]; 
 		let composerIndex = number; 
 		let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(composer.birth) )]; 
-		console.log(birthSeason); 
 		let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(composer.death) )]; 
-
-		console.log(deathSeason); 
 
 		let rectX = seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
 
@@ -535,17 +562,13 @@ d3.json('../../data/new_top60.json', composers => {
 				})
 				.attr('r', seasonsScale.bandwidth()/2.4)					
 				.attr('stroke-width', 1); 
-		    //console.log(d3.event.target);
 
 				d3.select(`circle.unid-${i}`)
 					.attr('stroke-width', 3)
 					.attr('r', seasonsScale.bandwidth()/1.5); 
 			})
       .on('mouseover', (d, i) => {
-        //console.log(d.data);
         let data = d.data; 
-				//console.log(composer.composer); 
-				//let dimensions = d3.event.target.getBoundingClientRect(); 
         let dimensions = document.querySelector(`circle.unid-${i}`).getBoundingClientRect(); 
 
 				let left = dimensions.right > svgDimensions.left + svgDimensions.width/2 
@@ -554,11 +577,8 @@ d3.json('../../data/new_top60.json', composers => {
 				let tooltip = d3.select('.tooltip').style('left', left + "px"); 
 				//will be variable based on the text content
         let height; 
-        let id = `unid-${i}`; 
-      
-        //console.log(composerWorks.length);
-        //console.log(data.numOfPerfs);
-				let html = `<span class='tooltip-title'>${data.title}</span><br><span class='tooltip-content'><em>${data.season} season</em></span><br><span class='tooltip-content'>Appeared in ${data.seasonCount} ${data.seasonCount == 1 ? 'season' : 'seasons'}</span><br><span class='tooltip-content'>${((data.numOfPerfs/composerWorks.length)*100).toFixed(2)}% of all performances of works by ${data.composer}</span>`; 
+        let id = `unid-${i}`;
+        let html = `<span class='tooltip-title'>${data.title}</span><br><span class='tooltip-content'><em>${data.season} season</em></span><br><span class='tooltip-content'>Appeared in ${data.seasonCount} ${data.seasonCount == 1 ? 'season' : 'seasons'}</span><br><span class='tooltip-content'>${((data.numOfPerfs/composerWorks.length)*100).toFixed(2)}% of all performances of works by ${data.composer}</span>`; 
 				tooltip.html(html); 
         //vertically center tooltip with the dot
 				height = document.querySelector('.tooltip').getBoundingClientRect().height; 
@@ -579,7 +599,7 @@ d3.json('../../data/new_top60.json', composers => {
 	      	.attr('r', seasonsScale.bandwidth()/2.4); 
       })
       //To see voronoi outline/dev env; comment out in production 
-      //.style("stroke", "rgba(180, 180, 180, .5)")
+      .style("stroke", "rgba(180, 180, 180, .5)")
       .style('pointer-events', 'all')
       .style('fill', 'none');
 	}

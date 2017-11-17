@@ -618,13 +618,18 @@
         font-size: .8em;
       }
       
-      .axis {
+      .axis, .grid-labels {
 				font-family: 'Lato'; 
 				stroke: rgba(133, 233, 90, 1);
         fill: rgba(133, 233, 90, 1);
 				font-weight: 300; 
 				letter-spacing: 2px;
+        text-rendering: optimizeLegibility;
 			}
+      
+      .grid-labels {
+        font-size: .6em
+      }
 		  
       
       @media screen and (max-width: 10000px) {
@@ -691,6 +696,15 @@
 				line-height: 14px; 
 			}
 			
+      @media screen and (max-width: 900px) {
+        .mobile-heatmap-legend {
+          display: block; 
+        }
+        
+        .desktop-dot-legend {
+          display: none; 
+        }
+      }
       
       @media screen and (max-width: 800px) {
         .axis text {
@@ -837,6 +851,9 @@
       <div class="dot-chart-explain prose note">
         <p><strong>You can explore the New York Philharmonic's performance history of these 61 composers by season <a href='/#dot-chart'>below</a></strong>. Search for your favorite composer and check if they made the list. Do you see any other trends or patterns?</p> 
         <hr>
+        <div class="mobile-heatmap-legend">
+          <p>Looks like you're reading this essay on a small screen! To enjoy the full interactive experience and to explore the individual pieces performed, either expand your browser window or use a device with larger screen dimensions.</p>
+        </div>
         <div class="desktop-dot-legend">
           <p>Each dot represents a unique composition programmed + performed in a particular season.</p>
           <p><strong>HOVER</strong> over the dots to see some metadata about each composition</p>
