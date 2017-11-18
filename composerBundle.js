@@ -58,6 +58,7 @@ d3.json('../../data/new_top60.json', composers => {
   //Heatmap color values (use samples[3])
   let samples = [[27, 243, 6, 128, 94, 52], [89, 248, 15, 182, 15, 7], [94, 207, 34, 195, 175, 46], [89, 207, 15, 195, 15, 46]]; 
 
+  let currentComposer; 
   
   //scales for DOT CHART
 	let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([SVG_WIDTH*.05, SVG_WIDTH*.95]); 
@@ -116,7 +117,7 @@ d3.json('../../data/new_top60.json', composers => {
   function setupDotChart() {
     //Add X axis
     dotXAxis = svg.append('g')
-      .attr('class', 'axis')
+      .attr('class', 'axis axis-years')
       .attr('transform',`translate(${-seasonsScale.bandwidth()/2.4},0)`)
 		  .call(axisYears); 
 	
@@ -132,12 +133,15 @@ d3.json('../../data/new_top60.json', composers => {
     dotXAxis.append('text')
       .attr('class', 'axis-label x-axis-label')
       .text('NEW YORK PHILHARMONIC SUBSCRIPTION SEASONS')
-      .attr('transform', `translate(${SVG_WIDTH*.5},${SVG_HEIGHT*.995})`); 
+      .attr('text-anchor', 'middle')
+      .attr('x',SVG_WIDTH*.5)
+      .attr('transform', `translate(0,${SVG_HEIGHT*.995})`); 
   
     //Add Y Axis
     dotFreqAxis = svg.append('g')
-      .attr('class', 'axis')
-      .attr('transform', `translate(${SVG_WIDTH*.05},0)`).call(axisFreq); 
+      .attr('class', 'axis axis-freq')
+      .attr('transform', `translate(${SVG_WIDTH*.05},0)`)
+      .call(axisFreq); 
   
     dotFreqAxis.select('.domain').remove(); 
     dotFreqAxis.append('text')
@@ -156,7 +160,9 @@ d3.json('../../data/new_top60.json', composers => {
     let rectX = seasonsScale("1842-43"); 
     let rectWidth = 0; 
   
-    lifetime.append('rect').attr('x', rectX)
+     
+    lifetime.append('rect')
+      .attr('x', rectX)
       .attr('y', 0)
       .attr('width', rectWidth)
       .attr('height', SVG_HEIGHT*.92)
@@ -176,7 +182,6 @@ d3.json('../../data/new_top60.json', composers => {
     d3.select('body').append('div')
       .attr('class', 'tooltip')
       .style('opacity', 0); 
-
 
   }
   
@@ -226,6 +231,11 @@ d3.json('../../data/new_top60.json', composers => {
     SVG_WIDTH = $('.main-container').innerWidth(); 
     SVG_HEIGHT = $(window).innerHeight()*.75; //REDO and calculate as innerHeight - (title + dropdown)
 
+    //reset svg
+    svg.attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
+	
+    //TODO reset tooltip box
+    svgDimensions = document.getElementsByTagName('svg')[0].getBoundingClientRect(); 
     //Scales
     //let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([SVG_WIDTH*.05, SVG_WIDTH*.95]); 
 	  //let yScale = d3.scaleLinear().domain([0,31]).range([SVG_HEIGHT*.92, 0]);
@@ -236,6 +246,16 @@ d3.json('../../data/new_top60.json', composers => {
       .y(d => yScale(d.seasonWorkCount))
       .extent([[seasonsScale(composerWorks[0].season) - 7, yScale(d3.max(composerWorks, work => work.seasonWorkCount)) - 7], [seasonsScale(composerWorks[composerWorks.length - 1].season) + 7, SVG_HEIGHT*.92]]);
 
+    axisYears = d3.axisBottom(seasonsScale)
+      .tickSize(SVG_HEIGHT*.92)
+      .tickValues(seasonsScale.domain().filter((season, i) => {
+		  	const S = ["1842-43", "1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01", "2016-17"];
+		  	return S.includes(season); 
+		  })) ; 
+    
+    axisFreq = d3.axisLeft(yScale)
+      .ticks(5)
+      .tickSize(SVG_WIDTH*.009); 
 
     if (window.matchMedia("(min-width: 900px)").matches) {
       svg.select('.lifetime-box').classed('hidden', false);
@@ -250,6 +270,31 @@ d3.json('../../data/new_top60.json', composers => {
     }
     
     //redraw axes
+    let dotXAxis = svg.select('.axis-years')
+      .attr('transform',`translate(${-seasonsScale.bandwidth()/2.4},0)`)
+		  .call(axisYears); 
+    
+    dotXAxis.select('.domain').remove(); 
+    dotXAxis.selectAll('.tick line')
+      .style('stroke', 'White')
+      .style('stroke-dasharray', '8,3');
+    dotXAxis.selectAll('text')
+      .style("text-anchor", d => (d === '1842-43' || d === '2016-17') ? "middle" : "start");
+    
+    dotXAxis.select('.x-axis-label')
+      .style('text-anchor', 'middle')
+      .attr('x', SVG_WIDTH*.5)
+      .attr('transform', `translate(0,${SVG_HEIGHT*.995})`); 
+
+    let dotFreqAxis = svg.select('.axis-freq')
+      .attr('transform', `translate(${SVG_WIDTH*.05},0)`)
+      .call(axisFreq); 
+  
+    dotFreqAxis.select('.domain').remove(); 
+  
+    dotFreqAxis.selectAll(".tick").select("line")
+		  .attr("stroke", "White")
+		  .attr("stroke-dasharray", "2,2"); 
     
     //redraw dots
     let dots = svg.select('.dots-grouping').selectAll('circle'); 
@@ -265,6 +310,46 @@ d3.json('../../data/new_top60.json', composers => {
       .attr('d', d => "M" + d.join("L") + "Z"); 
 
     //redraw lifetime box
+    lifetime.select('rect').transition().duration(1400)
+      .attr('x', d => {
+        let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
+        console.log(seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"))
+        return seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
+      })
+		  .attr('width', d => {
+        let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
+        let rectX = seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
+        let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.death) )]; 
+        let rectWidth; 
+
+        if (!seasonsScale(deathSeason)) {
+          rectWidth = 0; 
+		    } else {
+          rectWidth = seasonsScale(deathSeason) - rectX; 
+		    }
+        return rectWidth; 
+      })
+      .attr('height', SVG_HEIGHT*.92); 
+    
+    lifetime.select('line').transition().duration(1400)
+      .attr('x1', d => {
+        let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
+        return seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
+      })
+      .attr('x2', d => {
+        let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
+        let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.death) )]; 
+        let rectX = seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
+        let rectWidth; 
+
+        if (!seasonsScale(deathSeason)) {
+          rectWidth = 0; 
+		    } else {
+          rectWidth = seasonsScale(deathSeason) - rectX; 
+		    }
+
+        return (seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43")) + rectWidth; 
+      }); 
     
     
   }
@@ -442,7 +527,6 @@ d3.json('../../data/new_top60.json', composers => {
   function selectComposer(index) {
     //Code for vanilla select element
     //document.querySelector('.select-value').value = index;
-    
     //Code for using Select2 control
     $('.select-value').val(index);
     $('.select-value').trigger('change');
@@ -471,28 +555,77 @@ d3.json('../../data/new_top60.json', composers => {
 	
 	function renderDots(number) {
 		let composer = composers[number]; 
+    let composerWrapper = [composer]; 
 		let composerIndex = number; 
 		let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(composer.birth) )]; 
 		let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(composer.death) )]; 
 
-		let rectX = seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
-
-		let rectWidth; 
-		
-		if (!seasonsScale(deathSeason)) {
-			rectWidth = 0; 
-		} else {
-			rectWidth = seasonsScale(deathSeason) - rectX; 
-		}
+    //let rectX = seasonsScale("1842-43"); 
+    //let rectWidth = 0; 
+  
+		//let rectX = seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
+//
+		//let rectWidth; 
+		//
+		//if (!seasonsScale(deathSeason)) {
+		//	rectWidth = 0; 
+		//} else {
+		//	rectWidth = seasonsScale(deathSeason) - rectX; 
+		//}
 		
     calculateComposerSeasonData(composer, composerIndex);
 
 		// Composer birth-death box transition
-		svg.select('rect').transition().duration(1400).attr('x', rectX)
-		  .attr('width', rectWidth); 
+    let lifetimeBox = lifetime.select('rect').data(composerWrapper); 
+    let lifetimeBoxLine = lifetime.select('line').data(composerWrapper); 
+    console.log(lifetimeBox);
     
-    svg.select('.lifetime-box').select('line').transition().duration(1400).attr('x1', rectX)
-      .attr('x2', rectX + rectWidth); 
+    //lifetimeBox.exit().remove(); 
+    
+    lifetimeBox.transition().duration(1400)
+      .attr('x', d => {
+        let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
+        console.log(seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"))
+        return seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
+      })
+		  .attr('width', d => {
+        let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
+        let rectX = seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
+        let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.death) )]; 
+        let rectWidth; 
+
+        if (!seasonsScale(deathSeason)) {
+          rectWidth = 0; 
+		    } else {
+          rectWidth = seasonsScale(deathSeason) - rectX; 
+		    }
+        return rectWidth; 
+      }); 
+    
+    lifetimeBoxLine.transition().duration(1400)
+      .attr('x1', d => {
+        let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
+        return seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
+      })
+      .attr('x2', d => {
+        let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
+        let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.death) )]; 
+        let rectX = seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
+        let rectWidth; 
+
+        if (!seasonsScale(deathSeason)) {
+          rectWidth = 0; 
+		    } else {
+          rectWidth = seasonsScale(deathSeason) - rectX; 
+		    }
+
+        return (seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43")) + rectWidth; 
+      }); 
+   
+    
+		
+      //.attr('x1', rectX)
+      //.attr('x2', rectX + rectWidth); 
 		
 		let dots = svg.select('.dots-grouping').selectAll('circle')
 			.data(composerWorks); 
@@ -600,7 +733,7 @@ d3.json('../../data/new_top60.json', composers => {
 	      	.attr('r', seasonsScale.bandwidth()/2.4); 
       })
       //To see voronoi outline/dev env; comment out in production 
-      .style("stroke", "rgba(180, 180, 180, .5)")
+      //.style("stroke", "rgba(180, 180, 180, .5)")
       .style('pointer-events', 'all')
       .style('fill', 'none');
 	}

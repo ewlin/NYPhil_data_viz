@@ -383,7 +383,7 @@ d3.json('../../data/composers.json', (err, d) => {
     .attr('class', 'axis-label x-axis-label stream-label')
     .text('NEW YORK PHILHARMONIC SUBSCRIPTION SEASONS')
     .attr('x', `${(SVG_WIDTH - 92) * 0.5}`)
-    .attr('text-anchor', 'center')
+    .attr('text-anchor', 'middle')
     .attr('transform', `translate(0,${1.6*PADDING})`); 
 	
   xStreamAxis
