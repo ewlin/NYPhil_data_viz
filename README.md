@@ -17,6 +17,7 @@
 * MOBILE COMPOSER HEATMAP [STARTED] missing legend and margins/relative
 * MOBILE COMPOSER HEATMAP LIFETIME BOX
 * AXIS RESIZING TEXT, DYNAMIC
+* Add UNKNOWN to living and dead chart??
 
 #### MAJOR REFACTOR/RE-ORG OF REPO:
 * Babelfy everything so works on older browsers

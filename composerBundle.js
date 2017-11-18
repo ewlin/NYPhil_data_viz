@@ -29,6 +29,7 @@ function formatComposerName (name) {
 let svgDimensions; 
 
 let composerWorks = []; 
+let currentType; 
 
 //Github pages bug
 //d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
@@ -91,22 +92,34 @@ d3.json('../../data/new_top60.json', composers => {
   let dotXAxis; 
   let dotFreqAxis; 
   
+  //Dot chart contents
   //Lifetime box
-  let lifetime = svg.append('g').attr('class', 'lifetime-box'); 
+  let lifetime;// = svg.append('g').attr('class', 'lifetime-box'); 
   //Dots grouping
-  let dots = svg.append('g').attr('class', 'dots-grouping');
+  let dots; // = svg.append('g').attr('class', 'dots-grouping');
   //Voronoi grouping
-  let voronoiOverlay = svg.append('g').attr('class', 'voronoi-overlay'); 
+  let voronoiOverlay; // = svg.append('g').attr('class', 'voronoi-overlay'); 
+  
+  ////Lifetime box
+  //let lifetime = svg.append('g').attr('class', 'lifetime-box'); 
+  ////Dots grouping
+  //let dots = svg.append('g').attr('class', 'dots-grouping');
+  ////Voronoi grouping
+  //let voronoiOverlay = svg.append('g').attr('class', 'voronoi-overlay'); 
   
   //Heatmap container 
-  let heatmapContainer = svg.append('g').attr('class', 'heatmapPow'); 
-  let grid = heatmapContainer.append('g').attr('class', 'grid'); 
-  let texts = svg.append('g').attr('class', 'grid-labels'); 
+  let heatmapContainer;// = svg.append('g').attr('class', 'heatmapPow'); 
+  let grid;// = heatmapContainer.append('g').attr('class', 'grid'); 
+  let texts; //= svg.append('g').attr('class', 'grid-labels'); 
   
-  let seasonsLabels = [{row: 0, season: "1842-59"}, {row: 2, season: "1880-99"}, {row: 4, season: "1920-39"}, {row: 6, season: "1960-79"}, {row: 8, season: "2000-17"}]
-    
-  let gridLabels = texts.selectAll('texts').data(seasonsLabels).enter().append('text'); 
+  //let seasonsLabels = [{row: 0, season: "1842-59"}, {row: 2, season: "1880-99"}, {row: 4, season: "1920-39"}, {row: 6, season: "1960-79"}, {row: 8, season: "2000-17"}]
+  //  
+  //let gridLabels = texts.selectAll('texts').data(seasonsLabels).enter().append('text'); 
 
+  //Heatmap Scales
+  let scaleCol = d3.scaleLinear().domain([0,20]).range([0, SVG_WIDTH*.8]), 
+      gridCellWidth = scaleCol(1);     
+  
     
 	//Event listeners when option is selected from dropdown
 	$('.select-value').on('change', function(e) {
@@ -160,7 +173,8 @@ d3.json('../../data/new_top60.json', composers => {
     let rectX = seasonsScale("1842-43"); 
     let rectWidth = 0; 
   
-     
+    lifetime = svg.append('g').attr('class', 'lifetime-box'); 
+    
     lifetime.append('rect')
       .attr('x', rectX)
       .attr('y', 0)
@@ -177,6 +191,12 @@ d3.json('../../data/new_top60.json', composers => {
       .attr('y2', 0)
       .attr('stroke', '#ff645f')
       .attr('stroke-width', '10');
+    
+    ////Dots grouping
+    dots = svg.append('g').attr('class', 'dots-grouping');
+    
+    ////Voronoi grouping
+    voronoiOverlay = svg.append('g').attr('class', 'voronoi-overlay'); 
     
     //Tooltip setup
     d3.select('body').append('div')
@@ -256,18 +276,6 @@ d3.json('../../data/new_top60.json', composers => {
     axisFreq = d3.axisLeft(yScale)
       .ticks(5)
       .tickSize(SVG_WIDTH*.009); 
-
-    if (window.matchMedia("(min-width: 900px)").matches) {
-      svg.select('.lifetime-box').classed('hidden', false);
-      svg.select('.dots-grouping').classed('hidden', false);
-      svg.select('.voronoi-overlay').classed('hidden', false);
-      svg.selectAll('.axis').classed('hidden', false);
-    } else {
-      svg.select('.lifetime-box').classed('hidden', true);
-      svg.select('.dots-grouping').classed('hidden', true);
-      svg.select('.voronoi-overlay').classed('hidden', true);
-      svg.selectAll('.axis').classed('hidden', true);
-    }
     
     //redraw axes
     let dotXAxis = svg.select('.axis-years')
@@ -298,7 +306,7 @@ d3.json('../../data/new_top60.json', composers => {
     
     //redraw dots
     let dots = svg.select('.dots-grouping').selectAll('circle'); 
-    dots.transition().duration(1400).attr('r', seasonsScale.bandwidth()/2.4)
+    dots.transition().duration(500).attr('r', seasonsScale.bandwidth()/2.4)
 			.attr('cx', d => seasonsScale(d.season))
 			.attr('cy', d => yScale(d.seasonWorkCount)); 
     
@@ -306,11 +314,11 @@ d3.json('../../data/new_top60.json', composers => {
     voronoiOverlay.selectAll('path')
       .data(voronoiGen.polygons(composerWorks))
       .transition()
-      .duration(1400)
+      .duration(500)
       .attr('d', d => "M" + d.join("L") + "Z"); 
 
     //redraw lifetime box
-    lifetime.select('rect').transition().duration(1400)
+    lifetime.select('rect').transition().duration(500)
       .attr('x', d => {
         let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
         console.log(seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"))
@@ -331,7 +339,7 @@ d3.json('../../data/new_top60.json', composers => {
       })
       .attr('height', SVG_HEIGHT*.92); 
     
-    lifetime.select('line').transition().duration(1400)
+    lifetime.select('line').transition().duration(500)
       .attr('x1', d => {
         let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
         return seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
@@ -356,8 +364,47 @@ d3.json('../../data/new_top60.json', composers => {
   
   function mobileResize() {}
   
-  window.addEventListener('resize', debounce(isMobile().any() ? mobileResize : resize, 200)); 
+  window.addEventListener('resize', debounce(resizeDelegation, 200)); 
 
+  function resizeDelegation() {
+    let type; 
+    if (!isMobile().any() && window.matchMedia("(min-width: 900px)").matches) {
+      type = 'dots'; 
+    } else {
+      type = 'heat'; 
+    }
+    
+    console.log(currentType, type);
+    if (currentType === type) {
+      console.log('true'); 
+      currentType === "dots" ? resize() : mobileResize(); 
+    } else {
+      console.log('false');
+      if (currentType === "dots") {
+        //check if heatmap has been initialized, if not, do so. 
+        
+        //Hide Dots
+        (svg.select('.lifetime-box').classed('hidden', true), svg.select('.dots-grouping').classed('hidden', true),
+        svg.select('.voronoi-overlay').classed('hidden', true), svg.selectAll('.axis').classed('hidden', true)); 
+        //Show Heat Map
+        
+      } else {
+        //check if dot chart has been initialized, if not, do so. 
+        
+        //Hide Heat map
+        
+        //Show Dots
+        (svg.select('.lifetime-box').classed('hidden', false), svg.select('.dots-grouping').classed('hidden', false),
+        svg.select('.voronoi-overlay').classed('hidden', false), svg.selectAll('.axis').classed('hidden', false)); 
+      } 
+      //update current chart type
+      currentType = type; 
+    }
+  }
+    
+    
+  
+  
   
   function matchComposers(params, data) {
     // If there are no search terms, return all of the data
@@ -450,37 +497,30 @@ d3.json('../../data/new_top60.json', composers => {
     
   }
   
-  function renderHeatMap(data, a, b, c, d, e, f) {
-
-    console.log(data); 
+  function setupHeatMap () {
+    heatmapContainer = svg.append('g').attr('class', 'heatmapPow'); 
+    grid = heatmapContainer.append('g').attr('class', 'grid'); 
+    texts = svg.append('g').attr('class', 'grid-labels'); 
+  
+    let seasonsLabels = [{row: 0, season: "1842-59"}, {row: 2, season: "1880-99"}, {row: 4, season: "1920-39"}, {row: 6, season: "1960-79"}, {row: 8, season: "2000-17"}]
+      
+    let gridLabels = texts.selectAll('texts').data(seasonsLabels).enter().append('text'); 
     heatmapContainer.attr('height', SVG_HEIGHT * .7)
       .attr('width', SVG_WIDTH); 
     
     grid.attr('transform', `translate(${SVG_WIDTH*.2}, 0)`); 
-
-    [89, 207, 15, 195, 15, 46]
-    
-    //Heat map scales 
-    let scaleB = d3.scaleLinear().domain([1, 31]).range([a, b]), 
-        scaleG = d3.scaleLinear().domain([1, 31]).range([c, d]), 
-        scaleR = d3.scaleLinear().domain([1, 31]).range([e, f]),
-        scaleBP = d3.scalePow().exponent(.55).domain([1, 31]).range([a, b]), 
-        scaleGP = d3.scalePow().exponent(.65).domain([1, 31]).range([c, d]), 
-        scaleRP = d3.scalePow().exponent(.5).domain([1, 31]).range([e, f]),
-        scaleCol = d3.scaleLinear().domain([0,20]).range([0, SVG_WIDTH*.8]), 
-        gridCellWidth = scaleCol(1);     
-
-    //.range([0, SVG_WIDTH*.9]); 
-        
-    //let seasonsLabels = [{row: 0, season: "1842-59"}, {row: 1, season: "1860-79"}, {row: 2, season: "1880-99"}, {row: 3, season: "1900-19"}, {row: 4, season: "1920-39"}, {row: 5, season: "1940-59"}, {row: 6, season: "1960-79"}, {row: 7, season: "1980-99"}, {row: 8, season: "2000-17"}];
-    
-    
     
     gridLabels.attr('x', SVG_WIDTH * .035)
       .attr('y', d => d.row * gridCellWidth)
       .attr('transform', `translate(0, ${gridCellWidth/1.5})`)
       .text(d => d.season); 
     
+  }
+  
+  function renderHeatMap(data, a, b, c, d, e, f) {
+    let scaleBP = d3.scalePow().exponent(.55).domain([1, 31]).range([a, b]), 
+        scaleGP = d3.scalePow().exponent(.65).domain([1, 31]).range([c, d]), 
+        scaleRP = d3.scalePow().exponent(.5).domain([1, 31]).range([e, f]); 
     
     let rects = grid
       .selectAll('rect'); 
@@ -546,7 +586,7 @@ d3.json('../../data/new_top60.json', composers => {
 												? 'strauss_j.png' 
 												: composer.toLowerCase().split(' ')[0].match(/[a-z]*/)[0] + '.png';
 		$('.composer-face-container').append(`<img class='composer-face' src='assets/images/composer_sqs/${composerImage}'/>`); 
-    if (!isMobile().any() && window.matchMedia("(min-width: 900px)").matches) {
+    if (currentType == 'dots') {
       renderDots(index); 
     } else {
       renderHeatMap.call(null, calculateGrid(calculateComposerSeasonData(composers[index], index), 20, 2), ...samples[3]);
@@ -739,7 +779,11 @@ d3.json('../../data/new_top60.json', composers => {
 	}
 	
   if (!isMobile().any() && window.matchMedia("(min-width: 900px)").matches) {
+    currentType = 'dots'; 
     setupDotChart(); 
+  } else {
+    currentType = 'heat'; 
+    setupHeatMap(); 
   }
   
   selectComposer(0);
