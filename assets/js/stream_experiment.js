@@ -409,9 +409,10 @@ d3.json('../../data/composers.json', (err, d) => {
     //.enter()
     .attr('fill', 'none')
     .attr('stroke', 'rgba(218, 155, 103, 1)')
+    //.attr('stroke', '#AB7286')
     .attr('stroke-dasharray', '7, 2')
     .attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]))
-    .style('stroke-width', '2px'); 
+    .style('stroke-width', '3px'); 
 	
   let transition1 = function() {
     currentGraph = 'abs'; 

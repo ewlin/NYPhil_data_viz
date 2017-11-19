@@ -211,20 +211,34 @@ d3.json('../../data/new_top60.json', composers => {
 	}); 
   
   
-  
-  $('.dot-chart-prelude').on('click', (e) => {
+  function desktopScrollToComposer(e) {
     let index = e.target.dataset.index; 
-    //Feature detection here
-    //let chromeOrFirefox = navigator.userAgent.match(/Chrome\/\d*|Firefox\/\d*/);
-    //let browserVersion = chromeOrFirefox[0].match(/\d+/)[0]; 
-    //let options = null; 
-    //
-    //console.log(browserVersion);
+    let dotChart = document.querySelector('.dot-chart .graphic-title'); 
+    //Feature detection here for Element.scrollIntoView(). Options object arg only supported on newer versions of Firefox and Chrome 
+    let chromeOrFirefox = navigator.userAgent.match(/Chrome\/\d*|Firefox\/\d*/);
+    let browserType = chromeOrFirefox[0].match(/Chrome|Firefox/)[0]; 
+    let browserVersion = chromeOrFirefox[0].match(/\d+/)[0]; 
+    let options = browserType == 'Firefox' && browserVersion >= 36 || browserType == 'Chrome' && browserVersion >= 61 ? {block: 'start', behavior: 'smooth'} : null;  
+    
+    console.log(browserType);
+    console.log(browserVersion);
     
     if (e.target.dataset.index) {
-      document.querySelector('.dot-chart .graphic-title').scrollIntoView(); 
+      if (options) {
+        dotChart.scrollIntoView(options); 
+      } else {
+        dotChart.scrollIntoView(); 
+      }
       selectComposer(index);
     } 
+  }
+  
+  function mobileScrollToComposer(e) {
+    
+  }
+  
+  $('.dot-chart-prelude').on('click', (e) => {
+    desktopScrollToComposer(e); 
   });
 	
 	//Reset dots 
