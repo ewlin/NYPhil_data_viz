@@ -5,6 +5,7 @@
 
 ## TODOs: 
 
+#### FINISHED: 
 * DOT CHART LEGEND [ALPHA v0.1 COMPLETED 11/14/17 11:14am EST]
 * DOT CHART, ADD VORONOI OVERLAY [COMPLETED 11/14/17 ~5:30-6:00pm EST]
 * CODA PROSE, FINISH + EDIT [COMPLETED 11/14]
@@ -14,8 +15,7 @@
 
 
 #### FEATURES: 
-* MOBILE COMPOSER HEATMAP [STARTED] missing legend and margins/relative
-* MOBILE COMPOSER HEATMAP LIFETIME BOX
+* Mobile composer 61 composer list (line/frequency charts)
 * AXIS RESIZING TEXT, DYNAMIC
 * Add UNKNOWN to living and dead chart??
 
@@ -25,6 +25,9 @@
 * RANDOM BUG FIXES
 
 
+#### ABANDONED: 
+* MOBILE COMPOSER HEATMAP [STARTED] missing legend and margins/relative [scrap idea]
+* MOBILE COMPOSER HEATMAP LIFETIME BOX [scrap idea]
 
 
 
