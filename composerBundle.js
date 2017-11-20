@@ -52,7 +52,8 @@ d3.json('../../data/new_top60.json', composers => {
     
   });
   let SVG_WIDTH = $('.main-container').innerWidth(); 
-	let SVG_HEIGHT = $(window).innerHeight()*.75; //REDO and calculate as innerHeight - (title + dropdown)
+  let SVG_HEIGHT = $(window).innerHeight()*.75; //REDO and calculate as innerHeight - (title + dropdown)
+
 	//console.log(SVG_WIDTH);
 	//console.log(SVG_HEIGHT); 
 	
@@ -70,9 +71,9 @@ d3.json('../../data/new_top60.json', composers => {
     .x(d => seasonsScale(d.season))
     .y(d => yScale(d.seasonWorkCount)); 
   
-  let svg = d3.select('.main-container').append('svg').attr('class', 'composers-chart-container'); 
-  
-  svg.attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
+  let svg;// = d3.select('.main-container').append('svg').attr('class', 'composers-chart-container'); 
+  //
+  //svg.attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
 	
 	//Axes logic and display 
 	svgDimensions = document.getElementsByTagName('svg')[0].getBoundingClientRect(); 
@@ -96,18 +97,12 @@ d3.json('../../data/new_top60.json', composers => {
   
   //Dot chart contents
   //Lifetime box
-  let lifetime;// = svg.append('g').attr('class', 'lifetime-box'); 
+  let lifetime;
   //Dots grouping
-  let dots; // = svg.append('g').attr('class', 'dots-grouping');
+  let dots;
   //Voronoi grouping
-  let voronoiOverlay; // = svg.append('g').attr('class', 'voronoi-overlay'); 
+  let voronoiOverlay;  
   
-  ////Lifetime box
-  //let lifetime = svg.append('g').attr('class', 'lifetime-box'); 
-  ////Dots grouping
-  //let dots = svg.append('g').attr('class', 'dots-grouping');
-  ////Voronoi grouping
-  //let voronoiOverlay = svg.append('g').attr('class', 'voronoi-overlay'); 
   
   //Heatmap container 
   let heatmapContainer;// = svg.append('g').attr('class', 'heatmapPow'); 
@@ -130,6 +125,15 @@ d3.json('../../data/new_top60.json', composers => {
 	});
   
   function setupDotChart() {
+    //grab SVG dimensions: 
+    SVG_WIDTH = $('.main-container').innerWidth(); 
+    SVG_HEIGHT = $(window).innerHeight()*.75; //REDO and calculate as innerHeight - (title + dropdown)
+    //add SVG container 
+    svg = d3.select('.main-container')
+      .append('svg').attr('class', 'composers-chart-container')
+      .attr('width', SVG_WIDTH)
+      .attr('height', SVG_HEIGHT); 
+	
     //Add X axis
     dotXAxis = svg.append('g')
       .attr('class', 'axis axis-years')
@@ -411,7 +415,12 @@ d3.json('../../data/new_top60.json', composers => {
         
       } else {
         //check if dot chart has been initialized, if not, do so. 
-        
+        if (!document.querySelector('.composers-chart-container')) {
+          currentType = type; 
+          setupDotChart();
+          //default initial composer for dot chart is beethoven
+          selectComposer(0);
+        }
         //Hide Heat map
         
         //Show Dots
@@ -451,7 +460,35 @@ d3.json('../../data/new_top60.json', composers => {
   //Create Select2 object
   //$('.select-value').select2(); 
   $('.select-value').select2({matcher: matchComposers}); 
+  
+  
+  console.log('test'); 
+  console.log(calculateComposerSeasonCount(composers[1], 1)); 
+  
+  function calculateComposerSeasonCount (composer, composerIndex) {
+    let seasonsCount = []; 
+    
+    //composerWorks = []; 
+		ALL_SEASONS.forEach( (season, season_idx) => {
+			let works = composer.works; 
+      //accumulates the # of pieces per season by one composer
+			let seasonWorkCount = 0; 
+			works.forEach( (work, work_idx) => {
+				let workSeasons = work.seasons; 
+				let numOfPerformances = workSeasons.length; 
 
+				if (workSeasons.includes(season)) {
+					++seasonWorkCount
+				}
+				
+			});
+      seasonsCount.push({count: seasonWorkCount, season: season});
+
+		}); 
+    return seasonsCount; 
+  }
+  
+  
   //function expects composer object
   //UGLY CODE. Does side-effects + and returns data. Refactor ASAP
   function calculateComposerSeasonData (composer, composerIndex) {
@@ -486,17 +523,14 @@ d3.json('../../data/new_top60.json', composers => {
 				}
 				
 			});
-		  //seasonsCount.push({count: seasonWorkCount === 0 ? 0 : seasonWorkCount, season: season});
       seasonsCount.push({count: seasonWorkCount, season: season});
 
 		}); 
-		
-		console.log(composerWorks.length);
-    console.log(seasonsCount);
     return seasonsCount; 
   }
   
   /* HEAT MAP EXPERIMENT */
+  /*
   function calculateGrid(data, cellsPerRow, startColumnIndex = 0) {
     let dataLength = data.length - 1; 
     let lastColIndex = cellsPerRow - 1; 
@@ -581,7 +615,7 @@ d3.json('../../data/new_top60.json', composers => {
       }); 
     
   }
-
+  */
   /* END HEAT MAP */
   
   
@@ -610,7 +644,7 @@ d3.json('../../data/new_top60.json', composers => {
     if (currentType == 'dots') {
       renderDots(index); 
     } else {
-      renderHeatMap.call(null, calculateGrid(calculateComposerSeasonData(composers[index], index), 20, 2), ...samples[3]);
+      //renderHeatMap.call(null, calculateGrid(calculateComposerSeasonData(composers[index], index), 20, 2), ...samples[3]);
     }
   }
 	
@@ -621,19 +655,7 @@ d3.json('../../data/new_top60.json', composers => {
 		let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(composer.birth) )]; 
 		let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(composer.death) )]; 
 
-    //let rectX = seasonsScale("1842-43"); 
-    //let rectWidth = 0; 
-  
-		//let rectX = seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
-//
-		//let rectWidth; 
-		//
-		//if (!seasonsScale(deathSeason)) {
-		//	rectWidth = 0; 
-		//} else {
-		//	rectWidth = seasonsScale(deathSeason) - rectX; 
-		//}
-		
+    //Populate composerWorks array with works data
     calculateComposerSeasonData(composer, composerIndex);
 
 		// Composer birth-death box transition
@@ -799,15 +821,17 @@ d3.json('../../data/new_top60.json', composers => {
       .style('fill', 'none');
 	}
 	
+  //Initialize composers chart(s)
   if (!isMobile().any() && window.matchMedia("(min-width: 900px)").matches) {
     currentType = 'dots'; 
     setupDotChart(); 
+    selectComposer(0);
   } else {
-    currentType = 'heat'; 
-    setupHeatMap(); 
+    currentType = 'mobile'; 
+    //setupComposerCharts(); 
+    //renderComposersCharts(); 
   }
   
-  selectComposer(0);
 
 }); 
 
