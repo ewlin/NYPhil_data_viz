@@ -421,13 +421,18 @@ d3.json('../../data/new_top60.json', composers => {
           setupDotChart();
           //default initial composer for dot chart is beethoven
           selectComposer(0);
-          resize(); 
-        }
-        //Hide Heat map
+        } 
         
         //Show Dots
         (svg.select('.lifetime-box').classed('hidden', false), svg.select('.dots-grouping').classed('hidden', false),
         svg.select('.voronoi-overlay').classed('hidden', false), svg.selectAll('.axis').classed('hidden', false)); 
+        
+        //Resize chart
+        resize(); 
+        
+        //Hide Mobile charts
+        
+        
       } 
       //update current chart type
       currentType = type; 
