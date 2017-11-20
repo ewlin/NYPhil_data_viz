@@ -395,7 +395,7 @@ d3.json('../../data/new_top60.json', composers => {
     if (!isMobile().any() && window.matchMedia("(min-width: 900px)").matches) {
       type = 'dots'; 
     } else {
-      type = 'heat'; 
+      type = 'mobile'; 
     }
     
     console.log(currentType, type);
@@ -405,8 +405,9 @@ d3.json('../../data/new_top60.json', composers => {
     } else {
       console.log('false');
       if (currentType === "dots") {
+        currentType = type;
         //check if heatmap has been initialized, if not, do so. 
-        
+        //
         //Hide Dots
         (svg.select('.lifetime-box').classed('hidden', true), svg.select('.dots-grouping').classed('hidden', true),
         svg.select('.voronoi-overlay').classed('hidden', true), svg.selectAll('.axis').classed('hidden', true)); 
@@ -419,6 +420,7 @@ d3.json('../../data/new_top60.json', composers => {
           setupDotChart();
           //default initial composer for dot chart is beethoven
           selectComposer(0);
+          resize(); 
         }
         //Hide Heat map
         
@@ -820,6 +822,14 @@ d3.json('../../data/new_top60.json', composers => {
       .style('fill', 'none');
 	}
 	
+  
+  function tempMobileComposers() {
+    let chartContainer = d3.select('.main-container').append('div'); 
+    chartContainer.attr('class', 'composer-charts'); 
+    
+    chartContainer.append('p').html('TESTEST');
+  }
+  
   //Initialize composers chart(s)
   if (!isMobile().any() && window.matchMedia("(min-width: 900px)").matches) {
     currentType = 'dots'; 
@@ -827,6 +837,8 @@ d3.json('../../data/new_top60.json', composers => {
     selectComposer(0);
   } else {
     currentType = 'mobile'; 
+    //experiment
+    tempMobileComposers(); 
     //setupComposerCharts(); 
     //renderComposersCharts(); 
   }
