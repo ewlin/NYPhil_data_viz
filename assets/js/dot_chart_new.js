@@ -861,7 +861,6 @@ d3.json('../../data/new_top60.json', composers => {
     
     topComposers.forEach((composer, idx) => {
       let composerBar = chartContainer.append('div').attr('class', 'composer-bar');
-      composerBar.append('p').html(formatComposerName(composer.composer)); 
       //console.log(composerBar); 
       let composerBarSVG = composerBar
         .append('svg')
@@ -871,7 +870,8 @@ d3.json('../../data/new_top60.json', composers => {
         .attr('height', height)
         .attr('transform', `translate(${margins.left}, ${margins.top})`); 
       
-      
+      composerBar.append('p').html(formatComposerName(composer.composer)); 
+
       
       //console.log(composerBarSVG);
       //console.log(d3.select(`#composer${idx}`))//.append('g').select('path').data(composer.seasons).enter().append('path'); 
