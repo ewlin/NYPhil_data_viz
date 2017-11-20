@@ -236,7 +236,7 @@ d3.json('../../data/new_top60.json', composers => {
         dotChart.scrollIntoView(); 
       }
       selectComposer(index);
-    } 
+    }
   }
   
   function mobileScrollToComposer(e) {
@@ -244,7 +244,9 @@ d3.json('../../data/new_top60.json', composers => {
   }
   
   $('.dot-chart-prelude').on('click', (e) => {
-    desktopScrollToComposer(e); 
+    if (currentType === 'dots') {
+      desktopScrollToComposer(e); 
+    }
   });
 	
 	//Reset dots 
@@ -415,6 +417,8 @@ d3.json('../../data/new_top60.json', composers => {
         svg.select('.voronoi-overlay').classed('hidden', true), svg.selectAll('.axis').classed('hidden', true)); 
         //Show Heat Map
         
+        //Resize mobile charts
+        
       } else {
         //check if dot chart has been initialized, if not, do so. 
         if (!document.querySelector('.composers-chart-container')) {
@@ -430,10 +434,11 @@ d3.json('../../data/new_top60.json', composers => {
         
         d3.select('.dot-chart-heading-middle').classed('hidden', false); 
 
+        //Hide Mobile charts
+
         //Resize chart
         resize(); 
         
-        //Hide Mobile charts
         
         
       } 
@@ -834,10 +839,56 @@ d3.json('../../data/new_top60.json', composers => {
   
   function tempMobileComposers() {
     
-    let chartContainer = d3.select('.main-container').append('div'); 
+    let chartContainer = d3.select('.main-container').append('section'); 
     chartContainer.attr('class', 'composer-charts'); 
     
+    let margins = {top: 7, left: 20, bottom: 20, right: 8}; 
+    let mobileWidth = $('.composer-charts').innerWidth() - margins.left - margins.right; 
+    let height = 95 - margins.bottom - margins.top; 
+
+    let seasonXScale = d3.scaleBand().domain(ALL_SEASONS).range([0, mobileWidth]); 
+    let freqYScale = d3.scaleLinear().domain([0,31]).range([height, 0]);
+
+    let chartArea = d3.area()
+      .curve(d3.curveCardinal.tension(.1))
+      .x(d => seasonXScale(d.season))
+      .y0(d => 0)
+      .y1(d => freqYScale(d.count)); 
+    
     console.log(compileComposerSeasonData()); 
+    
+    let topComposers = compileComposerSeasonData(); 
+    
+    topComposers.forEach((composer, idx) => {
+      let composerBar = chartContainer.append('div').attr('class', 'composer-bar');
+      composerBar.append('p').html(formatComposerName(composer.composer)); 
+      //console.log(composerBar); 
+      let composerBarSVG = composerBar
+        .append('svg')
+        .attr('class', 'composer-bar-svg') 
+        .attr('id', `composer${idx}`)
+        .attr('width', mobileWidth)
+        .attr('height', height)
+        .attr('transform', `translate(${margins.left}, ${margins.top})`); 
+      
+      
+      
+      //console.log(composerBarSVG);
+      //console.log(d3.select(`#composer${idx}`))//.append('g').select('path').data(composer.seasons).enter().append('path'); 
+      
+      d3.select(`#composer${idx}`)
+        .append('path')
+        .datum(composer.seasons)
+        .attr('d', chartArea)
+        .attr('fill', 'none')
+        .attr('stroke', 'steelblue');
+      
+      //  .enter()
+      //  .append('path')
+        //.attr('d', chartArea)
+        //.attr('fill', 'Steelblue'); 
+      
+    }); 
     
     //chartContainer.append('p').html('TESTEST');
     function compileComposerSeasonData () {
@@ -869,7 +920,8 @@ d3.json('../../data/new_top60.json', composers => {
         seasonsCount.push({count: seasonWorkCount, season: season});
   
 		  }); 
-      return seasonsCount; 
+      //object with composer name and array of seasons and a count for each season
+      return {composer: composer.composer, seasons: seasonsCount}; 
     }
     
   }
