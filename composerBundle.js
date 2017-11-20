@@ -410,6 +410,8 @@ d3.json('../../data/new_top60.json', composers => {
         //check if heatmap has been initialized, if not, do so. 
         //
         //Hide Dots
+        d3.select('.dot-chart-heading-middle').classed('hidden', true); 
+        
         (svg.select('.lifetime-box').classed('hidden', true), svg.select('.dots-grouping').classed('hidden', true),
         svg.select('.voronoi-overlay').classed('hidden', true), svg.selectAll('.axis').classed('hidden', true)); 
         //Show Heat Map
@@ -427,6 +429,8 @@ d3.json('../../data/new_top60.json', composers => {
         (svg.select('.lifetime-box').classed('hidden', false), svg.select('.dots-grouping').classed('hidden', false),
         svg.select('.voronoi-overlay').classed('hidden', false), svg.selectAll('.axis').classed('hidden', false)); 
         
+        d3.select('.dot-chart-heading-middle').classed('hidden', false); 
+
         //Resize chart
         resize(); 
         
@@ -830,10 +834,45 @@ d3.json('../../data/new_top60.json', composers => {
 	
   
   function tempMobileComposers() {
+    
     let chartContainer = d3.select('.main-container').append('div'); 
     chartContainer.attr('class', 'composer-charts'); 
     
-    chartContainer.append('p').html('TESTEST');
+    console.log(compileComposerSeasonData()); 
+    
+    //chartContainer.append('p').html('TESTEST');
+    function compileComposerSeasonData () {
+      let composersSeasonCounts = []; 
+      composers.forEach((composer, idx) => {
+        composersSeasonCounts.push(calculateComposerSeasonCount(composer, idx)); 
+      }); 
+      
+      return composersSeasonCounts; 
+    }
+    
+    function calculateComposerSeasonCount (composer, composerIndex) {
+      let seasonsCount = []; 
+      
+      //composerWorks = []; 
+		  ALL_SEASONS.forEach( (season, season_idx) => {
+		  	let works = composer.works; 
+        //accumulates the # of pieces per season by one composer
+		  	let seasonWorkCount = 0; 
+		  	works.forEach( (work, work_idx) => {
+		  		let workSeasons = work.seasons; 
+		  		let numOfPerformances = workSeasons.length; 
+  
+		  		if (workSeasons.includes(season)) {
+		  			++seasonWorkCount
+		  		}
+		  		
+		  	});
+        seasonsCount.push({count: seasonWorkCount, season: season});
+  
+		  }); 
+      return seasonsCount; 
+    }
+    
   }
   
   //Initialize composers chart(s)
@@ -843,6 +882,8 @@ d3.json('../../data/new_top60.json', composers => {
     selectComposer(0);
   } else {
     currentType = 'mobile'; 
+    //hide image + select 
+    d3.select('.dot-chart-heading-middle').classed('hidden', true); 
     //experiment
     tempMobileComposers(); 
     //setupComposerCharts(); 
