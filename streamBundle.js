@@ -560,9 +560,10 @@ d3.json('../../data/composers.json', (err, d) => {
 
     let newAnnotations = [{
       note: {
-        title: "1859-60 Season (The 18th Season)",
+        title: "1859-60 Season",
         label: "First-time performances drop under 50%; more repeats than first-time pieces every season from this point on",
-        wrap: window.innerWidth <= 1024 ? 130 : 165
+        wrap: window.innerWidth <= 1024 ? 130 : 165, 
+        align: 'left'
       },
       data: { i: 17, perc: 0.488 }, 
       dy: -(.12 * SVG_HEIGHT),
@@ -649,11 +650,11 @@ d3.json('../../data/composers.json', (err, d) => {
       note: {
         //title: "Hello performances"
         title: 'Percentage of pieces that are repeat performances of music by a living composer', 
-        wrap: 155
+        wrap: 130
       }, 
       data: { i: 45, perc: percentagesOfAllRepeatsLiving[79].percentageOfTotalRepeatsLiving }, 
       dy: -(.22 * SVG_HEIGHT),
-      dx: .12 * SVG_WIDTH
+      dx: .14 * SVG_WIDTH
     }]; 
 
     animateLine = d3.timer(function() {

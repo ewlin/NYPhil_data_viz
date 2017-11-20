@@ -77,9 +77,11 @@ d3.json('../../data/new_top60.json', composers => {
 	svgDimensions = document.getElementsByTagName('svg')[0].getBoundingClientRect(); 
 	let axisYears = d3.axisBottom(seasonsScale)
 										.tickValues(seasonsScale.domain().filter((season, i) => {
-											const S = ["1842-43", "1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01", "2016-17"];
-											return S.includes(season); 
-										})) 
+                      let windowWidth = window.innerWidth; 
+                      const S = ["1842-43", "1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01", "2016-17"];
+                      const S_MOBILE = ["1850-51", "1900-01", "1950-51", "2000-01"];
+                      return windowWidth >= 1100 ? S.includes(season) : S_MOBILE.includes(season); 
+		                }))
 										.tickSize(SVG_HEIGHT*.92); 
                     //.tickFormat(d => d === "1842-43" ? "1842" : d); 
 	
@@ -281,10 +283,13 @@ d3.json('../../data/new_top60.json', composers => {
 
     axisYears = d3.axisBottom(seasonsScale)
       .tickSize(SVG_HEIGHT*.92)
+      //Example for determining based on window size:  .tickValues(windowWidth <= 1024 ? [8, 58, 108, 158] : [8, 33, 58, 83, 108, 133, 158, 174])
       .tickValues(seasonsScale.domain().filter((season, i) => {
-		  	const S = ["1842-43", "1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01", "2016-17"];
-		  	return S.includes(season); 
-		  })) ; 
+        let windowWidth = window.innerWidth; 
+        const S = ["1842-43", "1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01", "2016-17"];
+        const S_MOBILE = ["1850-51", "1900-01", "1950-51", "2000-01"];
+        return windowWidth >= 1100 ? S.includes(season) : S_MOBILE.includes(season); 
+		  })); 
     
     axisFreq = d3.axisLeft(yScale)
       .ticks(5)
@@ -301,7 +306,9 @@ d3.json('../../data/new_top60.json', composers => {
       .style('stroke-dasharray', '8,3');
     dotXAxis.selectAll('text')
       .style("text-anchor", d => (d === '1842-43' || d === '2016-17') ? "middle" : "start");
-    
+    dotXAxis.selectAll('.tick text')
+      .attr('transform', `translate(0,${SVG_HEIGHT*.015})`); 
+
     dotXAxis.select('.x-axis-label')
       .style('text-anchor', 'middle')
       .attr('x', SVG_WIDTH*.5)
