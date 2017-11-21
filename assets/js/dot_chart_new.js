@@ -226,12 +226,16 @@ d3.json('../../data/new_top60.json', composers => {
   }
   
   function mobileScrollToComposer(e) {
-    
+    let index = e.target.dataset.index;
+    let composerChart = document.querySelector(`#composer${index}`);
+    composerChart.scrollIntoView();
   }
   
   $('.dot-chart-prelude').on('click', (e) => {
     if (currentType === 'dots') {
       desktopScrollToComposer(e); 
+    } else {
+      mobileScrollToComposer(e); 
     }
   });
 	
@@ -396,8 +400,9 @@ d3.json('../../data/new_top60.json', composers => {
         //Hide Dots
         d3.select('.dot-chart-heading-middle').classed('hidden', true); 
         
-        (svg.select('.lifetime-box').classed('hidden', true), svg.select('.dots-grouping').classed('hidden', true),
-        svg.select('.voronoi-overlay').classed('hidden', true), svg.selectAll('.axis').classed('hidden', true)); 
+        d3.select('.composers-chart-container').classed('hidden', true); 
+        //(svg.select('.lifetime-box').classed('hidden', true), svg.select('.dots-grouping').classed('hidden', true),
+        //svg.select('.voronoi-overlay').classed('hidden', true), svg.selectAll('.axis').classed('hidden', true)); 
         //Show Mobile charts
         d3.select('.composer-charts').classed('hidden', false); 
 
@@ -413,9 +418,10 @@ d3.json('../../data/new_top60.json', composers => {
         } 
         
         //Show Dots
-        (svg.select('.lifetime-box').classed('hidden', false), svg.select('.dots-grouping').classed('hidden', false),
-        svg.select('.voronoi-overlay').classed('hidden', false), svg.selectAll('.axis').classed('hidden', false)); 
-        
+        //(svg.select('.lifetime-box').classed('hidden', false), svg.select('.dots-grouping').classed('hidden', false),
+        //svg.select('.voronoi-overlay').classed('hidden', false), svg.selectAll('.axis').classed('hidden', false)); 
+        d3.select('.composers-chart-container').classed('hidden', false); 
+
         d3.select('.dot-chart-heading-middle').classed('hidden', false); 
 
         //Hide Mobile charts
@@ -772,7 +778,7 @@ d3.json('../../data/new_top60.json', composers => {
         .attr('width', mobileWidth + margins.left + margins.right)
         .attr('height', height + margins.top + margins.bottom); 
       
-      composerBar.append('p').html(formatComposerName(composer.composer)); 
+      composerBar.append('p').html(`${formatComposerName(composer.composer)} (${composer.birth}-${composer.death})`); 
       
       d3.select(`#composer${idx}`)
         .append('path')
@@ -838,7 +844,12 @@ d3.json('../../data/new_top60.json', composers => {
   
 		  }); 
       //object with composer name and array of seasons and a count for each season
-      return {composer: composer.composer, seasons: seasonsCount}; 
+      return {
+        composer: composer.composer, 
+        birth: composer.birth, 
+        death: composer.death, 
+        seasons: seasonsCount
+      }; 
     }
     
   }
