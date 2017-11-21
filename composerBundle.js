@@ -3,9 +3,7 @@ let generateSeasons = require('../../temp_utils/generate_seasons.js');
 let isMobile = require('../../temp_utils/is-mobile.js');
 let debounce = require('just-debounce-it'); 
 
-
 const ALL_SEASONS = generateSeasons(1842, 2016); 
-
 
 function any (array, func) {
   let bool = false; 
@@ -17,9 +15,8 @@ function any (array, func) {
 //Incomplete; need to finish and move to utilities folder
 function formatComposerName (name) {
   let names = name.split(','); 
-  console.log(names);
   let match; 
-  //.split(' ').filter(el => !!el).join(' ')  
+
   // hackish way to remove spaces
   let firstname = names[1].trim().split(' ').filter(el => !!el).join(' '); 
   let surname = (match = names[0].match(/\[.*\]/)) ? match[0].substr(1, match[0].length - 2) : names[0]; 
@@ -38,29 +35,24 @@ d3.json('../../data/new_top60.json', composers => {
 //experiment with all composers
 //d3.json('../../data/composers.json', composers => {
 
-  console.log(composers);
-  composers.forEach(composer => {
-    if (composer.death > 1842) {
-      if (!any(composer.works, (work) => parseInt(work.seasons[0]) < composer.death)) {
-        console.log('after death: ' + composer.composer); 
-      } else {
-        //console.log('before death: ' + composer.composer);
-      }
-      
-    }
-    if (composer.death <= 1842) console.log(composer.composer);
-    
-  });
+  //composers.forEach(composer => {
+  //  if (composer.death > 1842) {
+  //    if (!any(composer.works, (work) => parseInt(work.seasons[0]) < composer.death)) {
+  //      console.log('after death: ' + composer.composer); 
+  //    } else {
+  //      //console.log('before death: ' + composer.composer);
+  //    }
+  //    
+  //  }
+  //  if (composer.death <= 1842) console.log(composer.composer);
+  //  
+  //});
   let SVG_WIDTH = $('.main-container').innerWidth(); 
   let SVG_HEIGHT = $(window).innerHeight()*.75; //REDO and calculate as innerHeight - (title + dropdown)
 
-	//console.log(SVG_WIDTH);
-	//console.log(SVG_HEIGHT); 
 	
   //Heatmap color values (use samples[3])
   let samples = [[27, 243, 6, 128, 94, 52], [89, 248, 15, 182, 15, 7], [94, 207, 34, 195, 175, 46], [89, 207, 15, 195, 15, 46]]; 
-
-  let currentComposer; 
   
   //scales for DOT CHART
 	let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([SVG_WIDTH*.05, SVG_WIDTH*.95]); 
@@ -71,10 +63,8 @@ d3.json('../../data/new_top60.json', composers => {
     .x(d => seasonsScale(d.season))
     .y(d => yScale(d.seasonWorkCount)); 
   
-  let svg;// = d3.select('.main-container').append('svg').attr('class', 'composers-chart-container'); 
-  //
-  //svg.attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
-	
+  let svg;
+  
 	//Axes logic and display 
 	svgDimensions = document.getElementsByTagName('svg')[0].getBoundingClientRect(); 
 	let axisYears = d3.axisBottom(seasonsScale)
@@ -227,9 +217,6 @@ d3.json('../../data/new_top60.json', composers => {
     let browserVersion = chromeOrFirefox[0].match(/\d+/)[0]; 
     let options = browserType == 'Firefox' && browserVersion >= 36 || browserType == 'Chrome' && browserVersion >= 61 ? {block: 'start', behavior: 'smooth'} : null;  
     
-    console.log(browserType);
-    console.log(browserVersion);
-    
     if (e.target.dataset.index) {
       if (options) {
         dotChart.scrollIntoView(options); 
@@ -348,7 +335,6 @@ d3.json('../../data/new_top60.json', composers => {
     lifetime.select('rect').transition().duration(500)
       .attr('x', d => {
         let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
-        console.log(seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"))
         return seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
       })
 		  .attr('width', d => {
@@ -403,10 +389,8 @@ d3.json('../../data/new_top60.json', composers => {
     
     console.log(currentType, type);
     if (currentType === type) {
-      console.log('true'); 
       currentType === "dots" ? resize() : mobileResize(); 
     } else {
-      console.log('false');
       if (currentType === "dots") {
         currentType = type;
         //check if mobile charts has been initialized, if not, do so. 
@@ -480,9 +464,6 @@ d3.json('../../data/new_top60.json', composers => {
   $('.select-value').select2({matcher: matchComposers}); 
   
   
-  console.log('test'); 
-  console.log(calculateComposerSeasonCount(composers[1], 1)); 
-  
   function calculateComposerSeasonCount (composer, composerIndex) {
     let seasonsCount = []; 
     
@@ -546,97 +527,7 @@ d3.json('../../data/new_top60.json', composers => {
 		}); 
     return seasonsCount; 
   }
-  
-  /* HEAT MAP EXPERIMENT */
-  /*
-  function calculateGrid(data, cellsPerRow, startColumnIndex = 0) {
-    let dataLength = data.length - 1; 
-    let lastColIndex = cellsPerRow - 1; 
-    let rowCurrent = 0; 
-    let colCurrent = startColumnIndex;
-    let newData = []; 
     
-    for (let i = 0; i <= dataLength; i++) {
-      newData.push(Object.assign(data[i], {rowIndex: rowCurrent, colIndex: colCurrent})); 
-      if (colCurrent == lastColIndex) {
-        colCurrent = 0; 
-        rowCurrent += 1; 
-      } else {
-        colCurrent += 1; 
-      }
-    }
-    
-    return newData; 
-    
-  }
-  
-  function setupHeatMap () {
-    heatmapContainer = svg.append('g').attr('class', 'heatmapPow'); 
-    grid = heatmapContainer.append('g').attr('class', 'grid'); 
-    texts = svg.append('g').attr('class', 'grid-labels'); 
-  
-    let seasonsLabels = [{row: 0, season: "1842-59"}, {row: 2, season: "1880-99"}, {row: 4, season: "1920-39"}, {row: 6, season: "1960-79"}, {row: 8, season: "2000-17"}]
-      
-    let gridLabels = texts.selectAll('texts').data(seasonsLabels).enter().append('text'); 
-    heatmapContainer.attr('height', SVG_HEIGHT * .7)
-      .attr('width', SVG_WIDTH); 
-    
-    grid.attr('transform', `translate(${SVG_WIDTH*.2}, 0)`); 
-    
-    gridLabels.attr('x', SVG_WIDTH * .035)
-      .attr('y', d => d.row * gridCellWidth)
-      .attr('transform', `translate(0, ${gridCellWidth/1.5})`)
-      .text(d => d.season); 
-    
-  }
-  
-  function renderHeatMap(data, a, b, c, d, e, f) {
-    let scaleBP = d3.scalePow().exponent(.55).domain([1, 31]).range([a, b]), 
-        scaleGP = d3.scalePow().exponent(.65).domain([1, 31]).range([c, d]), 
-        scaleRP = d3.scalePow().exponent(.5).domain([1, 31]).range([e, f]); 
-    
-    let rects = grid
-      .selectAll('rect'); 
-    
-    rects.data(data).transition()
-      .duration(1400)
-      //.attr('fill', d => scaleColor(d.count)); 
-      .attr('fill', d => {
-        let r, g, b; 
-        r = Math.floor(scaleRP(d.count)); 
-        g = Math.floor(scaleGP(d.count)); 
-        b = Math.floor(scaleBP(d.count)); 
-        
-        return d.count == 0 ? 'rgba(30,30,30,.45)' : `rgba(${r}, ${g}, ${b}, 1)`; 
-      }); 
-    
-    
-    rects.data(data)
-      .enter()
-      .append('rect')
-      //.attr('x', (d, i) => scaleXAxis(i))
-      .attr('x', d => scaleCol(d.colIndex))
-      .attr('y', d => d.rowIndex * gridCellWidth)
-      .attr('width', gridCellWidth)
-      .attr('height', gridCellWidth)
-      .attr('fill', 'rgba(1,1,1,0)')
-      .transition()
-      .duration(1400)
-      //.attr('fill', d => scaleColor(d.count)); 
-      .attr('fill', d => {
-        let r, g, b; 
-        r = Math.floor(scaleRP(d.count)); 
-        g = Math.floor(scaleGP(d.count)); 
-        b = Math.floor(scaleBP(d.count)); 
-        
-        return d.count == 0 ? 'rgba(30,30,30,.45)' : `rgba(${r}, ${g}, ${b}, 1)`; 
-      }); 
-    
-  }
-  */
-  /* END HEAT MAP */
-  
-  
   function selectComposer(index) {
     //Code for vanilla select element
     //document.querySelector('.select-value').value = index;
@@ -652,7 +543,6 @@ d3.json('../../data/new_top60.json', composers => {
     //$('option').attr('selected', false); 
     //$(`.select-value option[value=${index}]`).attr('selected', true);
     
-    console.log(`composer selected: ${index}: ${composers[index].composer}`);
     $('.composer-face').remove(); 
     let composer = composers[index].composer; 
 		let composerImage = composer === 'Strauss,  Johann, II'
@@ -679,14 +569,11 @@ d3.json('../../data/new_top60.json', composers => {
 		// Composer birth-death box transition
     let lifetimeBox = lifetime.select('rect').data(composerWrapper); 
     let lifetimeBoxLine = lifetime.select('line').data(composerWrapper); 
-    console.log(lifetimeBox);
     
-    //lifetimeBox.exit().remove(); 
     
     lifetimeBox.transition().duration(1400)
       .attr('x', d => {
         let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
-        console.log(seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"))
         return seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
       })
 		  .attr('width', d => {
@@ -767,9 +654,7 @@ d3.json('../../data/new_top60.json', composers => {
 			.attr('stroke', d => {
 				if (d.orphanWork) return '#df644e'; 
 			}); 
-	
-    console.log(composerWorks); 
-    
+	    
     
     //Voronoi inside renderDots; needs calculateComposerSeasonData to have been called
     voronoiOverlay.selectAll('path').remove(); 
@@ -857,14 +742,11 @@ d3.json('../../data/new_top60.json', composers => {
       .x(d => seasonXScale(d.season))
       .y0(d => 0)
       .y1(d => freqYScale(d.count)); 
-    
-    console.log(compileComposerSeasonData()); 
-    
+        
     let topComposers = compileComposerSeasonData(); 
     
     topComposers.forEach((composer, idx) => {
       let composerBar = chartContainer.append('div').attr('class', 'composer-bar');
-      //console.log(composerBar); 
       let composerBarSVG = composerBar
         .append('svg')
         .attr('class', 'composer-bar-svg') 
@@ -874,10 +756,6 @@ d3.json('../../data/new_top60.json', composers => {
         .attr('transform', `translate(${margins.left}, ${margins.top})`); 
       
       composerBar.append('p').html(formatComposerName(composer.composer)); 
-
-      
-      //console.log(composerBarSVG);
-      //console.log(d3.select(`#composer${idx}`))//.append('g').select('path').data(composer.seasons).enter().append('path'); 
       
       d3.select(`#composer${idx}`)
         .append('path')
@@ -885,11 +763,6 @@ d3.json('../../data/new_top60.json', composers => {
         .attr('d', chartArea)
         .attr('fill', 'none')
         .attr('stroke', 'steelblue');
-      
-      //  .enter()
-      //  .append('path')
-        //.attr('d', chartArea)
-        //.attr('fill', 'Steelblue'); 
       
     }); 
     
@@ -944,7 +817,6 @@ d3.json('../../data/new_top60.json', composers => {
     //renderComposersCharts(); 
   }
   
-
 }); 
 
 
