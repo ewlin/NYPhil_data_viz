@@ -16,7 +16,7 @@
 * SCROLL INTO VIEW for more modern browsers [COMPLETED; desktop-only 11/19; finished]
 
 #### FEATURES: 
-* Mobile composer 61 composer list (line/frequency charts) [Started 11/20, need to possibly add lifetime box + resizing code]
+* Mobile composer 61 composer list (line/frequency charts) [Started 11/20, need to possibly add lifetime box + resizing code + initialize charts if dot chart first rendered (larger browsers/resizing scenario)]
 * AXIS RESIZING TEXT, DYNAMIC
 * Add UNKNOWN to living and dead chart??
 
