@@ -244,6 +244,55 @@ d3.json('../../data/new_top60.json', composers => {
       
       composerBar.append('p').html(`${formatComposerName(composer.composer)} (${composer.birth}-${composer.death})`); 
       
+      let lifespan = {birth: composer.birth, death: composer.death}; 
+      //lifetime box
+      d3.select(`#composer${idx}`)
+        .append('rect')
+        .datum(lifespan)
+        .attr('height', height)
+        .attr('opacity', .2)
+        .attr('y', 0)
+        .attr('fill', 'grey')
+        .attr('transform', `translate(${margins.left}, ${margins.top})`)
+        .attr('x', d => {
+          let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )];
+          return seasonXScale(birthSeason) ? seasonXScale(birthSeason) : seasonXScale("1842-43");
+        })
+        .attr('width', d => {
+          let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )];
+          let rectX = seasonXScale(birthSeason) ? seasonXScale(birthSeason) : seasonXScale("1842-43");
+          let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.death) )]; 
+          let rectWidth; 
+
+          if (!seasonXScale(deathSeason)) {
+            rectWidth = 0; 
+		      } else {
+            rectWidth = seasonXScale(deathSeason) - rectX; 
+		      }
+          return rectWidth; 
+        }); 
+        
+      //line above lifetime box 
+      d3.select(`#composer${idx}`)
+        .append('line')
+        .datum(lifespan)
+        .attr('x1', d => {
+          let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )];
+          return seasonXScale(birthSeason) ? seasonXScale(birthSeason) : seasonXScale("1842-43");
+        })
+        .attr('x2', d => {
+          let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.death) )]; 
+          return !seasonXScale(deathSeason) ? 0 : seasonXScale(deathSeason); 
+        
+        })
+        .attr('y1', 0)
+        .attr('y2', 0)
+        .attr('stroke', '#ff645f')
+        .attr('stroke-width', '6')
+        .attr('transform', `translate(${margins.left}, ${margins.top + 3})`);
+
+      
+      //path for freq of pieces per season
       d3.select(`#composer${idx}`)
         .append('path')
         .datum(composer.seasons)
@@ -317,44 +366,6 @@ d3.json('../../data/new_top60.json', composers => {
     }
     
   }
-  
-  function tempMobileComposers() {
-    
-    //let chartsContainer = d3.select('.main-container').append('section'); 
-    //chartsContainer.attr('class', 'composer-charts'); 
-    //
-    //let margins = {top: 7, left: 20, bottom: 20, right: 8}; 
-    //let mobileWidth = $('.composer-charts').innerWidth() - margins.left - margins.right; 
-    //let height = 95 - margins.bottom - margins.top; 
-//
-    //let seasonXScale = d3.scaleBand().domain(ALL_SEASONS).range([0, mobileWidth]); 
-    //let freqYScale = d3.scaleLinear().domain([0,31]).range([height, 0]);
-//
-    //let xAxis = d3.axisBottom(seasonXScale)
-    //  .tickValues(seasonsScale.domain().filter((season, i) => {
-    //    const S = ["1842-43", "2016-17"]; 
-    //    return S.includes(season); 
-    //  }))
-    //  .tickSize(0); 
-    //
-    //let yAxis = d3.axisLeft(freqYScale)
-    //  .tickValues([0, 30])
-    //  .tickSize(0); 
-    //
-    //
-    //let chartArea = d3.area()
-    //  .curve(d3.curveCardinal.tension(.1))
-    //  .x(d => seasonXScale(d.season))
-    //  .y0(d => 0)
-    //  .y1(d => freqYScale(d.count)); 
-        
-    
-    
-  }
-  
-  
-  
-  
   
   
   //Create Options for select elements populated with composer names
