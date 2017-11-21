@@ -409,15 +409,16 @@ d3.json('../../data/new_top60.json', composers => {
       console.log('false');
       if (currentType === "dots") {
         currentType = type;
-        //check if heatmap has been initialized, if not, do so. 
+        //check if mobile charts has been initialized, if not, do so. 
         //
         //Hide Dots
         d3.select('.dot-chart-heading-middle').classed('hidden', true); 
         
         (svg.select('.lifetime-box').classed('hidden', true), svg.select('.dots-grouping').classed('hidden', true),
         svg.select('.voronoi-overlay').classed('hidden', true), svg.selectAll('.axis').classed('hidden', true)); 
-        //Show Heat Map
-        
+        //Show Mobile charts
+        d3.select('.composer-charts').classed('hidden', false); 
+
         //Resize mobile charts
         
       } else {
@@ -436,7 +437,8 @@ d3.json('../../data/new_top60.json', composers => {
         d3.select('.dot-chart-heading-middle').classed('hidden', false); 
 
         //Hide Mobile charts
-
+        
+        d3.select('.composer-charts').classed('hidden', true); 
         //Resize chart
         resize(); 
         
