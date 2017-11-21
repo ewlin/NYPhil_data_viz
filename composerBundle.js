@@ -75,7 +75,6 @@ d3.json('../../data/new_top60.json', composers => {
                       return windowWidth >= 1100 ? S.includes(season) : S_MOBILE.includes(season); 
 		                }))
 										.tickSize(SVG_HEIGHT*.92); 
-                    //.tickFormat(d => d === "1842-43" ? "1842" : d); 
 	
 	let axisFreq = d3.axisLeft(yScale)
 										.ticks(5)
@@ -737,6 +736,26 @@ d3.json('../../data/new_top60.json', composers => {
     let seasonXScale = d3.scaleBand().domain(ALL_SEASONS).range([0, mobileWidth]); 
     let freqYScale = d3.scaleLinear().domain([0,31]).range([height, 0]);
 
+    //d3.axisBottom(seasonsScale)
+		//.tickValues(seasonsScale.domain().filter((season, i) => {
+        //  let windowWidth = window.innerWidth; 
+        //  const S = ["1842-43", "1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01", "2016-17"];
+        //  const S_MOBILE = ["1850-51", "1900-01", "1950-51", "2000-01"];
+        //  return windowWidth >= 1100 ? S.includes(season) : S_MOBILE.includes(season); 
+		    //}))
+		//.tickSize(SVG_HEIGHT*.92); 
+    let xAxis = d3.axisBottom(seasonXScale)
+      .tickValues(seasonsScale.domain().filter((season, i) => {
+        const S = ["1842-43", "2016-17"]; 
+        return S.includes(season); 
+      }))
+      .tickSize(0); 
+    
+    let yAxis = d3.axisLeft(freqYScale)
+      .tickValues([0, 30])
+      .tickSize(0); 
+    
+    
     let chartArea = d3.area()
       .curve(d3.curveCardinal.tension(.1))
       .x(d => seasonXScale(d.season))
@@ -751,9 +770,8 @@ d3.json('../../data/new_top60.json', composers => {
         .append('svg')
         .attr('class', 'composer-bar-svg') 
         .attr('id', `composer${idx}`)
-        .attr('width', mobileWidth)
-        .attr('height', height)
-        .attr('transform', `translate(${margins.left}, ${margins.top})`); 
+        .attr('width', mobileWidth + margins.left + margins.right)
+        .attr('height', height + margins.top + margins.bottom); 
       
       composerBar.append('p').html(formatComposerName(composer.composer)); 
       
@@ -762,7 +780,31 @@ d3.json('../../data/new_top60.json', composers => {
         .datum(composer.seasons)
         .attr('d', chartArea)
         .attr('fill', 'none')
-        .attr('stroke', 'steelblue');
+        .attr('stroke', 'steelblue')
+        .attr('transform', `translate(${margins.left}, ${margins.top})`); 
+
+      let y = d3.select(`#composer${idx}`)
+        .append('g')
+        .attr('class', 'composer-bar-axis')
+        .attr('transform', `translate(${margins.left}, ${margins.top})`)
+        .call(yAxis); 
+      
+      y.select('.domain').remove(); 
+      
+      let x = d3.select(`#composer${idx}`)
+        .append('g')
+        .attr('class', 'composer-bar-axis')
+        .attr('transform', `translate(${margins.left}, ${margins.top + height})`)
+        .call(xAxis); 
+      
+      x.select('.domain').remove(); 
+      
+      x.selectAll('.tick text')
+        .attr('transform', `translate(0, ${margins.bottom/3})`)
+        .style("text-anchor", d => {
+          if (d === '1842-43') return 'start'; 
+          if (d === '2016-17') return 'end';
+        }); 
       
     }); 
     
