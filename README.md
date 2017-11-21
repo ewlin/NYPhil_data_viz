@@ -22,6 +22,7 @@
 * Insert a randomly generated, how-to-read legend for charts
 
 (Maybe)
+* If you're feeling ambitious, add a tooltip/hover over mobile charts when viewed on desktop (with a certain min width) that show number of pieces each season
 * Add composer rank to long list? 
 * Maybe a 'soundwave/audiowave like graphic as the top background image?
 * AXIS RESIZING TEXT, DYNAMIC

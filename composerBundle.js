@@ -82,6 +82,20 @@ d3.json('../../data/new_top60.json', composers => {
   let voronoiOverlay;  
   
   
+  /*MOBILE CHARTS VARIABLES*/
+  
+  let chartsContainer; 
+  let margins = {top: 7, left: 20, bottom: 20, right: 8}; //could be const
+  let height = 95 - margins.bottom - margins.top; //could be const
+  let mobileWidth;// = $('.composer-charts').innerWidth() - margins.left - margins.right; 
+
+  let seasonXScale; 
+  let freqYScale;
+  let xAxis; 
+  let yAxis; 
+  let chartArea; 
+    
+  
   //Heatmap container 
   let heatmapContainer;// = svg.append('g').attr('class', 'heatmapPow'); 
   let grid;// = heatmapContainer.append('g').attr('class', 'grid'); 
@@ -191,41 +205,42 @@ d3.json('../../data/new_top60.json', composers => {
 
   }
   
-  
-  function tempMobileComposers() {
-    
-    let chartContainer = d3.select('.main-container').append('section'); 
-    chartContainer.attr('class', 'composer-charts'); 
-    
+  /* Temp variables for mobile 
+    //Items needed by more than one function 
+    let chartsContainer; 
     let margins = {top: 7, left: 20, bottom: 20, right: 8}; 
     let mobileWidth = $('.composer-charts').innerWidth() - margins.left - margins.right; 
-    let height = 95 - margins.bottom - margins.top; 
 
-    let seasonXScale = d3.scaleBand().domain(ALL_SEASONS).range([0, mobileWidth]); 
-    let freqYScale = d3.scaleLinear().domain([0,31]).range([height, 0]);
+  */
+  function setupMobileCharts() {
+    let topComposers = compileComposerSeasonData(); 
+    
+    chartsContainer = d3.select('.main-container').append('section').attr('class', 'composer-charts'); 
+    mobileWidth = $('.composer-charts').innerWidth() - margins.left - margins.right; 
 
-    let xAxis = d3.axisBottom(seasonXScale)
+    seasonXScale = d3.scaleBand().domain(ALL_SEASONS).range([0, mobileWidth]); 
+    freqYScale = d3.scaleLinear().domain([0,31]).range([height, 0]);
+
+    xAxis = d3.axisBottom(seasonXScale)
       .tickValues(seasonsScale.domain().filter((season, i) => {
         const S = ["1842-43", "2016-17"]; 
         return S.includes(season); 
       }))
       .tickSize(0); 
     
-    let yAxis = d3.axisLeft(freqYScale)
+    yAxis = d3.axisLeft(freqYScale)
       .tickValues([0, 30])
       .tickSize(0); 
     
-    
-    let chartArea = d3.area()
+    chartArea = d3.area()
       .curve(d3.curveCardinal.tension(.1))
       .x(d => seasonXScale(d.season))
       .y0(d => 0)
       .y1(d => freqYScale(d.count)); 
-        
-    let topComposers = compileComposerSeasonData(); 
+    
     
     topComposers.forEach((composer, idx) => {
-      let composerBar = chartContainer.append('div').attr('class', 'composer-bar');
+      let composerBar = chartsContainer.append('div').attr('class', 'composer-bar');
       let composerBarSVG = composerBar
         .append('svg')
         .attr('class', 'composer-bar-svg') 
@@ -306,6 +321,40 @@ d3.json('../../data/new_top60.json', composers => {
         seasons: seasonsCount
       }; 
     }
+    
+  }
+  
+  function tempMobileComposers() {
+    
+    //let chartsContainer = d3.select('.main-container').append('section'); 
+    //chartsContainer.attr('class', 'composer-charts'); 
+    //
+    //let margins = {top: 7, left: 20, bottom: 20, right: 8}; 
+    //let mobileWidth = $('.composer-charts').innerWidth() - margins.left - margins.right; 
+    //let height = 95 - margins.bottom - margins.top; 
+//
+    //let seasonXScale = d3.scaleBand().domain(ALL_SEASONS).range([0, mobileWidth]); 
+    //let freqYScale = d3.scaleLinear().domain([0,31]).range([height, 0]);
+//
+    //let xAxis = d3.axisBottom(seasonXScale)
+    //  .tickValues(seasonsScale.domain().filter((season, i) => {
+    //    const S = ["1842-43", "2016-17"]; 
+    //    return S.includes(season); 
+    //  }))
+    //  .tickSize(0); 
+    //
+    //let yAxis = d3.axisLeft(freqYScale)
+    //  .tickValues([0, 30])
+    //  .tickSize(0); 
+    //
+    //
+    //let chartArea = d3.area()
+    //  .curve(d3.curveCardinal.tension(.1))
+    //  .x(d => seasonXScale(d.season))
+    //  .y0(d => 0)
+    //  .y1(d => freqYScale(d.count)); 
+        
+    
     
   }
   
@@ -513,7 +562,7 @@ d3.json('../../data/new_top60.json', composers => {
         //check if mobile charts has been initialized, if not, do so. 
         if (!document.querySelector('.composer-charts')) {
           currentType = type; 
-          tempMobileComposers();
+          setupMobileCharts();
         }
         //Hide Dots
         d3.select('.dot-chart-heading-middle').classed('hidden', true); 
@@ -837,7 +886,8 @@ d3.json('../../data/new_top60.json', composers => {
     //hide image + select 
     d3.select('.dot-chart-heading-middle').classed('hidden', true); 
     //experiment
-    tempMobileComposers(); 
+    //tempMobileComposers(); 
+    setupMobileCharts(); 
     //setupComposerCharts(); 
     //renderComposersCharts(); 
   }
