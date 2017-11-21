@@ -383,7 +383,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
     .attr('class', 'axis-label x-axis-label stream-label')
     .text('NEW YORK PHILHARMONIC SUBSCRIPTION SEASONS')
     .attr('x', `${(SVG_WIDTH - 92) * 0.5}`)
-    .attr('text-anchor', 'center')
+    .attr('text-anchor', 'middle')
     .attr('transform', `translate(0,${1.6*PADDING})`); 
 	
   xStreamAxis
@@ -410,9 +410,10 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
     //.enter()
     .attr('fill', 'none')
     .attr('stroke', 'rgba(218, 155, 103, 1)')
+    //.attr('stroke', '#AB7286')
     .attr('stroke-dasharray', '7, 2')
     .attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]))
-    .style('stroke-width', '2px'); 
+    .style('stroke-width', '3px'); 
 	
   let transition1 = function() {
     currentGraph = 'abs'; 
@@ -459,6 +460,9 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
   }; 
 	
   let transition2 = function() {
+    console.log('SVG HEIGHT = ' + $('svg').innerHeight());
+    console.log('SVG WIDTH = ' + $('svg').innerWidth());
+
     currentGraph = 'abs'; 
     
     let temp = SVG.selectAll('path')
@@ -495,8 +499,8 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
       //},
       //can use x, y directly instead of data
       data: { i: 67, workCount: 85 },
-      dy: -65,
-      dx: -95 
+      dy: -(.1 * SVG_HEIGHT),
+      dx: -(.1 * SVG_WIDTH) 
     }]; 
     
     if (window.innerWidth > 550 && window.innerHeight > 586) {
@@ -556,13 +560,14 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 
     let newAnnotations = [{
       note: {
-        title: "1859-60 Season (The 18th Season)",
+        title: "1859-60 Season",
         label: "First-time performances drop under 50%; more repeats than first-time pieces every season from this point on",
-        wrap: window.innerWidth <= 1024 ? 130 : 165
+        wrap: window.innerWidth <= 1024 ? 130 : 165, 
+        align: 'left'
       },
       data: { i: 17, perc: 0.488 }, 
-      dy: -70,
-      dx: 80
+      dy: -(.12 * SVG_HEIGHT),
+      dx: .1 * SVG_WIDTH
     }]; 
 
     makeAnnotations.accessors({
@@ -603,7 +608,7 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
         wrap: window.innerWidth <= 1024 ? 130 : 165
       },
       data: { i: 125, perc: .197 }, 
-      dy: -65,
+      dy: -(.12 * SVG_HEIGHT),
       dx: 0, 
     }]; 
     
@@ -645,11 +650,11 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
       note: {
         //title: "Hello performances"
         title: 'Percentage of pieces that are repeat performances of music by a living composer', 
-        wrap: 155
+        wrap: 130
       }, 
       data: { i: 45, perc: percentagesOfAllRepeatsLiving[79].percentageOfTotalRepeatsLiving }, 
-      dy: -135,
-      dx: 105
+      dy: -(.22 * SVG_HEIGHT),
+      dx: .14 * SVG_WIDTH
     }]; 
 
     animateLine = d3.timer(function() {
