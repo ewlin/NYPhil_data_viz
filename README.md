@@ -16,8 +16,13 @@
 * SCROLL INTO VIEW for more modern browsers [COMPLETED; desktop-only 11/19; finished]
 
 #### FEATURES: 
-* Mobile composer 61 composer list (line/frequency charts) [Started 11/20, add lifetime box + resizing code + initialize charts if dot chart first rendered (larger browsers/resizing scenario)]
-* Possibly a randomly generated, how-to-read legend for charts
+* Resizing code + refactor charts setup/layout 
+* initialize charts if dot chart first rendered (larger browsers/resizing scenario)]
+* Mobile composer 61 composer list resizable lifetime box
+* Insert a randomly generated, how-to-read legend for charts
+
+(Maybe)
+* Add composer rank to long list? 
 * Maybe a 'soundwave/audiowave like graphic as the top background image?
 * AXIS RESIZING TEXT, DYNAMIC
 * Add UNKNOWN to living and dead chart??
