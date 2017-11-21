@@ -89,9 +89,9 @@ d3.json('../../data/new_top60.json', composers => {
   let mobileWidth;// = $('.composer-charts').innerWidth() - margins.left - margins.right; 
 
   let seasonXScale; 
-  let freqYScale;
+  let freqYScale = d3.scaleLinear().domain([0,31]).range([height, 0]);
   let xAxis; 
-  let yAxis; 
+  let yAxis = d3.axisLeft(freqYScale).tickValues([0, 30]).tickSize(0);
   let chartArea; 
     
   
@@ -215,10 +215,9 @@ d3.json('../../data/new_top60.json', composers => {
     let topComposers = compileComposerSeasonData(); 
     
     chartsContainer = d3.select('.main-container').append('section').attr('class', 'composer-charts'); 
+    
     mobileWidth = $('.composer-charts').innerWidth() - margins.left - margins.right; 
-
     seasonXScale = d3.scaleBand().domain(ALL_SEASONS).range([0, mobileWidth]); 
-    freqYScale = d3.scaleLinear().domain([0,31]).range([height, 0]);
 
     xAxis = d3.axisBottom(seasonXScale)
       .tickValues(seasonsScale.domain().filter((season, i) => {
@@ -227,16 +226,11 @@ d3.json('../../data/new_top60.json', composers => {
       }))
       .tickSize(0); 
     
-    yAxis = d3.axisLeft(freqYScale)
-      .tickValues([0, 30])
-      .tickSize(0); 
-    
     chartArea = d3.area()
       .curve(d3.curveCardinal.tension(.1))
       .x(d => seasonXScale(d.season))
       .y0(d => 0)
       .y1(d => freqYScale(d.count)); 
-    
     
     topComposers.forEach((composer, idx) => {
       let composerBar = chartsContainer.append('div').attr('class', 'composer-bar');
@@ -267,7 +261,7 @@ d3.json('../../data/new_top60.json', composers => {
       
       let x = d3.select(`#composer${idx}`)
         .append('g')
-        .attr('class', 'composer-bar-axis')
+        .attr('class', 'composer-bar-axis composer-bar-axis-x')
         .attr('transform', `translate(${margins.left}, ${margins.top + height})`)
         .call(xAxis); 
       
@@ -540,7 +534,37 @@ d3.json('../../data/new_top60.json', composers => {
     
   }
   
-  function mobileResize() {}
+  function mobileResize() {
+    mobileWidth = $('.composer-charts').innerWidth() - margins.left - margins.right; 
+    seasonXScale = d3.scaleBand().domain(ALL_SEASONS).range([0, mobileWidth]); 
+
+    xAxis = d3.axisBottom(seasonXScale)
+      .tickValues(seasonsScale.domain().filter((season, i) => {
+        const S = ["1842-43", "2016-17"]; 
+        return S.includes(season); 
+      }))
+      .tickSize(0); 
+    
+    chartArea.x(d => seasonXScale(d.season)); 
+    //= d3.area()
+      //.curve(d3.curveCardinal.tension(.1))
+      
+      //.y0(d => 0)
+      //.y1(d => freqYScale(d.count));
+    
+    let bars = d3.selectAll('.composer-bar-svg'); 
+    
+    bars.transition().duration(500).attr('width', mobileWidth + margins.left + margins.right); 
+  
+    bars.select('path').transition().duration(500).attr('d', chartArea); 
+    
+    let x = bars.select('.composer-bar-axis-x')
+      .attr('transform', `translate(${margins.left}, ${margins.top + height})`)
+      .call(xAxis);
+    
+    x.select('.domain').remove(); 
+    
+  }
   
   window.addEventListener('resize', debounce(resizeDelegation, 200)); 
 
