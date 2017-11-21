@@ -598,6 +598,7 @@ d3.json('../../data/new_top60.json', composers => {
         d3.select('.composer-charts').classed('hidden', false); 
 
         //Resize mobile charts
+        mobileResize(); 
         
       } else {
         //check if dot chart has been initialized, if not, do so. 
