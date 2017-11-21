@@ -76,4 +76,17 @@ d3.queue()
 		}); 
 	}); 
 */
+
+
+function generateRandomComposer () {
+  let birth = Math.floor(Math.random() * 78) + 1842; 
+  let death = birth + 62; 
+  let works = []; 
+  ALL_SEASONS.forEach( season => {
+    let randomNum = parseInt(season) > (birth + 20) ? Math.floor(Math.random() * 30) : 0;  
+    let seasonObj = {season: season, count: randomNum}; 
+    works.push(seasonObj); 
+  }); 
+  return {composer: 'Composer X', birth: birth, death: death, seasons: works}; 
+}
 			

@@ -22,6 +22,20 @@ function formatComposerName (name) {
   return names.length === 3 ? `${firstname} ${surname} II`.trim() : `${firstname} ${surname}`.trim(); 
 }
 
+//Random composer generator for mobile charts
+function generateRandomComposer () {
+  let birth = Math.floor(Math.random() * 78) + 1842; 
+  let death = birth + 62; 
+  let works = []; 
+  ALL_SEASONS.forEach( (season, idx) => {
+    let randomNum = parseInt(season) > (birth + 20) ? Math.floor(Math.random() * 7) : 0;  
+    let parseSeason = parseInt(season); 
+    let seasonObj = {season: season, count: parseSeason - birth === 100 ? 14 : randomNum}; 
+    works.push(seasonObj); 
+  }); 
+  return {composer: 'Composer X', birth: birth, death: death, seasons: works}; 
+}
+
 let svgDimensions; 
 
 let composerWorks = []; 
@@ -213,6 +227,9 @@ d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
   */
   function setupMobileCharts() {
     let topComposers = compileComposerSeasonData(); 
+    
+    //set up legend 
+    //let chartsLegend = d3.select('.main-container').append('section').attr('class', 'composer-charts-legend'); 
     
     chartsContainer = d3.select('.main-container').append('section').attr('class', 'composer-charts'); 
     
@@ -952,11 +969,8 @@ d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
     currentType = 'mobile'; 
     //hide image + select 
     d3.select('.dot-chart-heading-middle').classed('hidden', true); 
-    //experiment
-    //tempMobileComposers(); 
     setupMobileCharts(); 
-    //setupComposerCharts(); 
-    //renderComposersCharts(); 
+    console.log(generateRandomComposer()); 
   }
   
 }); 

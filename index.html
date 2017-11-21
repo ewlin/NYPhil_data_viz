@@ -478,11 +478,16 @@
         text-align: center;
 			}
 			
+      .composer-charts-legend {
+        width: 90%; 
+        margin: auto; 
+      }
       
       .composer-charts {
         width: 100%; 
         margin-top: 2em;
       }
+      
       
       /**
 			select {
@@ -742,6 +747,21 @@
           font-size: .8em;
           color: aliceblue;
         }
+        
+        .mobile-composer-heading-middle p.lifetime-box {
+          margin-top: 1em;
+          color: rgba(112, 122, 112, 1);
+          vertical-align: middle;
+        }
+
+        .mobile-composer-heading-middle span.dot-legd.lifetime-box {
+          vertical-align: middle;
+          border-radius: 0;
+          width: 2em;
+          height: 1.5em;
+          background: rgba(122, 122, 122, 1);
+          border-top: 4px solid #ff645f;
+        }
       }
       
       @media screen and (max-width: 800px) {
@@ -915,6 +935,7 @@
           </div>
           <div class="mobile-composer-heading-middle">
             <p>The 61 most performed composers by the NYP ranked by total number of performances of unique pieces per season over 175 seasons</p>
+            <p class='lifetime-box'><span class='dot-legd lifetime-box'></span><strong>Lifespan of composer (if overlaps in part or whole with NYP history)</strong></p>
           </div>
         </div>    
 				<div class="main-container"></div>
