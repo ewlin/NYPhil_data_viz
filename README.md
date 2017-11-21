@@ -14,10 +14,11 @@
 * DOT CHART RESIZE [COMPLETED 11/17 10:31pm EST]
 * SELECT2/OPTIONS COMPOSER NAME FORMATTING BUG [EXTRA space?] (Fixed, hack-ish version in formatComposerName function 11/15/17, 9:40am EST)
 * SCROLL INTO VIEW for more modern browsers [COMPLETED; desktop-only 11/19; finished]
+* Resizing code + refactor charts setup/layout [COMPLETED 11/21]
+* initialize charts if dot chart first rendered (larger browsers/resizing scenario) [COMPLETED 11/21]
 
 #### FEATURES: 
-* Resizing code + refactor charts setup/layout 
-* initialize charts if dot chart first rendered (larger browsers/resizing scenario)]
+
 * Mobile composer 61 composer list resizable lifetime box
 * Insert a randomly generated, how-to-read legend for charts
 
