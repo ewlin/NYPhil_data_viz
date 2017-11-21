@@ -35,24 +35,13 @@ d3.json('../../data/new_top60.json', composers => {
 //experiment with all composers
 //d3.json('../../data/composers.json', composers => {
 
-  //composers.forEach(composer => {
-  //  if (composer.death > 1842) {
-  //    if (!any(composer.works, (work) => parseInt(work.seasons[0]) < composer.death)) {
-  //      console.log('after death: ' + composer.composer); 
-  //    } else {
-  //      //console.log('before death: ' + composer.composer);
-  //    }
-  //    
-  //  }
-  //  if (composer.death <= 1842) console.log(composer.composer);
-  //  
-  //});
+  /*DOT CHART VARIABLES*/
+  //SVG dimensions for DOT CHART
   let SVG_WIDTH = $('.main-container').innerWidth(); 
   let SVG_HEIGHT = $(window).innerHeight()*.75; //REDO and calculate as innerHeight - (title + dropdown)
 
-	
   //Heatmap color values (use samples[3])
-  let samples = [[27, 243, 6, 128, 94, 52], [89, 248, 15, 182, 15, 7], [94, 207, 34, 195, 175, 46], [89, 207, 15, 195, 15, 46]]; 
+  //let samples = [[27, 243, 6, 128, 94, 52], [89, 248, 15, 182, 15, 7], [94, 207, 34, 195, 175, 46], [89, 207, 15, 195, 15, 46]]; 
   
   //scales for DOT CHART
 	let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([SVG_WIDTH*.05, SVG_WIDTH*.95]); 
@@ -63,10 +52,10 @@ d3.json('../../data/new_top60.json', composers => {
     .x(d => seasonsScale(d.season))
     .y(d => yScale(d.seasonWorkCount)); 
   
+  //SVG container
   let svg;
   
 	//Axes logic and display 
-	svgDimensions = document.getElementsByTagName('svg')[0].getBoundingClientRect(); 
 	let axisYears = d3.axisBottom(seasonsScale)
 										.tickValues(seasonsScale.domain().filter((season, i) => {
                       let windowWidth = window.innerWidth; 
@@ -194,11 +183,136 @@ d3.json('../../data/new_top60.json', composers => {
     voronoiOverlay = svg.append('g').attr('class', 'voronoi-overlay'); 
     
     //Tooltip setup
+    svgDimensions = document.getElementsByClassName('composers-chart-container')[0].getBoundingClientRect(); 
+
     d3.select('body').append('div')
       .attr('class', 'tooltip')
       .style('opacity', 0); 
 
   }
+  
+  
+  function tempMobileComposers() {
+    
+    let chartContainer = d3.select('.main-container').append('section'); 
+    chartContainer.attr('class', 'composer-charts'); 
+    
+    let margins = {top: 7, left: 20, bottom: 20, right: 8}; 
+    let mobileWidth = $('.composer-charts').innerWidth() - margins.left - margins.right; 
+    let height = 95 - margins.bottom - margins.top; 
+
+    let seasonXScale = d3.scaleBand().domain(ALL_SEASONS).range([0, mobileWidth]); 
+    let freqYScale = d3.scaleLinear().domain([0,31]).range([height, 0]);
+
+    let xAxis = d3.axisBottom(seasonXScale)
+      .tickValues(seasonsScale.domain().filter((season, i) => {
+        const S = ["1842-43", "2016-17"]; 
+        return S.includes(season); 
+      }))
+      .tickSize(0); 
+    
+    let yAxis = d3.axisLeft(freqYScale)
+      .tickValues([0, 30])
+      .tickSize(0); 
+    
+    
+    let chartArea = d3.area()
+      .curve(d3.curveCardinal.tension(.1))
+      .x(d => seasonXScale(d.season))
+      .y0(d => 0)
+      .y1(d => freqYScale(d.count)); 
+        
+    let topComposers = compileComposerSeasonData(); 
+    
+    topComposers.forEach((composer, idx) => {
+      let composerBar = chartContainer.append('div').attr('class', 'composer-bar');
+      let composerBarSVG = composerBar
+        .append('svg')
+        .attr('class', 'composer-bar-svg') 
+        .attr('id', `composer${idx}`)
+        .attr('width', mobileWidth + margins.left + margins.right)
+        .attr('height', height + margins.top + margins.bottom); 
+      
+      composerBar.append('p').html(`${formatComposerName(composer.composer)} (${composer.birth}-${composer.death})`); 
+      
+      d3.select(`#composer${idx}`)
+        .append('path')
+        .datum(composer.seasons)
+        .attr('d', chartArea)
+        .attr('fill', 'none')
+        .attr('stroke', 'steelblue')
+        .attr('transform', `translate(${margins.left}, ${margins.top})`); 
+
+      let y = d3.select(`#composer${idx}`)
+        .append('g')
+        .attr('class', 'composer-bar-axis')
+        .attr('transform', `translate(${margins.left}, ${margins.top})`)
+        .call(yAxis); 
+      
+      y.select('.domain').remove(); 
+      
+      let x = d3.select(`#composer${idx}`)
+        .append('g')
+        .attr('class', 'composer-bar-axis')
+        .attr('transform', `translate(${margins.left}, ${margins.top + height})`)
+        .call(xAxis); 
+      
+      x.select('.domain').remove(); 
+      
+      x.selectAll('.tick text')
+        .attr('transform', `translate(0, ${margins.bottom/3})`)
+        .style("text-anchor", d => {
+          if (d === '1842-43') return 'start'; 
+          if (d === '2016-17') return 'end';
+        }); 
+      
+    }); 
+    
+    //chartContainer.append('p').html('TESTEST');
+    function compileComposerSeasonData () {
+      let composersSeasonCounts = []; 
+      composers.forEach((composer, idx) => {
+        composersSeasonCounts.push(calculateComposerSeasonCount(composer, idx)); 
+      }); 
+      
+      return composersSeasonCounts; 
+    }
+    
+    function calculateComposerSeasonCount (composer, composerIndex) {
+      let seasonsCount = []; 
+      
+      //composerWorks = []; 
+		  ALL_SEASONS.forEach( (season, season_idx) => {
+		  	let works = composer.works; 
+        //accumulates the # of pieces per season by one composer
+		  	let seasonWorkCount = 0; 
+		  	works.forEach( (work, work_idx) => {
+		  		let workSeasons = work.seasons; 
+		  		let numOfPerformances = workSeasons.length; 
+  
+		  		if (workSeasons.includes(season)) {
+		  			++seasonWorkCount
+		  		}
+		  		
+		  	});
+        seasonsCount.push({count: seasonWorkCount, season: season});
+  
+		  }); 
+      //object with composer name and array of seasons and a count for each season
+      return {
+        composer: composer.composer, 
+        birth: composer.birth, 
+        death: composer.death, 
+        seasons: seasonsCount
+      }; 
+    }
+    
+  }
+  
+  
+  
+  
+  
   
   //Create Options for select elements populated with composer names
 	composers.forEach( (composer, idx) => {
@@ -267,7 +381,7 @@ d3.json('../../data/new_top60.json', composers => {
     svg.attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT); 
 	
     //TODO reset tooltip box
-    svgDimensions = document.getElementsByTagName('svg')[0].getBoundingClientRect(); 
+    svgDimensions = document.getElementsByClassName('composers-chart-container')[0].getBoundingClientRect(); 
     //Scales
     //let seasonsScale = d3.scaleBand().domain(ALL_SEASONS).range([SVG_WIDTH*.05, SVG_WIDTH*.95]); 
 	  //let yScale = d3.scaleLinear().domain([0,31]).range([SVG_HEIGHT*.92, 0]);
@@ -392,12 +506,15 @@ d3.json('../../data/new_top60.json', composers => {
     
     console.log(currentType, type);
     if (currentType === type) {
-      currentType === "dots" ? resize() : mobileResize(); 
+      currentType === 'dots' ? resize() : mobileResize(); 
     } else {
-      if (currentType === "dots") {
+      if (currentType === 'dots') {
         currentType = type;
         //check if mobile charts has been initialized, if not, do so. 
-        //
+        if (!document.querySelector('.composer-charts')) {
+          currentType = type; 
+          tempMobileComposers();
+        }
         //Hide Dots
         d3.select('.dot-chart-heading-middle').classed('hidden', true); 
         
@@ -464,33 +581,13 @@ d3.json('../../data/new_top60.json', composers => {
     // Return `null` if the term should not be displayed
     return null;
   }
+  
   //Create Select2 object
   //$('.select-value').select2(); 
   $('.select-value').select2({matcher: matchComposers}); 
   
   
-  function calculateComposerSeasonCount (composer, composerIndex) {
-    let seasonsCount = []; 
-    
-    //composerWorks = []; 
-		ALL_SEASONS.forEach( (season, season_idx) => {
-			let works = composer.works; 
-      //accumulates the # of pieces per season by one composer
-			let seasonWorkCount = 0; 
-			works.forEach( (work, work_idx) => {
-				let workSeasons = work.seasons; 
-				let numOfPerformances = workSeasons.length; 
 
-				if (workSeasons.includes(season)) {
-					++seasonWorkCount
-				}
-				
-			});
-      seasonsCount.push({count: seasonWorkCount, season: season});
-
-		}); 
-    return seasonsCount; 
-  }
   
   
   //function expects composer object
@@ -729,131 +826,6 @@ d3.json('../../data/new_top60.json', composers => {
       .style('fill', 'none');
 	}
 	
-  
-  function tempMobileComposers() {
-    
-    let chartContainer = d3.select('.main-container').append('section'); 
-    chartContainer.attr('class', 'composer-charts'); 
-    
-    let margins = {top: 7, left: 20, bottom: 20, right: 8}; 
-    let mobileWidth = $('.composer-charts').innerWidth() - margins.left - margins.right; 
-    let height = 95 - margins.bottom - margins.top; 
-
-    let seasonXScale = d3.scaleBand().domain(ALL_SEASONS).range([0, mobileWidth]); 
-    let freqYScale = d3.scaleLinear().domain([0,31]).range([height, 0]);
-
-    //d3.axisBottom(seasonsScale)
-		//.tickValues(seasonsScale.domain().filter((season, i) => {
-        //  let windowWidth = window.innerWidth; 
-        //  const S = ["1842-43", "1850-51", "1875-76", "1900-01", "1925-26", "1950-51", "1975-76", "2000-01", "2016-17"];
-        //  const S_MOBILE = ["1850-51", "1900-01", "1950-51", "2000-01"];
-        //  return windowWidth >= 1100 ? S.includes(season) : S_MOBILE.includes(season); 
-		    //}))
-		//.tickSize(SVG_HEIGHT*.92); 
-    let xAxis = d3.axisBottom(seasonXScale)
-      .tickValues(seasonsScale.domain().filter((season, i) => {
-        const S = ["1842-43", "2016-17"]; 
-        return S.includes(season); 
-      }))
-      .tickSize(0); 
-    
-    let yAxis = d3.axisLeft(freqYScale)
-      .tickValues([0, 30])
-      .tickSize(0); 
-    
-    
-    let chartArea = d3.area()
-      .curve(d3.curveCardinal.tension(.1))
-      .x(d => seasonXScale(d.season))
-      .y0(d => 0)
-      .y1(d => freqYScale(d.count)); 
-        
-    let topComposers = compileComposerSeasonData(); 
-    
-    topComposers.forEach((composer, idx) => {
-      let composerBar = chartContainer.append('div').attr('class', 'composer-bar');
-      let composerBarSVG = composerBar
-        .append('svg')
-        .attr('class', 'composer-bar-svg') 
-        .attr('id', `composer${idx}`)
-        .attr('width', mobileWidth + margins.left + margins.right)
-        .attr('height', height + margins.top + margins.bottom); 
-      
-      composerBar.append('p').html(`${formatComposerName(composer.composer)} (${composer.birth}-${composer.death})`); 
-      
-      d3.select(`#composer${idx}`)
-        .append('path')
-        .datum(composer.seasons)
-        .attr('d', chartArea)
-        .attr('fill', 'none')
-        .attr('stroke', 'steelblue')
-        .attr('transform', `translate(${margins.left}, ${margins.top})`); 
-
-      let y = d3.select(`#composer${idx}`)
-        .append('g')
-        .attr('class', 'composer-bar-axis')
-        .attr('transform', `translate(${margins.left}, ${margins.top})`)
-        .call(yAxis); 
-      
-      y.select('.domain').remove(); 
-      
-      let x = d3.select(`#composer${idx}`)
-        .append('g')
-        .attr('class', 'composer-bar-axis')
-        .attr('transform', `translate(${margins.left}, ${margins.top + height})`)
-        .call(xAxis); 
-      
-      x.select('.domain').remove(); 
-      
-      x.selectAll('.tick text')
-        .attr('transform', `translate(0, ${margins.bottom/3})`)
-        .style("text-anchor", d => {
-          if (d === '1842-43') return 'start'; 
-          if (d === '2016-17') return 'end';
-        }); 
-      
-    }); 
-    
-    //chartContainer.append('p').html('TESTEST');
-    function compileComposerSeasonData () {
-      let composersSeasonCounts = []; 
-      composers.forEach((composer, idx) => {
-        composersSeasonCounts.push(calculateComposerSeasonCount(composer, idx)); 
-      }); 
-      
-      return composersSeasonCounts; 
-    }
-    
-    function calculateComposerSeasonCount (composer, composerIndex) {
-      let seasonsCount = []; 
-      
-      //composerWorks = []; 
-		  ALL_SEASONS.forEach( (season, season_idx) => {
-		  	let works = composer.works; 
-        //accumulates the # of pieces per season by one composer
-		  	let seasonWorkCount = 0; 
-		  	works.forEach( (work, work_idx) => {
-		  		let workSeasons = work.seasons; 
-		  		let numOfPerformances = workSeasons.length; 
-  
-		  		if (workSeasons.includes(season)) {
-		  			++seasonWorkCount
-		  		}
-		  		
-		  	});
-        seasonsCount.push({count: seasonWorkCount, season: season});
-  
-		  }); 
-      //object with composer name and array of seasons and a count for each season
-      return {
-        composer: composer.composer, 
-        birth: composer.birth, 
-        death: composer.death, 
-        seasons: seasonsCount
-      }; 
-    }
-    
-  }
   
   //Initialize composers chart(s)
   if (!isMobile().any() && window.matchMedia("(min-width: 900px)").matches) {
