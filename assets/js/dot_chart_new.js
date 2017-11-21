@@ -574,6 +574,38 @@ d3.json('../../data/new_top60.json', composers => {
       .call(xAxis);
     
     x.select('.domain').remove(); 
+      
+    //resize composer lifetime box in mobile charts
+    bars.select('rect').transition().duration(500)
+      .attr('x', d => {
+        let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )];
+        return seasonXScale(birthSeason) ? seasonXScale(birthSeason) : seasonXScale("1842-43");
+      })
+      .attr('width', d => {
+        let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )];
+        let rectX = seasonXScale(birthSeason) ? seasonXScale(birthSeason) : seasonXScale("1842-43");
+        let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.death) )]; 
+        let rectWidth; 
+        if (!seasonXScale(deathSeason)) {
+          rectWidth = 0; 
+		    } else {
+          rectWidth = seasonXScale(deathSeason) - rectX; 
+		    }
+        return rectWidth; 
+      }); 
+        
+    //resize line above lifetime box 
+    bars.select('line')
+      .attr('x1', d => {
+        let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )];
+        return seasonXScale(birthSeason) ? seasonXScale(birthSeason) : seasonXScale("1842-43");
+      })
+      .attr('x2', d => {
+        let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.death) )]; 
+        return !seasonXScale(deathSeason) ? 0 : seasonXScale(deathSeason); 
+      
+      }); 
+
     
   }
   
