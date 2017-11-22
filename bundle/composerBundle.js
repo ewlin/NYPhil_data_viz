@@ -44,12 +44,12 @@ let composerWorks = [];
 let currentType; 
 
 //Github pages bug
-//d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
+d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
 //DEV
-d3.json('../../data/new_top60.json', composers => {
+//d3.json('../../data/new_top60.json', composers => {
 //experiment with all composers
 //d3.json('../../data/composers.json', composers => {
-
+  
   /*DOT CHART VARIABLES*/
   //SVG dimensions for DOT CHART
   let SVG_WIDTH = $('.main-container').innerWidth(); 

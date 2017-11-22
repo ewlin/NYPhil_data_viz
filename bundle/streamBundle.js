@@ -93,10 +93,10 @@ $('.explain div').css('margin-bottom', function() {
 
                     
 //GITHUB pages bug 
-//d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
+d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 
 //DEV
-d3.json('../../data/composers.json', (err, d) => {
+//d3.json('../../data/composers.json', (err, d) => {
 	
   d.forEach( (composer, composerIdx) => {  //[] of work objects
     let works = composer.works,
@@ -911,6 +911,9 @@ d3.json('../../data/composers.json', (err, d) => {
 
   }
 
+  //if (!isMobile().any()) {
+  //  window.addEventListener('resize', debounce(resize, 200)); 
+  //}
   window.addEventListener('resize', debounce(resize, 200)); 
 	
 }); 
