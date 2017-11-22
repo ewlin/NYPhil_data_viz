@@ -82,7 +82,7 @@
         font-weight: 400;
         font-family: 'Spectral'; 
       }
-    
+
 			
 		  header {
 				margin: 0 auto 3em; 
@@ -449,6 +449,7 @@
 				font-size: 1.5em; 
 				/*color: #A6ADB3;*/
         color: #302B2B;
+        line-height: 1.2;
 				text-align: center;
         margin: 15px 0 30px 0;
 			}
@@ -552,7 +553,7 @@
       .select2-container--default .select2-selection--single .select2-selection__arrow {
         height: 2.5em; 
       }
-			
+      			
 			.main-container {
 				width: 100%; 
 				margin: auto; 
@@ -731,6 +732,10 @@
         font-size: .9em;
       }
       
+      .domain {
+        display: none;
+      }
+      
       @media screen and (max-width: 900px) {
         .mobile-heatmap-legend {
           display: block; 
@@ -768,6 +773,18 @@
         .axis text {
 				  font-size: .9em;
 			   }
+        
+   
+        header a span {
+          padding-left: 7px;
+          font-size: 1em; 
+        }
+        
+        header a img {
+				  width: 35px; 
+				  vertical-align: middle;
+			  }
+        
         
         
         .container {
@@ -818,6 +835,23 @@
       
       .hidden {
         display: none;
+      }
+      
+      ::-webkit-input-placeholder { 
+        font-family: 'Alegreya Sans'; 
+      }
+      ::-moz-placeholder {
+        font-family: 'Alegreya Sans'; 
+      }
+      :-ms-input-placeholder {
+        font-family: 'Alegreya Sans'; 
+      }
+      :-moz-placeholder {
+        font-family: 'Alegreya Sans'; 
+      }
+      
+      input {
+        font-size: .9em;
       }
       
 			
@@ -966,11 +1000,14 @@
   		crossorigin="anonymous">
 		</script>
     <script src="select2.full.min.js"></script>
-		<script src="d3-v4.js"></script>
+		<script src="d3.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.0.0/d3-annotation.js"></script>
 		
-		<script src="streamBundle.js"></script>
-    <script src="composerBundle.js"></script>
+		<script src="min-scripts/streamBundle-min.js"></script>
+    <script src="min-scripts/composerBundle-min.js"></script>
+
+    <!--<script src="bundle/composerBundle.js"></script>-->
+
 
 	</body>
 

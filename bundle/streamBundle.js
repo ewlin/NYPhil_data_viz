@@ -93,10 +93,10 @@ $('.explain div').css('margin-bottom', function() {
 
                     
 //GITHUB pages bug 
-d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
+//d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 
 //DEV
-//d3.json('../../data/composers.json', (err, d) => {
+d3.json('../../data/composers.json', (err, d) => {
 	
   d.forEach( (composer, composerIdx) => {  //[] of work objects
     let works = composer.works,
@@ -195,19 +195,19 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
     };
   }); 
   
-  percentagesOfLivingRepeats = ALL_SEASONS.map(season => {
-    let {repeatAlive, alive} = seasons[season]; 
-    
-    return {
-      season: season, 
-      percentageOfRepeatsLiving: repeatAlive/alive 
-    };
-  }); 
+  //percentagesOfLivingRepeats = ALL_SEASONS.map(season => {
+  //  let {repeatAlive, alive} = seasons[season]; 
+  //  
+  //  return {
+  //    season: season, 
+  //    percentageOfRepeatsLiving: repeatAlive/alive 
+  //  };
+  //}); 
   
   percentagesOfAllRepeatsLiving = ALL_SEASONS.map(season => {
     let {repeatAlive, repeat, first} = seasons[season]; 
     
-    total = repeat + first; 
+    let total = repeat + first; 
     
     return {
       season: season, 
@@ -216,8 +216,8 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
     };
   }); 
   
-  console.log('repeat alive');
-  console.log(percentagesOfLivingRepeats);
+  //console.log('repeat alive');
+  //console.log(percentagesOfLivingRepeats);
 	
   yAbs.domain([0, MAX_NUMBER_PER_SEASON]); 
 
@@ -911,9 +911,6 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 
   }
 
-  //if (!isMobile().any()) {
-  //  window.addEventListener('resize', debounce(resize, 200)); 
-  //}
   window.addEventListener('resize', debounce(resize, 200)); 
 	
 }); 
