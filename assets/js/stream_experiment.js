@@ -10,7 +10,6 @@ let generateSeasons = require('../../temp_utils/generate_seasons.js');
 let movingAverage = require('../../temp_utils/moving_averages.js'); 
 let isMobile = require('../../temp_utils/is-mobile.js'); 
 let ScrollMagic = require('scrollmagic'); 
-let $ = require('jquery');
 let debounce = require('just-debounce-it'); 
 
 //track current graph to determine which 'd' attribute area to use
@@ -412,7 +411,7 @@ d3.json('../../data/composers.json', (err, d) => {
     //.attr('stroke', '#AB7286')
     .attr('stroke-dasharray', '7, 2')
     .attr('d', d => line([{percentageOfTotalRepeatsLiving: 0}]))
-    .style('stroke-width', '3px'); 
+    .style('stroke-width', () => isMobile().any() ? '2px' : '3px'); 
 	
   let transition1 = function() {
     currentGraph = 'abs'; 

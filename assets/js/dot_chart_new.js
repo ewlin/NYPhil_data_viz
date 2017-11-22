@@ -586,7 +586,7 @@ d3.json('../../data/new_top60.json', composers => {
   
     bars.select('path').transition().duration(500).attr('d', chartArea); 
     
-    let x = bars.select('.composer-bar-axis-x')
+    let x = bars.select('.composer-bar-axis-x').transition().duration(500)
       .attr('transform', `translate(${margins.left}, ${margins.top + height})`)
       .call(xAxis);
     
