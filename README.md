@@ -1,7 +1,7 @@
 # Data Visualization Project w/New York Philharmonic Historical Concert Data
 
 
-### _(Updated 11/21/2017)_
+### _(COMPLETED PROJECT 11/22/2017)_
 ### _(Target Completion Date: 11/22/2017)_
 
 ## TODOs: 
@@ -17,15 +17,16 @@
 * Resizing code + refactor charts setup/layout [COMPLETED 11/21]
 * initialize charts if dot chart first rendered (larger browsers/resizing scenario) [COMPLETED 11/21]
 * Mobile composer 61 composer list resizable lifetime box [COMPLETED]
+* Babelfy everything so works on older browsers
 
-#### FEATURES: 
+#### FEATURES (TODO): 
 
-* Insert a randomly generated, how-to-read legend for charts
-
+* Add Babel Polyfill so some ES6 functions like Object.assign and Array.includes works on older browsers
+* Insert a randomly generated, how-to-read legend for charts (maybe)
 
 #### MAJOR REFACTOR/RE-ORG OF REPO:
-* Babelfy everything so works on older browsers
 * RANDOM BUG FIXES
+
 
 #### (Maybe features:)
 * If you're feeling ambitious, add a tooltip/hover over mobile charts when viewed on desktop (with a certain min width) that show number of pieces each season
@@ -33,8 +34,6 @@
 * Maybe a 'soundwave/audiowave like graphic as the top background image?
 * AXIS RESIZING TEXT, DYNAMIC
 * Add UNKNOWN to living and dead chart??
-
-
 
 
 #### ABANDONED: 
