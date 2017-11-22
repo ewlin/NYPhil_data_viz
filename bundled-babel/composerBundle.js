@@ -644,6 +644,14 @@
       //$('.select-value').select2(); 
       $('.select-value').select2({ matcher: matchComposers });
 
+      $('.select-value').on("select2:open", function () {
+        console.log('opened');
+        $('.select2-search__field').attr('placeholder', "Search for a composer...");
+      });
+      $('.select-value').on("select2:close", function () {
+        $('.select2-search__field').attr('placeholder', null);
+      });
+
       //function expects composer object
       //UGLY CODE. Does side-effects + and returns data. Refactor ASAP
       function calculateComposerSeasonData(composer, composerIndex) {
