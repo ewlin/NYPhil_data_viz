@@ -108,10 +108,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		});
 
 		//GITHUB pages bug 
-		d3.json('/NYPhil_data_viz/data/composers.json', function (err, d) {
+		//d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
 
-			//DEV
-			//d3.json('../../data/composers.json', (err, d) => {
+		//DEV
+		d3.json('../../data/composers.json', function (err, d) {
 
 			d.forEach(function (composer, composerIdx) {
 				//[] of work objects
@@ -853,9 +853,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 				makeAnnotations.updatedAccessors();
 			}
 
-			//if (!isMobile().any()) {
-			//  window.addEventListener('resize', debounce(resize, 200)); 
-			//}
 			window.addEventListener('resize', debounce(resize, 200));
 		});
 
