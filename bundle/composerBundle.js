@@ -1,3 +1,4 @@
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 let generateSeasons = require('../../temp_utils/generate_seasons.js');
 let isMobile = require('../../temp_utils/is-mobile.js');
 let debounce = require('just-debounce-it'); 
@@ -978,3 +979,63 @@ d3.json('../../data/new_top60.json', composers => {
 
 
 
+
+},{"../../temp_utils/generate_seasons.js":3,"../../temp_utils/is-mobile.js":4,"just-debounce-it":2}],2:[function(require,module,exports){
+module.exports = debounce;
+
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function () {
+    if (!wait) {
+      return func.apply(this, arguments);
+    }
+    var context = this;
+    var args = arguments;
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      timeout = null;
+      if (!callNow) {
+        func.apply(context, args);
+      }
+    }, wait);
+
+    if (callNow) {
+      return func.apply(this, arguments);
+    }
+  };
+};
+
+},{}],3:[function(require,module,exports){
+function generateSeasons (start, end) {
+	let seasons = []; 
+	
+	for (let i = start; i <= end; i++) {
+		let nextSeas = String(i + 1).slice(2, 4);
+		seasons.push(String(`${i}-${nextSeas}`)); 
+	}
+	
+	return seasons; 
+}
+
+module.exports = generateSeasons; 
+},{}],4:[function(require,module,exports){
+module.exports = isMobile; 
+
+function isMobile() {
+  return { 
+    android: () => navigator.userAgent.match(/Android/i),
+    blackberry: () => navigator.userAgent.match(/BlackBerry/i),
+    ios: () => navigator.userAgent.match(/iPhone|iPad|iPod/i),
+    opera: () => navigator.userAgent.match(/Opera Mini/i),
+    windows: () => navigator.userAgent.match(/IEMobile/i),
+    any: () => (
+      isMobile().android() ||
+      isMobile().blackberry() ||
+      isMobile().ios() ||
+      isMobile().opera() ||
+      isMobile().windows()
+    ),
+  }
+}
+},{}]},{},[1]);

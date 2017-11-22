@@ -194,19 +194,19 @@ d3.json('../../data/composers.json', (err, d) => {
     };
   }); 
   
-  percentagesOfLivingRepeats = ALL_SEASONS.map(season => {
-    let {repeatAlive, alive} = seasons[season]; 
-    
-    return {
-      season: season, 
-      percentageOfRepeatsLiving: repeatAlive/alive 
-    };
-  }); 
+  //percentagesOfLivingRepeats = ALL_SEASONS.map(season => {
+  //  let {repeatAlive, alive} = seasons[season]; 
+  //  
+  //  return {
+  //    season: season, 
+  //    percentageOfRepeatsLiving: repeatAlive/alive 
+  //  };
+  //}); 
   
   percentagesOfAllRepeatsLiving = ALL_SEASONS.map(season => {
     let {repeatAlive, repeat, first} = seasons[season]; 
     
-    total = repeat + first; 
+    let total = repeat + first; 
     
     return {
       season: season, 
@@ -215,8 +215,8 @@ d3.json('../../data/composers.json', (err, d) => {
     };
   }); 
   
-  console.log('repeat alive');
-  console.log(percentagesOfLivingRepeats);
+  //console.log('repeat alive');
+  //console.log(percentagesOfLivingRepeats);
 	
   yAbs.domain([0, MAX_NUMBER_PER_SEASON]); 
 
