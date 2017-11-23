@@ -17,11 +17,12 @@
 * Resizing code + refactor charts setup/layout [COMPLETED 11/21]
 * initialize charts if dot chart first rendered (larger browsers/resizing scenario) [COMPLETED 11/21]
 * Mobile composer 61 composer list resizable lifetime box [COMPLETED]
-* Babelfy everything so works on older browsers
+* Babelfy everything so works on older browsers [COMPLETED 11/22]
 
-#### FEATURES (TODO): 
+#### FEATURES (TODO) (as of 11/22/17): 
 
 * Add Babel Polyfill so some ES6 functions like Object.assign and Array.includes works on older browsers
+* Add composer ranks
 * Insert a randomly generated, how-to-read legend for charts (maybe)
 
 #### MAJOR REFACTOR/RE-ORG OF REPO:
@@ -30,7 +31,6 @@
 
 #### (Maybe features:)
 * If you're feeling ambitious, add a tooltip/hover over mobile charts when viewed on desktop (with a certain min width) that show number of pieces each season
-* Add composer rank to long list? 
 * Maybe a 'soundwave/audiowave like graphic as the top background image?
 * AXIS RESIZING TEXT, DYNAMIC
 * Add UNKNOWN to living and dead chart??
