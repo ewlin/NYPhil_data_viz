@@ -182,6 +182,12 @@
         ////LINE ABOVE LIFETIME BOX
         lifetime.append('line').attr('x1', rectX).attr('x2', rectX + rectWidth).attr('y1', 0).attr('y2', 0).attr('stroke', '#ff645f').attr('stroke-width', '10');
 
+        lifetime.append('text').attr('class', 'birth-year').attr('x', -30).attr('y', 20).attr('text-anchor', 'start');
+
+        lifetime.append('text').attr('class', 'death-year').attr('x', -30).attr('y', 20).attr('text-anchor', 'end');
+
+        //lifetime.append('text').attr('class', 'death-year'); 
+
         ////Dots grouping
         dots = svg.append('g').attr('class', 'dots-grouping');
 
@@ -492,6 +498,20 @@
 
           return (seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43")) + rectWidth;
         });
+
+        lifetime.select('.birth-year').transition().duration(500).attr('x', function (d) {
+          var birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex(function (season) {
+            return season.match(d.birth);
+          })];
+          return seasonsScale(birthSeason) ? seasonsScale(birthSeason) + 5 : seasonsScale('1842-43');
+        });
+
+        lifetime.select('.death-year').transition().duration(500).attr('x', function (d) {
+          var deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex(function (season) {
+            return season.match(d.death);
+          })];
+          return seasonsScale(deathSeason) ? seasonsScale(deathSeason) - 5 : seasonsScale('1842-43');
+        });
       }
 
       function mobileResize() {
@@ -732,17 +752,47 @@
         // Composer birth-death box transition
         var lifetimeBox = lifetime.select('rect').data(composerWrapper);
         var lifetimeBoxLine = lifetime.select('line').data(composerWrapper);
+        var lifetimeBoxBirth = lifetime.select('.birth-year').data(composerWrapper);
+        var lifetimeBoxDeath = lifetime.select('.death-year').data(composerWrapper);
+
+        lifetimeBoxBirth.transition().duration(1400).attr('x', function (d) {
+          var birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex(function (season) {
+            return season.match(d.birth);
+          })];
+          return seasonsScale(birthSeason) ? seasonsScale(birthSeason) + 5 : seasonsScale('1842-43');
+        }).style('opacity', function (d) {
+          var birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex(function (season) {
+            return season.match(d.birth);
+          })];
+          return seasonsScale(birthSeason) ? 1 : 0;
+        }).text(function (d) {
+          return d.birth;
+        });
+
+        lifetimeBoxDeath.transition().duration(1400).attr('x', function (d) {
+          var deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex(function (season) {
+            return season.match(d.death);
+          })];
+          return seasonsScale(deathSeason) ? seasonsScale(deathSeason) - 5 : seasonsScale('1842-43');
+        }).style('opacity', function (d) {
+          var deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex(function (season) {
+            return season.match(d.death);
+          })];
+          return seasonsScale(deathSeason) ? 1 : 0;
+        }).text(function (d) {
+          return d.death;
+        });
 
         lifetimeBox.transition().duration(1400).attr('x', function (d) {
           var birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex(function (season) {
             return season.match(d.birth);
           })];
-          return seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43");
+          return seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale('1842-43');
         }).attr('width', function (d) {
           var birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex(function (season) {
             return season.match(d.birth);
           })];
-          var rectX = seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43");
+          var rectX = seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale('1842-43');
           var deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex(function (season) {
             return season.match(d.death);
           })];

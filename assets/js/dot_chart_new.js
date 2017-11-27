@@ -204,6 +204,20 @@ d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
       .attr('stroke', '#ff645f')
       .attr('stroke-width', '10');
     
+    lifetime.append('text')
+      .attr('class', 'birth-year')
+      .attr('x', -30)
+      .attr('y', 20)
+      .attr('text-anchor', 'start'); 
+    
+    lifetime.append('text')
+      .attr('class', 'death-year')
+      .attr('x', -30)
+      .attr('y', 20)
+      .attr('text-anchor', 'end'); 
+    
+    //lifetime.append('text').attr('class', 'death-year'); 
+
     ////Dots grouping
     dots = svg.append('g').attr('class', 'dots-grouping');
     
@@ -559,7 +573,19 @@ d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
 
         return (seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43")) + rectWidth; 
       }); 
+        
+    lifetime.select('.birth-year').transition().duration(500)
+      .attr('x', d => {
+        let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
+        return seasonsScale(birthSeason) ? seasonsScale(birthSeason) + 5 : seasonsScale('1842-43'); 
+      });
     
+    lifetime.select('.death-year').transition().duration(500)
+      .attr('x', d => {
+        let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.death) )]; 
+        return seasonsScale(deathSeason) ? seasonsScale(deathSeason) - 5 : seasonsScale('1842-43'); 
+      });
+      
     
   }
   
@@ -810,16 +836,40 @@ d3.json('/NYPhil_data_viz/data/new_top60.json', composers => {
 		// Composer birth-death box transition
     let lifetimeBox = lifetime.select('rect').data(composerWrapper); 
     let lifetimeBoxLine = lifetime.select('line').data(composerWrapper); 
+    let lifetimeBoxBirth = lifetime.select('.birth-year').data(composerWrapper); 
+    let lifetimeBoxDeath = lifetime.select('.death-year').data(composerWrapper); 
+
     
+    lifetimeBoxBirth.transition().duration(1400)
+      .attr('x', d => {
+        let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
+        return seasonsScale(birthSeason) ? seasonsScale(birthSeason) + 5 : seasonsScale('1842-43'); 
+      })
+      .style('opacity', d => {
+        let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
+        return seasonsScale(birthSeason) ? 1 : 0; 
+      })
+      .text(d => d.birth); 
+    
+    lifetimeBoxDeath.transition().duration(1400)
+      .attr('x', d => {
+        let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.death) )]; 
+        return seasonsScale(deathSeason) ? seasonsScale(deathSeason) - 5 : seasonsScale('1842-43'); 
+      })
+      .style('opacity', d => {
+        let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.death) )]; 
+        return seasonsScale(deathSeason) ? 1 : 0; 
+      })
+      .text(d => d.death); 
     
     lifetimeBox.transition().duration(1400)
       .attr('x', d => {
         let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
-        return seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
+        return seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale('1842-43'); 
       })
-		  .attr('width', d => {
+      .attr('width', d => {
         let birthSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.birth) )]; 
-        let rectX = seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale("1842-43"); 
+        let rectX = seasonsScale(birthSeason) ? seasonsScale(birthSeason) : seasonsScale('1842-43'); 
         let deathSeason = ALL_SEASONS[ALL_SEASONS.findIndex( season => season.match(d.death) )]; 
         let rectWidth; 
 
