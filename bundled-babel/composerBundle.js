@@ -340,8 +340,8 @@
         var dotChart = document.querySelector('.dot-chart .graphic-title');
         //Feature detection here for Element.scrollIntoView(). Options object arg only supported on newer versions of Firefox and Chrome 
         var chromeOrFirefox = navigator.userAgent.match(/Chrome\/\d*|Firefox\/\d*/);
-        var browserType = chromeOrFirefox[0].match(/Chrome|Firefox/)[0];
-        var browserVersion = chromeOrFirefox[0].match(/\d+/)[0];
+        var browserType = chromeOrFirefox ? chromeOrFirefox[0].match(/Chrome|Firefox/)[0] : null;
+        var browserVersion = chromeOrFirefox ? chromeOrFirefox[0].match(/\d+/)[0] : null;
         var options = browserType == 'Firefox' && browserVersion >= 36 || browserType == 'Chrome' && browserVersion >= 61 ? { block: 'start', behavior: 'smooth' } : null;
 
         if (e.target.dataset.index) {

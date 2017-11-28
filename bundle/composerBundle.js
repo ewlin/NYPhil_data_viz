@@ -406,14 +406,14 @@ d3.json('../../data/new_top60.json', composers => {
 		$('.select-value').append(option); 
 	}); 
   
-  
+
   function desktopScrollToComposer(e) {
     let index = e.target.dataset.index; 
     let dotChart = document.querySelector('.dot-chart .graphic-title'); 
     //Feature detection here for Element.scrollIntoView(). Options object arg only supported on newer versions of Firefox and Chrome 
     let chromeOrFirefox = navigator.userAgent.match(/Chrome\/\d*|Firefox\/\d*/);
-    let browserType = chromeOrFirefox[0].match(/Chrome|Firefox/)[0]; 
-    let browserVersion = chromeOrFirefox[0].match(/\d+/)[0]; 
+    let browserType = chromeOrFirefox ? chromeOrFirefox[0].match(/Chrome|Firefox/)[0] : null; 
+    let browserVersion = chromeOrFirefox ? chromeOrFirefox[0].match(/\d+/)[0] : null; 
     let options = browserType == 'Firefox' && browserVersion >= 36 || browserType == 'Chrome' && browserVersion >= 61 ? {block: 'start', behavior: 'smooth'} : null;  
     
     if (e.target.dataset.index) {
