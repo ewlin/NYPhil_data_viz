@@ -46,6 +46,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		//let SVG_HEIGHT = SVG_WIDTH > '550' ? $(window).innerHeight() * 0.9 : $(window).innerHeight() * 0.8; 
 		//$('.container') is 80% of the width of div.outer-container (which is 100% of window), centered. 
 
+		d3.select('.inner-container').style('height', $(window).innerHeight() + "px");
 
 		var SVG = d3.select('.container').append('svg').attr('x', 0).attr('y', 0).attr('width', SVG_WIDTH).attr('height', SVG_HEIGHT);
 		//essentially a padding between chart + the graphic title
@@ -728,6 +729,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			});
 
 			function resize() {
+				d3.select('.inner-container').style('height', $(window).innerHeight() + "px");
+
 				//calculate title height; use this to subtract from later for total height
 				var titleHeight = $('.streamgraph-section .graphic-title').outerHeight(true);
 
@@ -839,10 +842,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 				makeAnnotations.updatedAccessors();
 			}
 
-			//if (!isMobile().any()) {
-			//  window.addEventListener('resize', debounce(resize, 200)); 
-			//}
-			window.addEventListener('resize', debounce(resize, 200));
+			function resizeDelegation() {
+				var newWidth = $(window).innerWidth();
+
+				if (windowWidth != newWidth) {
+					windowWidth = newWidth;
+					resize();
+				}
+			}
+
+			window.addEventListener('resize', debounce(resizeDelegation, 200));
 		});
 
 		var controller = new ScrollMagic.Controller();

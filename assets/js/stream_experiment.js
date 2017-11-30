@@ -29,6 +29,7 @@ let SVG_HEIGHT = $(window).innerHeight() - titleHeight;
 //let SVG_HEIGHT = SVG_WIDTH > '550' ? $(window).innerHeight() * 0.9 : $(window).innerHeight() * 0.8; 
 //$('.container') is 80% of the width of div.outer-container (which is 100% of window), centered. 
 
+d3.select('.inner-container').style('height', `${$(window).innerHeight()}px`);
 
 const SVG = d3.select('.container')
   .append('svg')
@@ -763,6 +764,8 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
   }); 
 	
   function resize() {
+    d3.select('.inner-container').style('height', `${$(window).innerHeight()}px`);
+
     //calculate title height; use this to subtract from later for total height
     let titleHeight = $('.streamgraph-section .graphic-title').outerHeight(true); 
 
@@ -894,13 +897,20 @@ d3.json('/NYPhil_data_viz/data/composers.json', (err, d) => {
     //console.log('resized'); 
     SVG.select('g.annotation-group').call(makeAnnotations); 
     makeAnnotations.updatedAccessors(); 
+  
 
   }
 
-  //if (!isMobile().any()) {
-  //  window.addEventListener('resize', debounce(resize, 200)); 
-  //}
-  window.addEventListener('resize', debounce(resize, 200)); 
+  function resizeDelegation() {
+    let newWidth = $(window).innerWidth(); 
+        
+    if (windowWidth != newWidth) {
+      windowWidth = newWidth; 
+      resize(); 
+    }
+  }
+  
+  window.addEventListener('resize', debounce(resizeDelegation, 200)); 
 	
 }); 
 
