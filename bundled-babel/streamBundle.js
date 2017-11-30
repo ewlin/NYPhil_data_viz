@@ -858,6 +858,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		scene.on('enter', function () {
 			//console.log('fixed'); 
 			$('.inner-container').addClass('fixed');
+			$('.inner-container').removeClass('at-bottom');
 		});
 
 		scene.on('leave', function (e) {

@@ -917,6 +917,7 @@ let scene = new ScrollMagic.Scene({
 scene.on('enter', () => {
   //console.log('fixed'); 
   $('.inner-container').addClass('fixed'); 
+  $('.inner-container').removeClass('at-bottom'); 
 });  
 	
 scene.on('leave', (e) => {
