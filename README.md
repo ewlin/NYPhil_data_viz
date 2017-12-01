@@ -3,6 +3,7 @@
 
 ### _(COMPLETED PROJECT 11/22/2017)_
 ### _(Target Completion Date: 11/22/2017)_
+### _(ADDITIONAL UPDATES: 11/30/2017)
 
 ## TODOs: 
 
@@ -26,7 +27,7 @@
 * Insert a randomly generated, how-to-read legend for charts (maybe)
 
 #### MAJOR REFACTOR/RE-ORG OF REPO:
-* RANDOM BUG FIXES
+* RANDOM BUG FIXES [STREAMCHART JITTERS on MOBILE; fixed. Added -fixed graphic container style (height of window), and don't resize on mobile with vertical resize only 11/30]
 
 
 #### (Maybe features:)
